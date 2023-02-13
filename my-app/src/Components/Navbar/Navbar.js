@@ -1,9 +1,9 @@
-import "./css/nav-styles.css";
+import "./nav-styles.css";
 
 export default function Navbar() {
 	return (
 		<nav className="nav">
-			<img className="site-icon" href="/" src={require("./images/site-icon.png")}></img>
+			<img className="site-icon" href="/" src={require("../../images/site-icon.png")}></img>
 			<ul>
 				<li>
 					<a href="/Home">Home</a>

@@ -1,7 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
-import Navbar from './Navbar';
-import MapContainer from './pages/EventMap';
+import Navbar from './Components/Navbar/Navbar';
+import Login from './Components/Login/Login';
+import MapContainer from './Components/EventMap/EventMap';
 
 function App() {
 	let component

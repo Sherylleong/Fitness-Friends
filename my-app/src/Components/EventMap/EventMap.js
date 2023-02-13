@@ -1,6 +1,6 @@
 import { Component, useMemo } from "react"
 import { GoogleMap, useLoadScript, Marker, MarkerClusterer} from '@react-google-maps/api';
-import "../css/event-map-styles.css"
+import "./event-map-styles.css"
 
 export default function MapContainer(){
 	const {isLoaded} = useLoadScript({
