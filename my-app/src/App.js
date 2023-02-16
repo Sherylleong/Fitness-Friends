@@ -4,6 +4,7 @@ import Navbar from './Components/Navbar/Navbar';
 import Login from './Components/Login/Login';
 import SignUp from './Components/Signup/Signup';
 import MapContainer from './Components/EventMap/EventMap';
+import CRUD from "./Components/TestFirebase/CRUD"
 
 function App() {
 	let component
@@ -17,6 +18,9 @@ function App() {
 		case "/Signup":
 			component = <SignUp />
 			break
+		case "/CRUD":
+			component = <CRUD/>
+			break;
 		default:
 			break
 	}
