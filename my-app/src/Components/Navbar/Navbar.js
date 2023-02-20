@@ -1,9 +1,11 @@
 import "./nav-styles.css";
+import { link, RouterProvider } from 'react-router-dom'
 
 export default function Navbar() {
 	return (
 		<nav className="nav">
 			<img className="site-icon" href="/" src={require("../../images/site-icon.png")}></img>
+			<RouterProvider>
 			<ul>
 				<li>
 					<a href="/Home">Home</a>
@@ -24,6 +26,7 @@ export default function Navbar() {
 					<a href="/Signup">Sign up</a>
 				</li>
 			</ul>
+			</RouterProvider>
 		</nav>
 	)
 }
