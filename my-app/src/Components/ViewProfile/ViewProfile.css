@@ -1,40 +1,44 @@
-.full-screen{
+.full-screen {
     display: flex;
-    flex-wrap: wrap; /* enable wrapping of flex items when there's not enough horizontal space */
+    flex-wrap: wrap;
+    /* enable wrapping of flex items when there's not enough horizontal space */
 }
 
-.full{
+.full {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
 }
 
-.left{
+.left {
     display: flex;
-    height: 200px;
+    height: 1000px;
+    width: 500px;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
 }
 
-.left-top{
+.left-top {
     display: flex;
-    height: 200px;
+    height: 500px;
+    width: 250px;
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
 }
 
-.left-top-left{
+.left-top-left {
     display: flex;
-    height: 200px;
+    height: 500px;
+    width: 125px;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
 }
 
-.image-container{
+.image-container {
     width: 100px;
     height: 100px;
     display: flex;
@@ -44,17 +48,16 @@
     margin-right: 40px;
 }
 
-.edit-profile-button{
+.edit-profile-button {
     height: 50px;
-    width: 250px;
+    width: 100px;
     display: flex;
     justify-content: space-around;
     align-items: flex-end;
-    margin-left: 550px;
-    margin-right: 20px;
+
 }
 
-.edit-profile{
+.edit-profile {
     height: 55px;
     width: 100%;
     border-radius: 15px;
@@ -65,41 +68,59 @@
     font-size: 20px;
 }
 
-.left-top-right{
+.left-top-right {
     display: flex;
-    height: 200px;
+    height: 500px;
+    width: 125px;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
 }
 
-.name{
+.name {
+    font-family: "Roboto";
+    font-style: normal;
     font-size: 30px;
     font-weight: bold;
     margin-top: 20px;
     margin-bottom: 20px;
 }
-.joined{
+
+.joined {
+    font-family: "Roboto";
+    font-style: normal;
     font-size: 20px;
     margin-top: 20px;
     margin-bottom: 20px;
 }
-.location{
+
+.location {
+    font-family: "Roboto";
+    font-style: normal;
     font-size: 20px;
     margin-top: 20px;
     margin-bottom: 20px;
 }
-.attended{
+
+.attended {
+    font-family: "Roboto";
+    font-style: normal;
     font-size: 20px;
     margin-top: 20px;
     margin-bottom: 20px;
 }
-.biotext{
+
+.biotext {
+    font-family: "Roboto";
+    font-style: normal;
     font-size: 20px;
     margin-top: 20px;
     margin-bottom: 20px;
 }
-.bio{
+
+.bio {
+    font-family: "Roboto";
+    font-style: normal;
     font-size: 20px;
     margin-top: 20px;
     margin-bottom: 20px;
