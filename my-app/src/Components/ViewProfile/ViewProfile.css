@@ -54,10 +54,53 @@
     margin-right: 20px;
 }
 
+.edit-profile{
+    height: 55px;
+    width: 100%;
+    border-radius: 15px;
+    cursor: pointer;
+    border-color: white;
+    color: white;
+    background-color: #ee6b6e;
+    font-size: 20px;
+}
+
 .left-top-right{
     display: flex;
     height: 200px;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+}
+
+.name{
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.joined{
+    font-size: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.location{
+    font-size: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.attended{
+    font-size: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.biotext{
+    font-size: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.bio{
+    font-size: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
