@@ -1,8 +1,9 @@
 import man from "../Resources/man.jpeg"
+import running from "../Resources/running.jpeg"
 
 let ProfileData = [{
     userid: 1,
-    image: man,
+    profilepic: man,
     name: "Jon. Faveru",
     joined: "24/10/2023",
     location: "Bukit Batok",

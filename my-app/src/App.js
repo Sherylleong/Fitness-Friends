@@ -7,6 +7,7 @@ import MapContainer from "./Components/EventMap/EventMap";
 import CRUD from "./Components/TestFirebase/CRUD";
 import ViewGroup from "./Components/ViewGroup";
 import ViewEvent from "./Components/ViewEvent";
+import ViewProfile from "./Components/ViewProfile";
 
 function App() {
   let component;
@@ -29,6 +30,8 @@ function App() {
 
     case "/ViewEvent":
       component = <ViewEvent />;
+    case "/ViewEProfile":
+      component = <ViewProfile />;
       break;
     default:
       break;
