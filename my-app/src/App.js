@@ -30,7 +30,7 @@ function App() {
 
     case "/ViewEvent":
       component = <ViewEvent />;
-    case "/ViewEProfile":
+    case "/ViewProfile":
       component = <ViewProfile />;
       break;
     default:

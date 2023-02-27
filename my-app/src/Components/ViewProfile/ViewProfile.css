@@ -47,7 +47,12 @@
     margin-left: 20px;
     margin-right: 40px;
 }
-
+.profile-picure {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 2px solid #ee6b6e;
+}
 .edit-profile-button {
     height: 50px;
     width: 100px;
