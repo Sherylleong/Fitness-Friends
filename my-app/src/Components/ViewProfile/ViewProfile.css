@@ -23,7 +23,8 @@
 
 .left-top {
     display: flex;
-    height: 500px;
+    height: 400px;
+    width: 1000px;
     flex-direction: row;
     justify-content: flex-start;
     align-items:left;
@@ -69,7 +70,7 @@
 
 .edit-profile-button {
     height: 50px;
-    width: 100px;
+    width: 150px;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -78,7 +79,7 @@
 }
 
 .edit-profile {
-    height: 55px;
+    height: 40px;
     width: 100%;
     border-radius: 15px;
     cursor: pointer;
@@ -141,4 +142,151 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: left;
+}
+.left-bottom{
+    display: flex;
+    height: 500px;
+    width: 1000px;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+.events-box{
+    display: flex;
+    height: 500px;
+    width: 1000px;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 50px;
+    background-color: lightgray;
+    border-radius: 30px;
+}
+.events-selector{
+    display: flex;
+    height: 50px;
+    width: 400px;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    
+}
+.events-selector-left{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: right;
+
+}
+
+.events-selector-right{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: left;
+}
+.events-selector-attending{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: right;
+    background-color:transparent;
+    border-color: transparent;
+    font-weight: bold;
+    font-size: 20px;
+}
+.events-selector-owned{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: left;
+    background-color:transparent;
+    border-color: transparent;
+    font-weight: bold;
+    font-size: 20px;
+}
+.events-list{
+    display: flex;
+    height: 200px;
+    width: 1000px;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+.event{
+    display: flex;
+    height: 100px;
+    width: 900px;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    background-color: white;
+    border-radius: 30px;
+    margin-top: 20px;
+}
+.event-left{
+    display: flex;
+    height: 100px;
+    width: 400px;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: left;
+}
+.event-left-left{
+    display: flex;
+    height: 100px;
+    width: 120px;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: left;
+}
+.event-left-right{
+    display: flex;
+    height: 100px;
+    width: 200px;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: left;
+}
+.event-image-container{
+    display: flex;
+    height: 100px;
+    width: 100px;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 5px;
+}
+.event-image{
+    width: 90px;
+    height: 90px;
+    border-radius: 10px;
+    object-fit:cover;
+}
+.event-title{
+    font-size: 20px;
+    font-weight: bold;
+}
+.event-right{
+    display: flex;
+    height: 100px;
+    width: 400px;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: right;
+}
+.tags-container{
+    display: flex;
+    height: 100px;
+    width: 300px;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: right;
+}
+.tag{
+    border-radius: 15px;
+    border: 1px solid black;
+    width: 100px;
+    height: 30px;
+    text-align: center;
 }

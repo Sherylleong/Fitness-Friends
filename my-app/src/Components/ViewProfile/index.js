@@ -38,7 +38,47 @@ function ViewProfile() {
             </div>
 
             <div className="left-bottom">
-
+              <div className="events-box">
+                <div className="events-selector">
+                  <div className="events-selector-left">
+                    <button className="events-selector-attending" type="submit">
+                      Events Attending
+                    </button>
+                  </div>
+                  <div className="events-selector-right">
+                  <button className="events-selector-owned" type="submit">
+                      Events Owned
+                    </button>
+                  </div>
+                </div>
+                <div className="events-list">
+                  {profile.eventsattending.map((event) => (
+                    <div className="event" key={event.eventid}>
+                      <div className="event-left">
+                        <div className="event-left-left">
+                          <div className="event-image-container">
+                            <img className="event-image" src={event.eventimage}></img>
+                          </div>
+                        </div>
+                        <div className="event-left-right">
+                          <div className="event-title">{event.eventtitle}</div>
+                          <div className="event-location">Location: {event.eventlocation}</div>
+                          <div className="event-date">{event.eventdate}</div>
+                        </div>
+                      </div>
+                      <div className="event-right">
+                        <div className="tags-container">
+                        {event.eventtags.map((tag, index) => (
+                          <div key={index} className="tag">
+                            {tag}
+                          </div>
+                        ))}  
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
             
           </div>
