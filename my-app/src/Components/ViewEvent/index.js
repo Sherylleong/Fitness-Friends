@@ -9,7 +9,7 @@ import "./ViewEvent.css";
 function ViewEvent() {
   return (
     <>
-      <div clasName="full-screen">
+      <div className="full-screen">
         {EventData.map((event) => (
           <div className="full">
             <div className="top1">

@@ -11,37 +11,94 @@ export default function MapContainer(){
 	return <Map />
 }
 
+function filters(){
+	let groups = ["a","b"];
+	function handleFilters(){}
+	return (
+		<form>
+		  <select
+			name="filterIntensity"
+			onChange={(e) => {
+				handleFilters(e);
+			}}
+		  >
+		  </select>
+		  <label>Date</label>
+		  <label>Start Date</label>
+		  <input type="date"/>
+		  <label>End Date</label>
+		  <input type="date"/>
+
+		  <select
+			name="filterCategory"
+			onChange={(e) => {
+				handleFilters(e);
+			}}
+		  >
+			<option value="none">Category</option>
+			<option value="Walking"> Running</option>
+			<option value="Jogging"> Running</option>
+			<option value="Running"> Running</option>
+			<option value="Climbing"> Running</option>
+			<option value="Biking"> Running</option>
+			<option value="Sports"> Running</option>
+			<option value="Other"> Running</option>
+		  </select>
+
+		  <select
+			name="filterGroup"
+			onChange={(e) => {
+				handleFilters(e);
+			}}
+		  >
+			{groups.map(group => {
+           		return (
+             		<option value={group}> {group} </option>
+           		)
+         	})}
+		  </select>
+		</form>
+	  );
+}
+
 function Map() {
+	const markers = [
+		{position: useMemo(() => ({lat: 1.348578045634617, lng: 103.6831722481014}))},
+		{position: useMemo(() => ({lat: 1.3485887714987213, lng: 103.68382670706136}))},
+		{position: useMemo(() => ({lat: 1.3458889951752477, lng: 103.69933201581368}))},
+		{position: useMemo(() => ({lat: 1.3451843416350524, lng: 103.69917596458055}))}
+	]
+	/*
 	const ntu = useMemo(() => ({lat: 1.348578045634617, lng: 103.6831722481014}), [])
 	const mark1 = useMemo(() => ({lat: 1.3485887714987213, lng: 103.68382670706136}))
 	const mark2 = useMemo(() => ({lat: 1.3458889951752477, lng: 103.69933201581368}))
 	const mark3 = useMemo(() => ({lat: 1.3451843416350524, lng: 103.69917596458055}))
+	*/
 	// const markerLoc: Array<LatLngLiteral> = [];
 	// markerLoc.push({lat: 1.348578045634617, lng: 103.6831722481014});
 	// markerLoc.push({lat: 1.3485887714987213, lng: 103.68382670706136});
 	// markerLoc.push({lat: 1.3458889951752477, lng: 103.69933201581368});
 	// markerLoc.push({lat: 1.3451843416350524, lng: 103.69917596458055});
 	return (
-		<GoogleMap zoom={18} 
-		center={ntu} 
-		mapContainerClassName="map-container">
-			{/* <Marker icon={"https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png"}
-			position={{lat: 1.348578045634617, lng: 103.6831722481014}} /> */}
-			{/* <Marker position={ntu} />
-			<Marker position={mark1} />
-			<Marker position={mark2} />
-			<Marker position={mark3} /> */}
-			
-			<MarkerClusterer>
-				{(clusterer) => (
-					<>
-						<Marker position={ntu} clusterer={clusterer}/>
-						<Marker position={mark1} clusterer={clusterer}/>
-						<Marker position={mark2} clusterer={clusterer}/>
-						<Marker position={mark3} clusterer={clusterer}/>
-					</>
-				)}
-			</MarkerClusterer>
-		</GoogleMap>
+		<>
+			<GoogleMap zoom={18} 
+			center={markers[1].position} 
+			mapContainerClassName="map-container">
+				{/* <Marker icon={"https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png"}
+				position={{lat: 1.348578045634617, lng: 103.6831722481014}} /> */}
+				{/* <Marker position={ntu} />
+				<Marker position={mark1} />
+				<Marker position={mark2} />
+				<Marker position={mark3} /> */}
+				
+				<MarkerClusterer>
+					{(clusterer) => (
+						<>
+							{markers.map(marker => <Marker position={marker.position} clusterer={clusterer}/>)}
+						</>
+					)}
+				</MarkerClusterer>
+			</GoogleMap>
+		</>
 	)
 }
