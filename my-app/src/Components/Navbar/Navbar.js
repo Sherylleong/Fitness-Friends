@@ -25,6 +25,8 @@ export default function Navbar() {
 				<li>
 					<a href="/Signup">Sign up</a>
 				</li>
+
+
 			</ul>
 			</RouterProvider>
 		</nav>
