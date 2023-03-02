@@ -1,0 +1,125 @@
+body {
+    overflow: hidden;
+}
+
+.account-form {
+    text-align: center;
+    display: flex;
+    min-height: 100vh;
+    background-image: url("../../images/account-form-background.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.account-form, .login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.account-form {
+    padding: 5rem;
+    background-image: white;
+    border-radius: 10px;
+    margin: 0.5rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.account-form-container {
+    width: 500px;
+    height: 500px;
+    background-color: white;
+    padding: 0rem 1rem 0rem 1.5rem;
+}
+
+.account-form-container h1, h2 {
+    text-align: left;
+    padding: 2rem 0rem 0rem 0rem;
+    /* margin: 1rem 0rem 0rem 0rem; */
+    margin: 0rem;
+}
+
+.account-form-container h2 {
+    color: #F05537;
+}
+
+.account-form-container h1 {
+    color:#666262; 
+    padding: 0rem 0rem 1rem 0rem;
+}
+
+label {
+    text-align: left;
+    padding: 0.25rem 0.75rem;
+    font-size: 11px;
+    font-family: ;
+    font-weight: bold;
+    color: #333333;
+    /* display:block; */
+}
+  
+input {
+    margin: 0.5rem 0;
+    padding: 1rem;
+    border: none;
+    width: 98%;
+    background-color: #E5E5E5E5;
+    border-radius: 10px;
+}
+  
+input::placeholder {
+    color:#808080;
+}
+
+.account-form-options {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+}
+
+input[type=checkbox] {
+    vertical-align: bottom;
+    position: relative;
+    width: 15px;
+    height: 12px;
+    padding: 0;
+    margin: 0;
+}
+
+.checkbox-label {
+    /* padding: 1rem 0rem 1rem 0rem; */
+    width: 8rem;
+    font-color: #1A1A1A;
+    font-weight: bold;
+}
+
+.account-form-container a {
+    width: 150px;
+    padding-right: 0.5rem;
+    padding-top: 0.2rem;
+    color:#007AFF;
+    text-align: right;
+    cursor: pointer;
+}
+
+.account-form-container a:hover {
+    text-decoration: underline;
+
+}
+
+button {
+    border: none;
+    background-color: #F15E41;
+    /* padding: 10px; */
+    width: 98%;
+    margin: 1rem 0rem 1rem 0rem;
+    padding: 10px 0px 10px 0px;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #7439db;
+    font-size: 20px;
+    color: white;
+    text-decoration: none;
+}
+
