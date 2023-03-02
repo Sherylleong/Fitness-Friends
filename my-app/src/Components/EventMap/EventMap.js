@@ -1,7 +1,7 @@
 import { Component, useMemo } from "react"
 import { GoogleMap, useLoadScript, Marker, MarkerClusterer} from '@react-google-maps/api';
 import "./event-map-styles.css"
-
+import Filters from "../Filters/Filters.js"
 export default function MapContainer(){
 	const {isLoaded} = useLoadScript({
 		googleMapsApiKey: "AIzaSyCGCznAwZAFJ8qMQY1ckg6EfDwuczmepWI",
@@ -9,56 +9,6 @@ export default function MapContainer(){
 
 	if (!isLoaded) return <div>..Loading</div>
 	return <Map />
-}
-
-function filters(){
-	let groups = ["a","b"];
-	function handleFilters(){}
-	return (
-		<form>
-		  <select
-			name="filterIntensity"
-			onChange={(e) => {
-				handleFilters(e);
-			}}
-		  >
-		  </select>
-		  <label>Date</label>
-		  <label>Start Date</label>
-		  <input type="date"/>
-		  <label>End Date</label>
-		  <input type="date"/>
-
-		  <select
-			name="filterCategory"
-			onChange={(e) => {
-				handleFilters(e);
-			}}
-		  >
-			<option value="none">Category</option>
-			<option value="Walking"> Running</option>
-			<option value="Jogging"> Running</option>
-			<option value="Running"> Running</option>
-			<option value="Climbing"> Running</option>
-			<option value="Biking"> Running</option>
-			<option value="Sports"> Running</option>
-			<option value="Other"> Running</option>
-		  </select>
-
-		  <select
-			name="filterGroup"
-			onChange={(e) => {
-				handleFilters(e);
-			}}
-		  >
-			{groups.map(group => {
-           		return (
-             		<option value={group}> {group} </option>
-           		)
-         	})}
-		  </select>
-		</form>
-	  );
 }
 
 function Map() {
@@ -80,7 +30,9 @@ function Map() {
 	// markerLoc.push({lat: 1.3458889951752477, lng: 103.69933201581368});
 	// markerLoc.push({lat: 1.3451843416350524, lng: 103.69917596458055});
 	return (
+		
 		<>
+			<Filters/>
 			<GoogleMap zoom={18} 
 			center={markers[1].position} 
 			mapContainerClassName="map-container">
