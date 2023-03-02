@@ -1,10 +1,10 @@
-.full-screen {
+.full-screen112 {
     display: flex;
     flex-wrap: wrap;
 
 }
 
-.full {
+.full112 {
     flex: 1;
     display: flex;
     flex-direction: row;
@@ -12,7 +12,7 @@
     align-items: center;
 }
 
-.left {
+.left112 {
     display: flex;
     height: 500px;
     width: 1000px;
@@ -21,7 +21,7 @@
     align-items: left;
 }
 
-.left-top {
+.left-top112 {
     display: flex;
     height: 400px;
     width: 1000px;
@@ -30,7 +30,7 @@
     align-items:left;
 }
 
-.left-top-left {
+.left-top-left112 {
     display: flex;
     height: 500px;
     width: 400px;
@@ -39,7 +39,7 @@
     align-items: center;
 }
 
-.image-container {
+.image-container112 {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -55,20 +55,20 @@
 
 }
 
-.profile-img {
+.profile-img112 {
     width: 200px;
     height: 200px;
     
 }
 
-.profile-picture {
+.profile-picture112 {
     width: 100%;
     height: 140%;
     border-radius: 100%;
     object-fit:cover;
 }
 
-.edit-profile-button {
+.edit-profile-button112 {
     height: 50px;
     width: 150px;
     display: flex;
@@ -78,7 +78,7 @@
 
 }
 
-.edit-profile {
+.edit-profile112 {
     height: 40px;
     width: 100%;
     border-radius: 15px;
@@ -89,7 +89,7 @@
     font-size: 20px;
 }
 
-.left-top-right {
+.left-top-right112 {
     display: flex;
     height: 500px;
     width: 500px;
@@ -99,43 +99,43 @@
     margin-top: 75px;
 }
 
-.profilename {
+.profilename112 {
     font-style: normal;
     font-size: 30px;
     font-weight: bold;
 }
 
-.joined {
+.joined112 {
     font-style: normal;
     font-size: 20px;
     margin-top: 10px;
 }
 
-.locationtext {
+.locationtext112 {
     font-style: normal;
     font-size: 20px;
     margin-top: 10px;
 }
 
-.attended {
+.attended112 {
     font-style: normal;
     font-size: 20px;
     margin-top: 10px;
 }
 
-.biotext {
+.biotext112 {
     font-style: normal;
     font-size: 20px;
     font-weight: bold;
     margin-top: 10px;
 }
 
-.bio {
+.bio112 {
     font-style: normal;
     font-size: 20px;
     margin-top: 10px;
 }
-.right{
+.right112{
     display: flex;
     height: 500px;
     width: 700px;
@@ -143,7 +143,7 @@
     justify-content: flex-start;
     align-items: left;
 }
-.left-bottom{
+.left-bottom112{
     display: flex;
     height: 500px;
     width: 1000px;
@@ -151,7 +151,7 @@
     justify-content: flex-start;
     align-items: center;
 }
-.events-box{
+.events-box112{
     display: flex;
     height: 500px;
     width: 1000px;
@@ -162,7 +162,7 @@
     background-color: lightgray;
     border-radius: 30px;
 }
-.events-selector{
+.events-selector112{
     display: flex;
     height: 50px;
     width: 400px;
@@ -171,7 +171,7 @@
     align-items: center;
     
 }
-.events-selector-left{
+.events-selector-left112{
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -179,13 +179,13 @@
 
 }
 
-.events-selector-right{
+.events-selector-right112{
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
     align-items: left;
 }
-.events-selector-attending{
+.events-selector-attending112{
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -195,7 +195,7 @@
     font-weight: bold;
     font-size: 20px;
 }
-.events-selector-owned{
+.events-selector-owned112{
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -205,7 +205,7 @@
     font-weight: bold;
     font-size: 20px;
 }
-.events-list{
+.events-list112{
     display: flex;
     height: 200px;
     width: 1000px;
@@ -213,7 +213,7 @@
     justify-content: flex-start;
     align-items: center;
 }
-.event{
+.event112{
     display: flex;
     height: 100px;
     width: 900px;
@@ -224,7 +224,7 @@
     border-radius: 30px;
     margin-top: 20px;
 }
-.event-left{
+.event-left112{
     display: flex;
     height: 100px;
     width: 400px;
@@ -232,7 +232,7 @@
     justify-content: flex-start;
     align-items: left;
 }
-.event-left-left{
+.event-left-left112{
     display: flex;
     height: 100px;
     width: 120px;
@@ -240,7 +240,7 @@
     justify-content: flex-start;
     align-items: left;
 }
-.event-left-right{
+.event-left-right112{
     display: flex;
     height: 100px;
     width: 200px;
@@ -248,7 +248,7 @@
     justify-content: flex-start;
     align-items: left;
 }
-.event-image-container{
+.event-image-container112{
     display: flex;
     height: 100px;
     width: 100px;
@@ -257,17 +257,17 @@
     align-items: center;
     margin-top: 5px;
 }
-.event-image{
+.event-image112{
     width: 90px;
     height: 90px;
     border-radius: 10px;
     object-fit:cover;
 }
-.event-title{
+.event-title112{
     font-size: 20px;
     font-weight: bold;
 }
-.event-right{
+.event-right112{
     display: flex;
     height: 100px;
     width: 400px;
@@ -275,7 +275,7 @@
     justify-content: flex-start;
     align-items: right;
 }
-.tags-container{
+.tags-container112{
     display: flex;
     height: 100px;
     width: 300px;
@@ -283,7 +283,7 @@
     justify-content: flex-start;
     align-items: right;
 }
-.tag{
+.tag112{
     border-radius: 15px;
     border: 1px solid black;
     width: 100px;

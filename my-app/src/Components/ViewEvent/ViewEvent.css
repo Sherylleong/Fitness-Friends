@@ -154,12 +154,14 @@
 .creator-img {
   width: 150px;
   height: 150px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .creator-img-img {
-  margin-top: 20px;
-  width: 100%;
-  height: 100%;
+  width: 150px;
+  height: 150px;
   border-radius: 70px;
 }
 
@@ -168,7 +170,7 @@
   font-style: normal;
   font-weight: 700;
   font-size: 20px;
-  padding-top: 20px;
+  padding-top: 10px;
 }
 
 .middleright1 {
@@ -205,4 +207,21 @@
   width: 100px;
   height: 30px;
   text-align: center;
+}
+
+.bottom1 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  height: 400px;
+}
+
+.bottom1-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  width: 200px;
 }
