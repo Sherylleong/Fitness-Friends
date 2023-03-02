@@ -210,18 +210,50 @@
 }
 
 .bottom1 {
+  padding-top: 20px;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  align-items: center;
   width: 100%;
-  height: 400px;
+  height: 500px;
+  align-items: flex-start;
 }
 
-.bottom1-left {
+.event {
   display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  color: #808080;
+  display: flex-start;
   flex-direction: column;
-  justify-content: space-around;
+  border: 1px solid #000;
+  width: 50%;
+  height: 100%;
+  padding: 15px;
+  margin: 40px;
+}
+
+.event-title {
+  margin-bottom: 20px;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+}
+.event-desc {
+  margin-bottom: 20px;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.googlemap {
+  display: flex;
   align-items: center;
-  width: 200px;
+  justify-content: space-around;
+
+  width: 50%;
+  height: 100%;
 }

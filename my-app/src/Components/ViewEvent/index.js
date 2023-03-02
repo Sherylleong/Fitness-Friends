@@ -68,23 +68,29 @@ function ViewEvent() {
             </div>
 
             <div className="bottom1">
-            <div clasName = "bottom1-left"> 
-            
-            
-              <div className ='event-desc-title'>   Event Description: </div>
+              <div className="event">
+                <div className ="event-title"> 
+                Event Description:
 
-              <div className ='event-desc-body'>   {event.eventdescription}  </div>
+                </div>
 
+                <div className ="event-desc"> 
+                {event.eventdescription}
+                
 
-
+                </div>
+               
+      
               </div>
 
-            <div className = 'bottom1-right'> 
-            gooogle map
+              <div className="googlemap">google map
+                
+              </div>
 
             </div>
 
-            </div>
+
+
           </div>
         ))}
       </div>
