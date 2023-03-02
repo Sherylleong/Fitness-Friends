@@ -219,7 +219,7 @@
   align-items: flex-start;
 }
 
-.event {
+.event1 {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
@@ -227,11 +227,15 @@
   color: #808080;
   display: flex-start;
   flex-direction: column;
-  border: 1px solid #000;
+
   width: 50%;
   height: 100%;
   padding: 15px;
   margin: 40px;
+  background-image: url("../Resources/blue.jpeg");
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  background-size: cover; /* adjust size of background image */
+  background-position: center; /* adjust position of background image */
 }
 
 .event-title {
