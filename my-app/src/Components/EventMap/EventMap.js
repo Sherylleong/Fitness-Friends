@@ -1,7 +1,6 @@
 import { Component, useMemo } from "react"
 import { GoogleMap, useLoadScript, Marker, MarkerClusterer} from '@react-google-maps/api';
 import "./event-map-styles.css"
-import Filters from "../Filters/Filters.js"
 export default function MapContainer(){
 	const {isLoaded} = useLoadScript({
 		googleMapsApiKey: "AIzaSyCGCznAwZAFJ8qMQY1ckg6EfDwuczmepWI",
@@ -32,7 +31,6 @@ function Map() {
 	return (
 		
 		<>
-			<Filters/>
 			<GoogleMap zoom={18} 
 			center={markers[1].position} 
 			mapContainerClassName="map-container">

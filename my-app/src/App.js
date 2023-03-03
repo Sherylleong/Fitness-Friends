@@ -3,7 +3,7 @@ import "./App.css";
 import Navbar from "./Components/Navbar/Navbar";
 import Login from "./Components/Login/Login";
 import SignUp from "./Components/Signup/Signup";
-import MapContainer from "./Components/EventMap/EventMap";
+import FindEventsMap from "./Components/FindEventsMap/FindEventsMap";
 import CRUD from "./Components/TestFirebase/CRUD";
 import ViewGroup from "./Components/ViewGroup";
 import ViewEvent from "./Components/ViewEvent";
@@ -13,7 +13,7 @@ function App() {
   let component;
   switch (window.location.pathname) {
     case "/Events":
-      component = <MapContainer />;
+      component = <FindEventsMap />;
       break;
     case "/Login":
       component = <Login />;
