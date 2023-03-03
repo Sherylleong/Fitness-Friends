@@ -34,6 +34,7 @@ function App() {
     case "/ViewProfile":
       component = <ViewProfile />;
       break;
+
     default:
       break;
   }
