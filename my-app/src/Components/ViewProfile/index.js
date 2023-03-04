@@ -1,7 +1,25 @@
 import ProfileData from "./ProfileData";
 import { useState, useEffect } from "react";
 import "./ViewProfile.css";
+import ReactPaginate from "react-paginate";
 function ViewProfile() {
+  // set up attending and owned events
+  const [attending, setAttending] = useState(true);
+  const [owned, setOwned] = useState(false);
+  const attendinghandler = () => {
+    setAttending(true);
+    setOwned(false);
+  };
+  const ownedhandler = () => {
+    setAttending(false);
+    setOwned(true);
+  };
+
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const handlePageChange = (selectedPage) => {
+    setCurrentPage(selectedPage);
+  };
   return (
     <>
       <div clasName="full-screen112">
@@ -41,10 +59,12 @@ function ViewProfile() {
               <div className="left-bottom112">
                 <div className="events-box112">
                   <div className="events-selector112">
+                    
                     <div className="events-selector-left112">
                       <button
                         className="events-selector-attending112"
                         type="submit"
+                        onClick={attendinghandler}
                       >
                         Events Attending
                       </button>
@@ -53,13 +73,21 @@ function ViewProfile() {
                       <button
                         className="events-selector-owned112"
                         type="submit"
+                        onClick={ownedhandler}
                       >
                         Events Owned
                       </button>
                     </div>
                   </div>
+                  {owned && (
+                      <div className="manage-events112">
+                        <button className="manage-events-button112" type="submit">
+                          Manage Events
+                        </button>
+                      </div>
+                  )}
                   <div className="events-list112">
-                    {profile.eventsattending.map((event) => (
+                    {attending && profile.eventsattending.slice(currentPage*3,currentPage*3+3).map((event) => (
                       <div className="event112" key={event.eventid}>
                         <div className="event-left112">
                           <div className="event-left-left112">
@@ -93,6 +121,56 @@ function ViewProfile() {
                         </div>
                       </div>
                     ))}
+                    {owned && profile.eventsowned.slice(currentPage*3,currentPage*3+3).map((event) => (
+                      <div className="event112" key={event.eventid}>
+                      <div className="event-left112">
+                        <div className="event-left-left112">
+                          <div className="event-image-container112">
+                            <img
+                              className="event-image112"
+                              src={event.eventimage}
+                            ></img>
+                          </div>
+                        </div>
+                        <div className="event-left-right112">
+                          <div className="event-title112">
+                            {event.eventtitle}
+                          </div>
+                          <div className="event-location112">
+                            Location: {event.eventlocation}
+                          </div>
+                          <div className="event-date112">
+                            {event.eventdate}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="event-right112">
+                        <div className="tags-container112">
+                          {event.eventtags.map((tag, index) => (
+                            <div key={index} className="tag112">
+                              {tag}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  </div>
+                  <div className="event-pagination112">
+                  {profile.eventsattending.length > 3 ||
+                    profile.eventsowned.length > 3 ? (
+                      <ReactPaginate
+                        previousLabel={'<'}
+                        nextLabel={'>'}
+                        breakLabel={'...'}
+                        pageCount={Math.ceil((attending ? profile.eventsattending.length : profile.eventsowned.length) / 3)}
+                        marginPagesDisplayed={2}
+                        pageRangeDisplayed={3}
+                        onPageChange={(selectedPage) => handlePageChange(selectedPage.selected)}
+                        containerClassName={'pagination'}
+                        activeClassName={'active'}
+                      />
+                    ) : null}
                   </div>
                 </div>
               </div>
