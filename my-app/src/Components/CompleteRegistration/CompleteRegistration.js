@@ -20,9 +20,16 @@ export default function CompleteRegistration() {
 		e.preventDefault(); //Prevent Reload on Form Submit
 		if (verifyLoginData()) {
             console.log("Adding");
+			const today = new Date();
+			const formattedDate = today.getDate() + "/" + (today.getMonth() + 1) + "/" + today.getFullYear();
+
             addDoc(collection(firestore, 'users'), {
                 userId: userId,
-                displayName: username
+                profilePic: null,
+				displayName: username,
+				JoinedDate: formattedDate,
+				Location: null,
+				Bio: null
             });
             navigate("/Login"); //Navigate to login to do login demo
 		}
