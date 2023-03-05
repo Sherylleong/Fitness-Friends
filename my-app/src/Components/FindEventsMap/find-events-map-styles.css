@@ -7,7 +7,7 @@
     align-items: center;
 }
 
-.events-list {
+.events-map-list {
     display: flex; 
     flex-direction: column;
     justify-content:space-around;
@@ -19,7 +19,7 @@
     flex-direction: row;
     justify-content:space-between;
     align-items: center;
-    border-bottom: solid;
+    border-bottom: 2px solid;
 }
 .event-card p {
     margin:0;
@@ -55,4 +55,13 @@
     border-radius: 15px;
     text-align: center;
     margin: 5px;
+}
+
+.event-card .join-event {
+    font-size: 18px;
+    padding: 0px;
+}
+
+#locationsearch{
+    font-size: 20px;
 }
