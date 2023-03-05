@@ -1,0 +1,28 @@
+.events-form {
+    font-size: 20px;
+    display: flex;
+    flex-direction: column; 
+}
+
+.events-form fieldset {
+    display: flex;
+    flex-direction: column; 
+}
+
+.events-form legend {
+    font-size: 25px;
+    font-weight: bold;
+
+}
+
+fieldset {
+    border: 0;
+}
+
+.filter-item {
+    background-color:rgb(233, 233, 233);
+    padding: 5px;
+    padding-right: 15px;
+    display: flex;
+    flex-direction: column; 
+}

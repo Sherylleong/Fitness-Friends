@@ -1,0 +1,67 @@
+
+.find-events-page {
+    font-size: 20px;
+    display: flex; 
+    flex-direction: row;
+    justify-content:space-around;
+    align-items: center;
+}
+
+.events-map-list {
+    display: flex; 
+    flex-direction: column;
+    justify-content:space-around;
+
+}
+.event-card {
+    margin:10px;
+    display: flex; 
+    flex-direction: row;
+    justify-content:space-between;
+    align-items: center;
+    border-bottom: 2px solid;
+}
+.event-card p {
+    margin:0;
+}
+
+#mapview, #listview {
+    margin: 5px;
+    font-size: 25px;
+    border: none;
+    background-color: white;
+}
+
+.event-card .event-name {
+    font-size: 20px;
+    font-weight: bold;
+    padding: 0px;
+    margin: 0px;
+}
+.event-card .event-time {
+    font-size: 18px;
+    font-weight: bold;
+    color: orangered;
+}
+.event-card .event-location {
+    font-size: 18px;
+    color: rgb(94, 85, 85);
+}
+
+.event-card .event-category,.event-card .event-difficulty {
+    font-size: 15px;
+    border: 2px solid;
+    padding: 0px;
+    border-radius: 15px;
+    text-align: center;
+    margin: 5px;
+}
+
+.event-card .join-event {
+    font-size: 18px;
+    padding: 0px;
+}
+
+#locationsearch{
+    font-size: 20px;
+}
