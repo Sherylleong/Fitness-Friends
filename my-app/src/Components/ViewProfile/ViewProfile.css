@@ -299,6 +299,7 @@
     flex-direction: row;
     justify-content: flex-start;
     align-items: right;
+    margin-top: 10px;
 }
 
 .tag112 {
@@ -307,6 +308,7 @@
     width: 100px;
     height: 30px;
     text-align: center;
+    margin-left: 5px;
 }
 
 .manage-events112 {
@@ -327,7 +329,7 @@
     cursor: pointer;
     border-color: lightgray;
     color: white;
-    background-color: #ee6b6e;
+    background-color: teal;
     font-size: 20px;
 }
 
@@ -477,7 +479,7 @@
     cursor: pointer;
     border-color: lightgray;
     color: white;
-    background-color: turquoise;
+    background-color: teal;
     font-size: 15px;
 }
 .paginationjoined {
