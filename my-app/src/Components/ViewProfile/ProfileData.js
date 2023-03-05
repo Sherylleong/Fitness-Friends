@@ -18,7 +18,27 @@ let ProfileData = [{
         attendees: 15,
         creator: "Fab. Faveru",
         groupdesc: "running group"
-    }
+    },
+    {
+        groupid: 5,
+        image: running,
+        title: "Running Group",
+        location: "Our Tampines Hub",
+        tags: ["running", "fun", "group"],
+        attendees: 15,
+        creator: "Fab. Faveru",
+        groupdesc: "running group"
+        },
+        {
+            groupid: 6,
+            image: running,
+            title: "Running Group",
+            location: "Our Tampines Hub",
+            tags: ["running", "fun", "group"],
+            attendees: 15,
+            creator: "Fab. Faveru",
+            groupdesc: "running group"
+        },
     ],
 
     groupsowned: [{
@@ -32,7 +52,31 @@ let ProfileData = [{
         groupdesc:
             "We focus on training for yearly IPPT test and Lorem ipsum  (need to have certain character limit",
 
-    }
+    },
+    {
+        groupid: 3,
+        image: running,
+        title: "IPPT Training ",
+        location: "Our Tampines Hub",
+        tags: ["running", "swimming", "cycling", "fun", "group"],
+        attendees: 15,
+        creator: "Jon. Faveru",
+        groupdesc:
+            "We focus on training for yearly IPPT test and Lorem ipsum  (need to have certain character limit",
+
+        },
+        {
+            groupid: 4,
+            image: running,
+            title: "IPPT Training ",
+            location: "Our Tampines Hub",
+            tags: ["running", "swimming", "cycling", "fun", "group"],
+            attendees: 15,
+            creator: "Jon. Faveru",
+            groupdesc:
+                "We focus on training for yearly IPPT test and Lorem ipsum  (need to have certain character limit",
+    
+        },
     ],
     eventsattending: [{
         eventid: 5,

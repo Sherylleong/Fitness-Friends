@@ -15,10 +15,19 @@ function ViewProfile() {
     setOwned(true);
   };
 
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentEventPage, setcurrentEventPage] = useState(0);
+  const [currentJoinedPage, setCurrentJoinedPage] = useState(0);
+  const [currentOwnedPage, setCurrentOwnedPage] = useState(0);
 
-  const handlePageChange = (selectedPage) => {
-    setCurrentPage(selectedPage);
+  const handleEventPageChange = (selectedEventPage) => {
+    setcurrentEventPage(selectedEventPage);
+  };
+  const handleJoinedPageChange = (selectedJoinedPage) => {
+    setCurrentJoinedPage(selectedJoinedPage);
+  };
+
+  const handleOwnedPageChange = (selectedOwnedPage) => {
+    setCurrentOwnedPage(selectedOwnedPage);
   };
   return (
     <>
@@ -87,7 +96,7 @@ function ViewProfile() {
                       </div>
                   )}
                   <div className="events-list112">
-                    {attending && profile.eventsattending.slice(currentPage*3,currentPage*3+3).map((event) => (
+                    {attending && profile.eventsattending.slice(currentEventPage*3,currentEventPage*3+3).map((event) => (
                       <div className="event112" key={event.eventid}>
                         <div className="event-left112">
                           <div className="event-left-left112">
@@ -121,7 +130,7 @@ function ViewProfile() {
                         </div>
                       </div>
                     ))}
-                    {owned && profile.eventsowned.slice(currentPage*3,currentPage*3+3).map((event) => (
+                    {owned && profile.eventsowned.slice(currentEventPage*3,currentEventPage*3+3).map((event) => (
                       <div className="event112" key={event.eventid}>
                       <div className="event-left112">
                         <div className="event-left-left112">
@@ -166,7 +175,7 @@ function ViewProfile() {
                         pageCount={Math.ceil((attending ? profile.eventsattending.length : profile.eventsowned.length) / 3)}
                         marginPagesDisplayed={2}
                         pageRangeDisplayed={3}
-                        onPageChange={(selectedPage) => handlePageChange(selectedPage.selected)}
+                        onPageChange={(selectedEventPage) => handleEventPageChange(selectedEventPage.selected)}
                         containerClassName={'pagination'}
                         activeClassName={'active'}
                       />
@@ -178,18 +187,71 @@ function ViewProfile() {
             <div className="right112">
               <div className="right-top112"></div>
               <div className="groupsjoined112">
-                <div classname="groupsjoinedtext112">Groups Joined</div>
+                <div className="groupsjoinedtext112">Groups Joined</div>
+                
                 <div className="groupsjoinedlist112">
-                  {profile.groupsjoined.map((group) => (
-                    <div className="group-bo112" key={group.groupid}>
-                      <div className="grouptitle112">{group.title}</div>
-                      <div className="groupmembers112">{group.attendees} members</div>
-                      <div className="group-creator112">Created by {group.creator}</div>
+                  {profile.groupsjoined.slice(currentJoinedPage*2,currentJoinedPage*2+2).map((group) => (
+                    <div className="group-box112" key={group.groupid}>
+                      <div className="group-box-left112">
+                        <div className="grouptitle112">{group.title}</div>
+                        <div className="groupmembers112">{group.attendees} members</div>
+                        <div className="group-creator112">Created by {group.creator}</div>
+                      </div>
+                      <div className="group-box-right112">
+                        {/* add a leave group button */}
+                        <button className="leave-group112" type="submit">
+                          Leave Group
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                {profile.groupsjoined.length > 2 ? (
+                  <ReactPaginate
+                  previousLabel={'<'}
+                    nextLabel={'>'}
+                    breakLabel={'...'}
+                  pageCount={Math.ceil((attending ? profile.groupsjoined.length : profile.groupsjoined.length) / 2)}
+                  marginPagesDisplayed={1}
+                  pageRangeDisplayed={2}
+                  onPageChange={(selectedJoinedPage) => handleJoinedPageChange(selectedJoinedPage.selected)}
+                  containerClassName={'paginationjoined'}
+                  activeClassName={'activejoined'}
+                  />):null}
+              </div>
+              <div className="right-bottom112">
+              <div className="groupsjoined112">
+                  <div className="groupsjoinedtext112">Groups Owned</div>
+                  <div className="groupsjoinedlist112">
+                  {profile.groupsowned.slice(currentOwnedPage*2,currentOwnedPage*2+2).map((group) => (
+                    <div className="group-box112" key={group.groupid}>
+                      <div className="group-box-left112">
+                        <div className="grouptitle112">{group.title}</div>
+                        <div className="groupmembers112">{group.attendees} members</div>
+                        <div className="group-creator112">Created by {group.creator}</div>
+                      </div>
+                      <div className="group-box-right112">
+                        <button className="manage-group112" type="submit">
+                          Manage Group
+                        </button>
+                      </div>
                     </div>
                   ))}
                   </div>
+                  {profile.groupsowned.length > 2 ? (
+                    <ReactPaginate
+                        previousLabel={'<'}
+                      nextLabel={'>'}
+                      breakLabel={'...'}
+                        pageCount={Math.ceil((attending ? profile.groupsowned.length : profile.groupsowned.length) / 2)}
+                        marginPagesDisplayed={1}
+                        pageRangeDisplayed={2}
+                        onPageChange={(selectedOwnedPage) => handleOwnedPageChange(selectedOwnedPage.selected)}
+                        containerClassName={'paginationowned'}
+                        activeClassName={'activeowned'}
+                    />) : null}
               </div>
-              <div className="right-bottom112"></div>
+              </div>
             </div>
           </div>
         ))}
