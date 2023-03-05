@@ -18,7 +18,27 @@ let ProfileData = [{
         attendees: 15,
         creator: "Fab. Faveru",
         groupdesc: "running group"
-    }
+    },
+    {
+        groupid: 5,
+        image: running,
+        title: "Running Group",
+        location: "Our Tampines Hub",
+        tags: ["running", "fun", "group"],
+        attendees: 15,
+        creator: "Fab. Faveru",
+        groupdesc: "running group"
+        },
+        {
+            groupid: 6,
+            image: running,
+            title: "Running Group",
+            location: "Our Tampines Hub",
+            tags: ["running", "fun", "group"],
+            attendees: 15,
+            creator: "Fab. Faveru",
+            groupdesc: "running group"
+        },
     ],
 
     groupsowned: [{
@@ -32,10 +52,34 @@ let ProfileData = [{
         groupdesc:
             "We focus on training for yearly IPPT test and Lorem ipsum  (need to have certain character limit",
 
-    }
+    },
+    {
+        groupid: 3,
+        image: running,
+        title: "IPPT Training ",
+        location: "Our Tampines Hub",
+        tags: ["running", "swimming", "cycling", "fun", "group"],
+        attendees: 15,
+        creator: "Jon. Faveru",
+        groupdesc:
+            "We focus on training for yearly IPPT test and Lorem ipsum  (need to have certain character limit",
+
+        },
+        {
+            groupid: 4,
+            image: running,
+            title: "IPPT Training ",
+            location: "Our Tampines Hub",
+            tags: ["running", "swimming", "cycling", "fun", "group"],
+            attendees: 15,
+            creator: "Jon. Faveru",
+            groupdesc:
+                "We focus on training for yearly IPPT test and Lorem ipsum  (need to have certain character limit",
+    
+        },
     ],
     eventsattending: [{
-        eventid: 3,
+        eventid: 5,
         eventimage: running,
         eventtitle: "Running Session",
         eventlocation: "Our Tampines Hub",
@@ -45,7 +89,7 @@ let ProfileData = [{
         eventcreator: "Fab. Faveru",
         eventdescription: "We will do 6x400m around the track",
     }, {
-        eventid: 4,
+        eventid: 6,
         eventimage: running,
         eventtitle: "Running Session",
         eventlocation: "Our Tampines Hub",
@@ -54,7 +98,28 @@ let ProfileData = [{
         eventattendees: 20,
         eventcreator: "Fab. Faveru",
         eventdescription: "We will do 6x400m around the track",
-    },],
+    },{
+        eventid: 7,
+        eventimage: running,
+        eventtitle: "Running Session",
+        eventlocation: "Our Tampines Hub",
+        eventdate: "25/10/2023",
+        eventtags: ["Beginner", "Running", "Fun"],
+        eventattendees: 20,
+        eventcreator: "Fab. Faveru",
+        eventdescription: "We will do 6x400m around the track",
+        },
+        {
+            eventid: 8,
+            eventimage: running,
+            eventtitle: "Running Session",
+            eventlocation: "Our Tampines Hub",
+            eventdate: "25/10/2023",
+            eventtags: ["Beginner", "Running", "Fun"],
+            eventattendees: 20,
+            eventcreator: "Fab. Faveru",
+            eventdescription: "We will do 6x400m around the track",
+        },],
     eventsowned: [{
         eventid: 1,
         eventimage: running,
@@ -75,7 +140,28 @@ let ProfileData = [{
         eventattendees: 20,
         eventcreator: "Jon. Faveru",
         eventdescription: "We will do 6x400m around the track",
-    },]
+    },{
+        eventid: 3,
+        eventimage: running,
+        eventtitle: "2.4km training",
+        eventlocation: "Our Tampines Hub",
+        eventdate: "24/10/2023",
+        eventtags: ["Beginner", "Running"],
+        eventattendees: 20,
+        eventcreator: "Jon. Faveru",
+        eventdescription: "We will do 6x400m around the track",
+        },
+        {
+            eventid: 4,
+            eventimage: running,
+            eventtitle: "2.4km training",
+            eventlocation: "Our Tampines Hub",
+            eventdate: "24/10/2023",
+            eventtags: ["Beginner", "Running"],
+            eventattendees: 20,
+            eventcreator: "Jon. Faveru",
+            eventdescription: "We will do 6x400m around the track",
+        },]
 }
 
 ];

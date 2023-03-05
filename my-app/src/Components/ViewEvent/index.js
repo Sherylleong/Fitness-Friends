@@ -3,6 +3,7 @@ import iconpin from "../Resources/location.png";
 import attendee from "../Resources/attendees.png";
 import attendee1 from "../Resources/attendee.png";
 import arrow from "../Resources/arrow.png";
+import MapContainer from "../EventMap/EventMap.js";
 import { useEffect, useState } from "react";
 import "./ViewEvent.css";
 
@@ -68,7 +69,15 @@ function ViewEvent() {
             </div>
 
             <div className="bottom1">
-              <div className="event-desc"> </div>
+              <div className="event1">
+                <div className="event-title">Event Description:</div>
+
+                <div className="event-desc">{event.eventdescription}</div>
+              </div>
+
+              <div className="googlemap">
+                <MapContainer />
+              </div>
             </div>
           </div>
         ))}
