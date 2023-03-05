@@ -20,8 +20,6 @@ body {
 .account-form {
     padding: 5rem;
     background-image: white;
-    border-radius: 10px;
-    margin: 0.5rem;
     align-items: center;
     justify-content: center;
 }
@@ -29,8 +27,11 @@ body {
 .account-form-container {
     width: 500px;
     height: 500px;
-    background-color: white;
     padding: 0rem 1rem 0rem 1.5rem;
+    border: 0.5px;
+    border-style: solid;
+    border-color: #c8cfc8;
+    background-color: white;
 }
 
 .account-form-container h1, h2 {
@@ -65,13 +66,32 @@ input {
     border: none;
     width: 98%;
     background-color: #E5E5E5E5;
-    border-radius: 10px;
+    border-radius: 5px;
 }
   
 input::placeholder {
     color:#808080;
 }
 
+.account-form-incorrect {
+    color: red;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: left;
+    /* margin-bottom: 0.5rem; */
+}
+
+.account-form-correct {
+    color: green;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: left;
+    /* margin-bottom: 0.5rem; */
+}
+
+.hidden {
+    display:none;
+}
 .account-form-options {
     display: flex;
     justify-content: space-between;

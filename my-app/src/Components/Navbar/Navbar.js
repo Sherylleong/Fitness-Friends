@@ -1,28 +1,53 @@
 import "./nav-styles.css";
-import { link, RouterProvider } from 'react-router-dom'
+import { Link, RouterProvider, redirect, useNavigate } from 'react-router-dom'
+import { useContext } from "react";
+import { dispatch, useStoreState} from "../../App"
+
 
 export default function Navbar() {
+	let showLogin = true;
+	const userId = useStoreState("userId");
+
+	if (userId != "") {
+		showLogin = false;
+	}
+
+	const signedOutStyle = {
+		display: showLogin ? "block" : "none"
+	}
+
+	const loggedInStyle = {
+		display: showLogin ? "none" : "block"
+	}
+
+	const logOut = (e) => {
+		dispatch({newId: ""});
+	}
+
 	return (
 		<nav className="nav">
-			<img className="site-icon" href="/" src={require("../../images/site-icon.png")}></img>
+			<img className="site-icon" src={require("../../images/site-icon.png")}></img>
 			<ul>
 				<li>
-					<a href="/Home">Home</a>
+					<Link to="/Home">Home</Link>
 				</li>
 				<li>
-					<a href="/CRUD">CRUD</a>
+					<Link to="/CRUD">CRUD</Link>
 				</li>
 				<li>
-					<a href="/Events">Events</a>
+					<Link to="/Events">Events</Link>
 				</li>
 				<li>
-					<a href="/Groups">Groups</a>
+					<Link to="/Groups">Groups</Link>
 				</li>
-				<li>
-					<a href="/Login">Log In</a>
+				<li style={signedOutStyle}>
+					<Link to="/Login">Log In</Link>
 				</li>
-				<li>
-					<a href="/Signup">Sign up</a>
+				<li style={signedOutStyle}>
+					<Link to="/Signup">Sign up</Link>
+				</li>
+				<li style={loggedInStyle}>
+					<Link to="/Home" onClick={logOut}>Logout</Link>
 				</li>
 			</ul>
 		</nav>

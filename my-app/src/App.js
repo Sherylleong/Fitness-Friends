@@ -1,33 +1,58 @@
+import React, { useState, useEffect  } from "react";
+
 import logo from "./logo.svg";
 import "./App.css";
 import Navbar from "./Components/Navbar/Navbar";
 import Login from "./Components/Login/Login";
+import CompleteRegistration from "./Components/CompleteRegistration/CompleteRegistration";
 import SignUp from "./Components/Signup/Signup";
+import ForgetPassword from "./Components/ForgetPassword/ForgetPassword";
 import MapContainer from "./Components/EventMap/EventMap";
 import CRUD from "./Components/TestFirebase/CRUD";
 import ViewGroup from "./Components/ViewGroup";
 import ViewEvent from "./Components/ViewEvent";
 import ViewProfile from "./Components/ViewProfile";
+import { createStore } from 'react-hooks-global-state'
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
+// import { withRouter } from "react-router";
+
+
+const setUserId = (state, action) => {
+  return {...state, userId: action.newId};
+}
+// Global State
+const { dispatch, useStoreState } = createStore(setUserId, {userId: ""});
+
+export { dispatch, useStoreState };
 
 function App() {
   let component;
-  switch (window.location.pathname) {
+  let navBarDisplay = true; 
+  
+  const location = useLocation().pathname;
+  console.log(location);
+  switch (location) {
     case "/Events":
       component = <MapContainer />;
       break;
     case "/Login":
       component = <Login />;
+      navBarDisplay = false;
       break;
     case "/Signup":
       component = <SignUp />;
+      navBarDisplay = false;
       break;
+    case "/ForgetPassword":
+        component = <ForgetPassword />;
+        navBarDisplay = false;
+        break;
     case "/CRUD":
       component = <CRUD />;
       break;
-    case "/ViewGroup":
+    case "/Groups":
       component = <ViewGroup />;
       break;
-
     case "/ViewEvent":
       component = <ViewEvent />;
       break;
@@ -37,12 +62,71 @@ function App() {
     default:
       break;
   }
+
+  const [showNavBar, setShowNavBar] = useState(navBarDisplay); //Best solution I found
+
+const NoNavContainer = () => {
+  <>
+  <Routes>
+    <Route path="/Login" element={<Login />}/>
+    <Route path="/Signup" element={<SignUp />}/>
+    <Route path="/ForgetPassword" element={<ForgetPassword />}/>
+  </Routes>
+  </>
+}
+
+const DefaultContainer = () => (
+  <>
+  <Navbar/>
+  <Routes>
+    <Route path="/Events" element={<MapContainer />}/>
+    <Route path="/CRUD" element={<CRUD />}/>
+    <Route path="/ViewGroup" element={<ViewGroup />}/>
+    <Route path="/ViewEvent" element={<ViewEvent />}/>
+    <Route path="/ViewProfile" element={<ViewProfile />}/>
+  </Routes>
+  </>
+);
+
+  // return (
+  //   <>
+  //       <Routes>
+  //           <Route exact path="/Login" element={NoNavContainer}></Route>
+  //           <Route exact path='/Events' element={DefaultContainer}></Route>
+  //       </Routes>
+  //   </>
+  // );
+
   return (
     <>
-      <Navbar />
-      {component}
+    {!["/Login","/CompleteRegistration","/Signup","/ForgetPassword"].includes(useLocation().pathname) && <Navbar />}
+    <Routes>
+      <Route path="/Login" element={<Login />}/>
+      <Route path="/CompleteRegistration" element={<CompleteRegistration />} />
+      <Route path="/Signup" element={<SignUp />}/>
+      <Route path="/ForgetPassword" element={<ForgetPassword />}/>
+      <Route path="/Events" element={<MapContainer />}/>
+      <Route path="/CRUD" element={<CRUD />}/>
+      <Route path="/ViewGroup" element={<ViewGroup />}/>
+      <Route path="/ViewEvent" element={<ViewEvent />}/>
+      <Route path="/ViewProfile" element={<ViewProfile />}/>
+    </Routes>
     </>
   );
 }
 
 export default App;
+
+// class ShowNavBar extends React.Component {
+//   currlocation = this.props.location.pathname
+//   display = true;
+//   render() {
+//     return (
+//       <>
+//       {!["/Login","/Signup","/ForgetPassword"].includes(this.props.location.pathname) && <Navbar />}
+//       </>
+//     );
+//   }
+// }
+
+// const ShowNavBarComponent = withRouter(ShowNavBar)
