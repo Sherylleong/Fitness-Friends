@@ -1,49 +1,68 @@
-export default function Filters(){
+import "./filter-styles.css";
+
+export default function Filters({handleFilters}){
 	let groups = ["a","b"];
-	function handleFilters(){}
 	return (
-		<form>
+		<form className="events-form">
+            <h1>Filters</h1>
+
             <fieldset>
                 <legend>Intensity</legend>
+                <div className="filter-item">
+                <label>
                 <input type="checkbox" name="Intensity" value="Low" onChange={(e) => {handleFilters(e);}}/>
-                <label for="Low">Low</label>
+                {' '}Low </label>
+                <label>
                 <input type="checkbox" name="Intensity" value="Moderate" onChange={(e) => {handleFilters(e);}}/>
-                <label for="Moderate">Moderate</label>
+                {' '}Moderate </label>
+                <label>
                 <input type="checkbox" name="Intensity" value="Vigorous" onChange={(e) => {handleFilters(e);}}/>
-                <label for="Vigorous">Vigorous</label>
+                {' '}Vigorous </label>
+                </div>
             </fieldset>
             <fieldset>
                 <legend>Date</legend>
-                <label>Start Date</label>
+                <div className="filter-item">
+                <label>
                 <input type="date" onChange={(e) => {handleFilters(e);}}/>
-                <label>End Date</label>
-                <input type="date" onChange={(e) => {handleFilters(e);}}/>
+                </label>
+                </div>
             </fieldset>
             <fieldset>
                 <legend>Category</legend>
+                <div className="filter-item">
+                <label>
                 <input type="checkbox" name="Category" value="Walking" onChange={(e) => {handleFilters(e);}}/>
-                <label for="Walking">Walking</label>
+                {' '}Walking </label>
+                <label>
                 <input type="checkbox" name="Category" value="Jogging" onChange={(e) => {handleFilters(e);}}/>
-                <label for="Jogging">Jogging</label>
+                {' '}Jogging </label>
+                <label>
                 <input type="checkbox" name="Category" value="Running" onChange={(e) => {handleFilters(e);}}/>
-                <label for="Running">Running</label>
+                {' '}Running </label>
+                <label>
                 <input type="checkbox" name="Category" value="Climbing" onChange={(e) => {handleFilters(e);}}/>
-                <label for="Climbing">Climbing</label>
+                {' '}Climbing </label>
+                <label>
                 <input type="checkbox" name="Category" value="Biking" onChange={(e) => {handleFilters(e);}}/>
-                <label for="Biking">Biking</label>
+                {' '}Biking </label>
+                <label>
                 <input type="checkbox" name="Category" value="Sports" onChange={(e) => {handleFilters(e);}}/>
-                <label for="Sports">Sports</label>
+                {' '}Sports </label>
+                <label>
                 <input type="checkbox" name="Category" value="Other" onChange={(e) => {handleFilters(e);}}/>
-                <label for="Other">Other</label>
+                {' '}Other </label>
+                </div>
             </fieldset>
             <fieldset>
                 <legend>Group</legend>
                 {groups.map(group => {
            		return (
-                    <>
+                    <div className="filter-item">
+                    <label>
                     <input type="checkbox" name="Group" value={group} onChange={(e) => {handleFilters(e);}}/>
-                    <label for="Group">{group}</label>
-                    </>
+                    {' '}{group}</label>
+                    </div>
            		)
          	})}
             </fieldset>
