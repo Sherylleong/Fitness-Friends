@@ -5,9 +5,15 @@ import attendee1 from "../Resources/attendee.png";
 import arrow from "../Resources/arrow.png";
 import { useEffect, useState } from "react";
 import "./ViewGroup.css";
+import ReactPaginate from "react-paginate";
 
 function ViewGroup() {
-    
+  const [currentPg, setCurrentPg] = useState(0);
+
+  const handlePageChange = (selectedPage) => {
+    setCurrentPg(selectedPage);
+  };
+
   return (
     <>
       <div clasName="full-screen">
@@ -67,39 +73,53 @@ function ViewGroup() {
 
             <div className="bottom">
               <div className="upcoming"> Upcoming Events </div>
+
               <div className="grpevents">
-                {group.events.map((event) => (
-                  <div className="event" key={event.eventid}>
-                    <div className="left">
-                      <div className="eventtitle">{event.eventtitle}</div>
-                      <div className="eventdate">Date: {event.eventdate}</div>
-                      <div className="eventlocation">
-                        Location: {event.eventlocation}
-                      </div>
-                    </div>
-
-                    <div className="right">
-                      <div className="attendees-img">
-                        {" "}
-                        <img src={attendee1}></img>
+                {group.events
+                  .slice(currentPg * 5, currentPg * 5 + 5)
+                  .map((event) => (
+                    <div className="event" key={event.eventid}>
+                      <div className="left">
+                        <div className="eventtitle">{event.eventtitle}</div>
+                        <div className="eventdate">Date: {event.eventdate}</div>
+                        <div className="eventlocation">
+                          Location: {event.eventlocation}
+                        </div>
                       </div>
 
-                      <div>{event.eventattendees} participants</div>
-                      <div className="join-event-btn">
-                        <button className="join-event" type="submit">
-                          Join
-                        </button>
+                      <div className="right">
+                        <div className="attendees-img">
+                          {" "}
+                          <img src={attendee1}></img>
+                        </div>
+
+                        <div>{event.eventattendees} participants</div>
+                        <div className="join-event-btn">
+                          <button className="join-event" type="submit">
+                            Join
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
-            </div>
-
-            <div className="see-more">
-              <button className="seemore" type="submit">
-                See More Events
-              </button>
+              <div className="event-pagination112">
+                {group.events.length > 5 ? (
+                  <ReactPaginate
+                    previousLabel={"<"}
+                    nextLabel={">"}
+                    breakLabel={"..."}
+                    pageCount={Math.ceil(group.events.length / 5)}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={3}
+                    onPageChange={(selectedPg) =>
+                      handlePageChange(selectedPg.selected)
+                    }
+                    containerClassName={"pagination"}
+                    activeClassName={"active"}
+                  />
+                ) : null}
+              </div>
             </div>
           </div>
         ))}
