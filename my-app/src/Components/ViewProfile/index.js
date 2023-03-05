@@ -177,6 +177,18 @@ function ViewProfile() {
             </div>
             <div className="right112">
               <div className="right-top112"></div>
+              <div className="groupsjoined112">
+                <div classname="groupsjoinedtext112">Groups Joined</div>
+                <div className="groupsjoinedlist112">
+                  {profile.groupsjoined.map((group) => (
+                    <div className="group-bo112" key={group.groupid}>
+                      <div className="grouptitle112">{group.title}</div>
+                      <div className="groupmembers112">{group.attendees} members</div>
+                      <div className="group-creator112">Created by {group.creator}</div>
+                    </div>
+                  ))}
+                  </div>
+              </div>
               <div className="right-bottom112"></div>
             </div>
           </div>
