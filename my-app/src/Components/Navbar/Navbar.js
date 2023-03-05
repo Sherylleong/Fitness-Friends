@@ -47,6 +47,9 @@ export default function Navbar() {
 					<Link to="/Signup">Sign up</Link>
 				</li>
 				<li style={loggedInStyle}>
+					<Link to="/ViewProfile">Profile</Link>
+				</li>
+				<li style={loggedInStyle}>
 					<Link to="/Home" onClick={logOut}>Logout</Link>
 				</li>
 			</ul>
