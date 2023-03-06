@@ -5,8 +5,6 @@ export default function Filters({handleFilters, groups}){
 
 	return (
 		<form className="events-form">
-            <h1>Filters</h1>
-
             <fieldset>
                 <legend>Difficulty</legend>
                 <div className="filter-item">

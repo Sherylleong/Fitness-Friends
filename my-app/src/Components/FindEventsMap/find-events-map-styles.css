@@ -2,30 +2,34 @@
 .find-events-page {
     font-size: 20px;
     display: flex; 
-    flex-direction: row;
-    justify-content:space-around;
-    align-items: flex-start;
+    flex-direction: column;
+
 }
 
 .events-map-list {
     display: flex; 
     flex-direction: column;
-    justify-content:space-around;
+    justify-content:flex-start;
 
 
 }
-.event-card {
-    margin:10px;
+.event-map-card {
+    margin:0px;
     display: flex; 
     flex-direction: row;
     justify-content:space-between;
     align-items: center;
     border-bottom: 2px solid;
 }
-.event-card p {
-    margin:0;
-}
 
+.event-list-card {
+    margin:0px;
+    display: flex; 
+    flex-direction: row;
+    justify-content:space-between;
+    align-items: center;
+    border-bottom: 2px solid;
+}
 #mapview, #listview {
     margin: 5px;
     font-size: 25px;
@@ -33,23 +37,23 @@
     background-color: white;
 }
 
-.event-card .event-name {
-    font-size: 20px;
+.event-map-card .event-map-name {
+    font-size: 25px;
     font-weight: bold;
     padding: 0px;
     margin: 0px;
 }
-.event-card .event-time {
+.event-map-card .event-map-time {
     font-size: 18px;
     font-weight: bold;
     color: orangered;
 }
-.event-card .event-location {
+.event-map-card .event-map-location {
     font-size: 18px;
     color: rgb(94, 85, 85);
 }
 
-.event-card .event-category,.event-card .event-difficulty {
+.event-map-card .event-map-category,.event-map-card .event-map-difficulty {
     font-size: 15px;
     border: 2px solid;
     padding: 0px;
@@ -58,27 +62,62 @@
     margin: 5px;
 }
 
-.event-card .join-event {
+.event-map-card .join-event {
     font-size: 18px;
     padding: 0px;
 }
 
 #locationsearch{
     font-size: 20px;
+    margin-top: 10px;
+    margin-bottom: 0px;
 }
 
 .event-map-header {
     display: flex;
     flex-direction: row;
     justify-content:space-between;
+
 }
 .event-map-info-header {
     display: flex;
     flex-direction: column;
 
+
 }
 .event-map-info {
     display: flex;
     flex-direction: row;
-    justify-content:space-between;
+    justify-content:space-around;
+}
+
+.event-list-info {
+    display: flex;
+    flex-direction: row;
+    justify-content:space-around;
+}
+
+.crop {
+    width: 150px;
+    height: 150px;
+    border: 2px solid;
+    border-radius: 20px;
+    overflow: hidden;
+
+
+}
+
+.crop img {
+    object-fit: cover;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+
+}
+
+.event-list-card .event-list-name {
+    font-size: 30px;
+    font-weight: bold;
+    padding: 0px;
+    margin: 0px;
 }

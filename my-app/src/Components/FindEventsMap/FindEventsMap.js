@@ -1,21 +1,45 @@
 import { useState,useReducer, useEffect  } from "react";
 import MapContainer from "../EventMap/EventMap.js"
-import Filters from "../Filters/Filters.js"
+import EventFilters from "../Filters/EventFilters.js"
 import "./find-events-map-styles.css";
 
 
-function eventsCard(event){
+function eventsMapCard(event){
     return (
-        <div className="event-card">
+        <div className="event-map-card">
         <div>
-            <p className="event-name">{event.name}</p>
-            <p className="event-time">{event.date}, {event.time}</p>
-            <p className="event-location">{event.location}</p>
-            <p className="event-category">{event.category}</p>
-            <p className="event-difficulty">{event.difficulty}</p>
+            <p className="event-map-name">{event.name}</p>
+            <p className="event-map-time">{event.date}, {event.time}</p>
+            <p className="event-map-location">{event.location}</p>
+            <p className="event-map-category">{event.category}</p>
+            <p className="event-map-difficulty">{event.difficulty}</p>
         </div>
         <div>
-            <p className="event-attendees">{event.attendees} participants</p>
+            <p className="event-map-attendees">{event.attendees} participants</p>
+            <button className="join-event">Join</button>
+        </div>
+        </div>
+    )
+}
+function eventsListCard(event){
+    return (
+        <div className="event-list-card">
+        <div className="crop">
+            <img src="http://i.stack.imgur.com/wPh0S.jpg"/>
+        </div>
+        <div>
+            <h1 className="event-list-name">{event.name}</h1>
+            <p className="event-list-time">{event.date}, {event.time}</p>
+            <p className="event-list-location">{event.location}</p>
+            <p className="event-list-attendees">{event.attendees} participants</p>
+
+        </div>
+        <div>
+            <p className="event-list-category">{event.category}</p>
+            <p className="event-list-difficulty">{event.difficulty}</p>
+        </div>
+        <div>
+            
             <button className="join-event">Join</button>
         </div>
         </div>
@@ -27,7 +51,7 @@ function Searchbar({handleFilters}){
     return (
         <input 
         id="locationsearch"
-        name="searchLocation"
+        name="search"
         type="text"
         className="searchbar"
         placeholder="Search Location"
@@ -40,28 +64,38 @@ function EventMapHeader({eventsView,setEventsView}){
         setEventsView(e.target.id);
           };
     return (
-        <div className="event-map-header">{/*row*/}
-            <h1>Search Events</h1>
-        <div>
-            <button id="mapview" style={{ fontWeight: eventsView === "mapview" ? "bold" : "" }} onClick={(e)=>changeView(e)}>Map View</button>
-            <button id="listview" style={{ fontWeight: eventsView === "listview" ? "bold" : "" }} onClick={(e)=>changeView(e)}>List View</button>
-        </div>
-        </div>
-    )
+            <div style={{ display:"flex", flexDirection:"row", justifyContent:"space-around"}}>
+                <h1 style={{marginTop:"0px", position:"relative", right:"270px"}}>Filters</h1>
+                <div style={{marginTop:"0px", position:"relative", left:"400px"}}>
+                <button id="mapview" style={{ fontWeight: eventsView === "mapview" ? "bold" : "" }} onClick={(e)=>changeView(e)}>Map View</button>
+                <button id="listview" style={{ fontWeight: eventsView === "listview" ? "bold" : "" ,marginRight:"100px"}} onClick={(e)=>changeView(e)}>List View</button>
+                </div>
 
+            </div>
+
+    )
 }
 function EventsMapList({events, handleFilters}){
     return (
         <div className="events-map-list">
             <Searchbar handleFilters={handleFilters}/>
             {
-                events.map((event) => eventsCard(event))
+                events.map((event) => eventsMapCard(event))
             }
         </div>
-        
     )
 }
-
+function EventsListList({events, handleFilters}){
+    return (
+        <div className="events-list-list">
+            <h1>Search Events</h1>
+            <Searchbar handleFilters={handleFilters}/>
+            {
+                events.map((event) => eventsListCard(event))
+            }
+        </div>
+    )
+}
 
 export default function FindEventsMap(){
 
@@ -118,7 +152,7 @@ export default function FindEventsMap(){
     const [filters, setFilters] = useReducer(
         (state, newState) => ({ ...state, ...newState }),
         {
-            searchLocation: "",
+            search: "",
             difficulty: [],
             startDate: "",
             endDate: "",
@@ -128,7 +162,7 @@ export default function FindEventsMap(){
       );
       let groups =   Array.from(new Set(events.map((event)=>event.group)));
 
-        events = (filterEvents(eventsdb, filters));
+        events = (filterEvents(eventsdb, filters, eventsView));
 
   
 
@@ -152,7 +186,7 @@ export default function FindEventsMap(){
         }
     }
 
-    function filterEvents(events, filters){
+    function filterEvents(events, filters, eventsView){
         let filteredEvents = events.filter((event) => {
             if (filters.difficulty.length !==0 && !(filters.difficulty.includes(event.difficulty))) return false;
             if (filters.category.length !==0 && !(filters.category.includes(event.category))) return false;
@@ -166,27 +200,39 @@ export default function FindEventsMap(){
                 let filterEndDate = new Date(filters.endDate);
                 if (eventDate > filterEndDate) return false;
             }
-            return event.location.toLowerCase().indexOf(filters.searchLocation.toLowerCase()) !==-1;
+            if (eventsView==="mapview") return event.location.toLowerCase().indexOf(filters.search.toLowerCase()) !==-1;
+            return event.location.toLowerCase().indexOf(filters.search.toLowerCase()) !==-1;
         })
         return filteredEvents;
     }
 
-    function EventMapInfo(){
-        return (
-            <div className="event-map-info">
-            <MapContainer />
-            <EventsMapList events={events} eventsView={eventsView} setEventsView={setEventsView} handleFilters={handleFilters}/>
-            </div>
-        )
-    }
+
     return(
-        <div className="find-events-page" >{/*row*/}
-            <Filters groups={groups} handleFilters={handleFilters}/>
-            <div className="event-map-info-header">{/*column*/}
-                <EventMapHeader eventsView={eventsView} setEventsView={setEventsView} />{/*row*/}
-                <EventMapInfo/>
-            </div>
+        <div className="find-events-page" >{/*col*/}
+            <EventMapHeader eventsView={eventsView} setEventsView={setEventsView} />{/*row*/}
+            {eventsView==="mapview" ?
+            (<EventMapInfo groups={groups} handleFilters={handleFilters} events={events} eventsView={eventsView} setEventsView={setEventsView} />)
+        : (<EventListInfo groups={groups} handleFilters={handleFilters} events={events} eventsView={eventsView} setEventsView={setEventsView} />)}
         </div>
 
+    )
+}
+
+function EventMapInfo({groups, handleFilters, events, eventsView, setEventsView}){
+    return (
+        <div className="event-map-info">
+        <EventFilters groups={groups} handleFilters={handleFilters}/>
+        <MapContainer />
+        <EventsMapList events={events} eventsView={eventsView} setEventsView={setEventsView} handleFilters={handleFilters}/>    
+    </div>
+    )
+}
+
+function EventListInfo({groups, handleFilters, events, eventsView, setEventsView}){
+    return (
+        <div className="event-list-info">
+        <EventFilters groups={groups} handleFilters={handleFilters}/>
+        <EventsListList events={events} eventsView={eventsView} setEventsView={setEventsView} handleFilters={handleFilters}/>    
+    </div>
     )
 }
