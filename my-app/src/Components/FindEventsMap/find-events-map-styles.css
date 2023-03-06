@@ -4,13 +4,14 @@
     display: flex; 
     flex-direction: row;
     justify-content:space-around;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .events-map-list {
     display: flex; 
     flex-direction: column;
     justify-content:space-around;
+
 
 }
 .event-card {
@@ -64,4 +65,20 @@
 
 #locationsearch{
     font-size: 20px;
+}
+
+.event-map-header {
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+}
+.event-map-info-header {
+    display: flex;
+    flex-direction: column;
+
+}
+.event-map-info {
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
 }

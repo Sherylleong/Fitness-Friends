@@ -35,17 +35,24 @@ function Searchbar({handleFilters}){
     />
     )
 }
-function EventsMapList({events, eventsView,setEventsView,handleFilters}){
+function EventMapHeader({eventsView,setEventsView}){
     function changeView(e){
         setEventsView(e.target.id);
           };
-
     return (
-        <div className="events-map-list">
-            <div>
+        <div className="event-map-header">{/*row*/}
+            <h1>Search Events</h1>
+        <div>
             <button id="mapview" style={{ fontWeight: eventsView === "mapview" ? "bold" : "" }} onClick={(e)=>changeView(e)}>Map View</button>
             <button id="listview" style={{ fontWeight: eventsView === "listview" ? "bold" : "" }} onClick={(e)=>changeView(e)}>List View</button>
-            </div>
+        </div>
+        </div>
+    )
+
+}
+function EventsMapList({events, handleFilters}){
+    return (
+        <div className="events-map-list">
             <Searchbar handleFilters={handleFilters}/>
             {
                 events.map((event) => eventsCard(event))
@@ -164,11 +171,21 @@ export default function FindEventsMap(){
         return filteredEvents;
     }
 
-    return(
-        <div className="find-events-page">
-            <Filters groups={groups} handleFilters={handleFilters}/>
+    function EventMapInfo(){
+        return (
+            <div className="event-map-info">
             <MapContainer />
             <EventsMapList events={events} eventsView={eventsView} setEventsView={setEventsView} handleFilters={handleFilters}/>
+            </div>
+        )
+    }
+    return(
+        <div className="find-events-page" >{/*row*/}
+            <Filters groups={groups} handleFilters={handleFilters}/>
+            <div className="event-map-info-header">{/*column*/}
+                <EventMapHeader eventsView={eventsView} setEventsView={setEventsView} />{/*row*/}
+                <EventMapInfo/>
+            </div>
         </div>
 
     )
