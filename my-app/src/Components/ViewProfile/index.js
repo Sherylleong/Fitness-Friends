@@ -2,8 +2,14 @@ import ProfileData from "./ProfileData";
 import { useState, useEffect } from "react";
 import "./ViewProfile.css";
 import ReactPaginate from "react-paginate";
+import { dispatch, useStoreState } from "../../App"
+import { firestore } from "../FirebaseDb/Firebase";
+import 'firebase/firestore';
+import { async } from "@firebase/util";
+import {collection,doc,documentId,getDocs, query, where } from "firebase/firestore";
 function ViewProfile() {
   // set up attending and owned events
+  const userId = useStoreState("userId");
   const [attending, setAttending] = useState(true);
   const [owned, setOwned] = useState(false);
   const attendinghandler = () => {
@@ -29,6 +35,21 @@ function ViewProfile() {
   const handleOwnedPageChange = (selectedOwnedPage) => {
     setCurrentOwnedPage(selectedOwnedPage);
   };
+  const [profile2, setProfile2] = useState("");
+  const getProfile = async () => {
+    const docRef = query(collection(firestore, "users"), where("userId", "==", userId));
+    const docu = await getDocs(docRef);
+    docu.forEach((doc) => {
+      setProfile2(doc.data());
+    });
+  };
+  useEffect(() => {
+    getProfile();
+  }, []);
+  console.log({profile2});
+  console.log(userId);
+
+
   return (
     <>
       <div clasName="full-screen112">
@@ -41,7 +62,7 @@ function ViewProfile() {
                     <div clasName="profile-img112">
                       <img
                         className="profile-picture112"
-                        src={profile.profilepic}
+                        src={profile2.profilePic}
                       ></img>
                     </div>
                   </div>
@@ -54,7 +75,7 @@ function ViewProfile() {
                 </div>
 
                 <div className="left-top-right112">
-                  <div className="profilename112">{profile.name}</div>
+                  <div className="profilename112">{profile2.displayName}</div>
                   <div className="joined112">Joined {profile.joined}</div>
                   <div className="locationtext112">{profile.location}</div>
                   <div className="attended112">
