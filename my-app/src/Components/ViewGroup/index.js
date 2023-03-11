@@ -58,7 +58,7 @@ function ViewGroup() {
   }, [groupId]); // re-fetch the group whenever the groupId changes
 
   if (!group) {
-    return <div>Loading...</div>; // show a loading message if the group state is null
+    return <div clasName="loading">Loading...</div>; // show a loading message if the group state is null
   }
 
   console.log({ group });

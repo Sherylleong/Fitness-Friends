@@ -1,3 +1,4 @@
+
 .full-screen {
   display: flex;
   flex-wrap: wrap; /* enable wrapping of flex items when there's not enough horizontal space */
@@ -189,7 +190,7 @@
   border: 1px solid black;
   padding: 5px;
   margin: 5px;
-  width: 100px;
+  width: 120px;
   height: 30px;
   text-align: center;
 }

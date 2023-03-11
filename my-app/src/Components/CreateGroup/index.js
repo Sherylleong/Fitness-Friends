@@ -60,12 +60,6 @@ function CreateGroup() {
         groupId: groupId,
       });
     }
-
-
-
-
-
-    
   };
   return (
     <div className="creategroup-form">
@@ -75,10 +69,13 @@ function CreateGroup() {
         <form className="group-form" onSubmit={submitGroup}>
           <div className="grpimage">
             <label>Group image</label>
-            <input
-              type="file"
-              onChange={(e) => setSelectedImage(e.target.files[0])}
-            />
+            <div className="img-input">
+              <input
+                className="img-input-btn"
+                type="file"
+                onChange={(e) => setSelectedImage(e.target.files[0])}
+              />
+            </div>
           </div>
 
           <div className="grptitle">
@@ -124,7 +121,11 @@ function CreateGroup() {
             </div>
           </div>
 
-          <button type="submit">Submit </button>
+          <div className="create-grp">
+            <button type="submit" className="create-grp-btn">
+              Create Group{" "}
+            </button>
+          </div>
         </form>
       </div>
     </div>
