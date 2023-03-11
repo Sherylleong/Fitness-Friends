@@ -168,28 +168,20 @@
 
 .middleright {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
   padding-bottom: 20px;
-  margin-left: 70px;
-  margin-right: 90px;
 }
 
-.tag-title {
-  padding-bottom: 20px;
+.difficulty-title,
+.category-title {
+  padding-bottom: 5px;
+  padding-top: 10px;
   font-family: "Roboto";
   font-style: normal;
   font-weight: 700;
   font-size: 30px;
-}
-
-.tags-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: center;
-  width: 300px;
 }
 
 .tag {
@@ -315,4 +307,12 @@
   background-color: #ee6b6e;
   font-size: 20px;
   margin-bottom: 30px;
+}
+
+.no-events {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 300;
+  font-size: 30px;
+  color: #808080;
 }

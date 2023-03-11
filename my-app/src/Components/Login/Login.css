@@ -1,145 +1,145 @@
 body {
-    overflow: visible;
+  overflow: visible;
 }
 
 .account-form {
-    text-align: center;
-    display: flex;
-    min-height: 100vh;
-    background-image: url("../../images/account-form-background.png");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
+  text-align: center;
+  display: flex;
+  min-height: 100vh;
+  background-image: url("../../images/account-form-background.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 }
 
-.account-form, .login-form {
-    display: flex;
-    flex-direction: column;
+.account-form,
+.login-form {
+  display: flex;
+  flex-direction: column;
 }
 
 .account-form {
-    padding: 5rem;
-    background-image: white;
-    align-items: center;
-    justify-content: center;
+  padding: 5rem;
+  background-image: white;
+  align-items: center;
+  justify-content: center;
 }
 
 .account-form-container {
-    width: 500px;
-    height: 500px;
-    padding: 0rem 1rem 0rem 1.5rem;
-    border: 0.5px;
-    border-style: solid;
-    border-color: #c8cfc8;
-    background-color: white;
+  width: 500px;
+  height: 500px;
+  padding: 0rem 1rem 0rem 1.5rem;
+  border: 0.5px;
+  border-style: solid;
+  border-color: #c8cfc8;
+  background-color: white;
 }
 
-.account-form-container h1, h2 {
-    text-align: left;
-    padding: 2rem 0rem 0rem 0rem;
-    /* margin: 1rem 0rem 0rem 0rem; */
-    margin: 0rem;
+.account-form-container h1,
+h2 {
+  text-align: left;
+  padding: 2rem 0rem 0rem 0rem;
+  /* margin: 1rem 0rem 0rem 0rem; */
+  margin: 0rem;
 }
 
 .account-form-container h2 {
-    color: #F05537;
+  color: #f05537;
 }
 
 .account-form-container h1 {
-    color:#666262; 
-    padding: 0rem 0rem 1rem 0rem;
+  color: #666262;
+  padding: 0rem 0rem 1rem 0rem;
 }
 
 .account-form label {
-    text-align: left;
-    padding: 0.25rem 0.75rem;
-    font-size: 11px;
-    font-family: ;
-    font-weight: bold;
-    color: #333333;
-    /* display:block; */
+  text-align: left;
+  padding: 0.25rem 0.75rem;
+  font-size: 11px;
+
+  font-weight: bold;
+  color: #333333;
+  /* display:block; */
 }
-  
+
 .account-form input {
-    margin: 0.5rem 0;
-    padding: 1rem;
-    border: none;
-    width: 98%;
-    background-color: #E5E5E5E5;
-    border-radius: 5px;
+  margin: 0.5rem 0;
+  padding: 1rem;
+  border: none;
+  width: 98%;
+  background-color: #e5e5e5e5;
+  border-radius: 5px;
 }
-  
+
 .account-form input::placeholder {
-    color:#808080;
+  color: #808080;
 }
 
 .account-form-incorrect {
-    color: red;
-    font-size: 15px;
-    font-weight: bold;
-    text-align: left;
-    /* margin-bottom: 0.5rem; */
+  color: red;
+  font-size: 15px;
+  font-weight: bold;
+  text-align: left;
+  /* margin-bottom: 0.5rem; */
 }
 
 .account-form-correct {
-    color: green;
-    font-size: 15px;
-    font-weight: bold;
-    text-align: left;
-    /* margin-bottom: 0.5rem; */
+  color: green;
+  font-size: 15px;
+  font-weight: bold;
+  text-align: left;
+  /* margin-bottom: 0.5rem; */
 }
 
 .hidden {
-    display:none;
+  display: none;
 }
 .account-form-options {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
 }
 
-.account-form input[type=checkbox] {
-    vertical-align: bottom;
-    position: relative;
-    width: 15px;
-    height: 12px;
-    padding: 0;
-    margin: 0;
+.account-form input[type="checkbox"] {
+  vertical-align: bottom;
+  position: relative;
+  width: 15px;
+  height: 12px;
+  padding: 0;
+  margin: 0;
 }
 
 .checkbox-label {
-    /* padding: 1rem 0rem 1rem 0rem; */
-    width: 8rem;
-    font-color: #1A1A1A;
-    font-weight: bold;
+  /* padding: 1rem 0rem 1rem 0rem; */
+  width: 8rem;
+  font-color: #1a1a1a;
+  font-weight: bold;
 }
 
 .account-form-container a {
-    width: 150px;
-    padding-right: 0.5rem;
-    padding-top: 0.2rem;
-    color:#007AFF;
-    text-align: right;
-    cursor: pointer;
+  width: 150px;
+  padding-right: 0.5rem;
+  padding-top: 0.2rem;
+  color: #007aff;
+  text-align: right;
+  cursor: pointer;
 }
 
 .account-form-container a:hover {
-    text-decoration: underline;
-
+  text-decoration: underline;
 }
 
 .account-form button {
-    border: none;
-    background-color: #F15E41;
-    /* padding: 10px; */
-    width: 98%;
-    margin: 1rem 0rem 1rem 0rem;
-    padding: 10px 0px 10px 0px;
-    border-radius: 10px;
-    cursor: pointer;
-    color: #7439db;
-    font-size: 20px;
-    color: white;
-    text-decoration: none;
+  border: none;
+  background-color: #f15e41;
+  /* padding: 10px; */
+  width: 98%;
+  margin: 1rem 0rem 1rem 0rem;
+  padding: 10px 0px 10px 0px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #7439db;
+  font-size: 20px;
+  color: white;
+  text-decoration: none;
 }
-

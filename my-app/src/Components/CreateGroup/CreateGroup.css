@@ -1,0 +1,111 @@
+.creategroup-form-container {
+  font-family: "Roboto";
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-start;
+  width: 100%;
+  padding: 10px;
+
+  padding-left: 20px;
+}
+
+.group-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-start;
+  min-height: 100vh;
+  width: 80%;
+  height: 100%;
+}
+
+.grpimage {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.grptitle {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 40%;
+}
+
+.grpdesc {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 40%;
+}
+
+.selection {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
+}
+.grpdifficulty {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 20%;
+  margin-right: 20px;
+}
+
+.grpcategory {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 20%;
+}
+
+.grpimage label,
+.grptitle label,
+.grpdifficulty label,
+.grpcategory label,
+.grpdesc label {
+  font-size: 25px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.grptitle input {
+  width: 100%;
+  height: 40px;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  color: #333;
+  font-size: 16px;
+  font-family: "Roboto";
+}
+
+.grpdifficulty select,
+.grpcategory select {
+  width: 100%;
+  height: 40px;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  color: #333;
+  font-size: 16px;
+  text-align: center;
+  font-family: "Roboto";
+}
+
+.grpdesc textarea {
+  width: 100%;
+  height: 150px;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  color: #333;
+  font-size: 16px;
+  resize: vertical;
+  font-family: "Roboto";
+}

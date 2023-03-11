@@ -1,4 +1,4 @@
-import React, { useState, useEffect  } from "react";
+import React, { useState, useEffect } from "react";
 
 import logo from "./logo.svg";
 import "./App.css";
@@ -12,23 +12,23 @@ import CRUD from "./Components/TestFirebase/CRUD";
 import ViewGroup from "./Components/ViewGroup";
 import ViewEvent from "./Components/ViewEvent";
 import ViewProfile from "./Components/ViewProfile";
-import { createStore } from 'react-hooks-global-state'
+import CreateGroup from "./Components/CreateGroup";
+import { createStore } from "react-hooks-global-state";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 // import { withRouter } from "react-router";
 
-
 const setUserId = (state, action) => {
-  return {...state, userId: action.newId};
-}
+  return { ...state, userId: action.newId };
+};
 // Global State
-const { dispatch, useStoreState } = createStore(setUserId, {userId: ""});
+const { dispatch, useStoreState } = createStore(setUserId, { userId: "" });
 
 export { dispatch, useStoreState };
 
 function App() {
   // let component;
-  // let navBarDisplay = true; 
-  
+  // let navBarDisplay = true;
+
   // const location = useLocation().pathname;
   // console.log(location);
   // switch (location) {
@@ -68,18 +68,27 @@ function App() {
 
   return (
     <>
-    {!["/Login","/CompleteRegistration","/Signup","/ForgetPassword"].includes(useLocation().pathname) && <Navbar />}
-    <Routes>
-      <Route path="/Login" element={<Login />}/>
-      <Route path="/CompleteRegistration" element={<CompleteRegistration />} />
-      <Route path="/Signup" element={<SignUp />}/>
-      <Route path="/ForgetPassword" element={<ForgetPassword />}/>
-      <Route path="/Events" element={<FindEventsMap />}/>
-      <Route path="/CRUD" element={<CRUD />}/>
-      <Route path="/ViewGroup" element={<ViewGroup />}/>
-      <Route path="/ViewEvent" element={<ViewEvent />}/>
-      <Route path="/ViewProfile" element={<ViewProfile />}/>
-    </Routes>
+      {![
+        "/Login",
+        "/CompleteRegistration",
+        "/Signup",
+        "/ForgetPassword",
+      ].includes(useLocation().pathname) && <Navbar />}
+      <Routes>
+        <Route path="/Login" element={<Login />} />
+        <Route
+          path="/CompleteRegistration"
+          element={<CompleteRegistration />}
+        />
+        <Route path="/Signup" element={<SignUp />} />
+        <Route path="/ForgetPassword" element={<ForgetPassword />} />
+        <Route path="/Events" element={<FindEventsMap />} />
+        <Route path="/CRUD" element={<CRUD />} />
+        <Route path="/ViewGroup/:groupId" element={<ViewGroup />} />
+        <Route path="/ViewEvent" element={<ViewEvent />} />
+        <Route path="/ViewProfile" element={<ViewProfile />} />
+        <Route path="/CreateGroup" element={<CreateGroup />} />
+      </Routes>
     </>
   );
 }
