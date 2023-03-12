@@ -5,8 +5,7 @@ import "../Login/Login.css";
 import { dispatch, useStoreState} from "../../App"
 import { Link, redirect, useNavigate } from "react-router-dom";
 import { firestore } from "../FirebaseDb/Firebase";
-import { addDoc} from "firebase/firestore";
-import { collection } from 'firebase/firestore';
+import { addDoc, collection} from "firebase/firestore";
 
 export default function CompleteRegistration() {
 	const [username, setUsername] = useState("");
@@ -25,7 +24,7 @@ export default function CompleteRegistration() {
 
             addDoc(collection(firestore, 'users'), {
                 userId: userId,
-                profilePic: null,
+                profilePic: "https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/defaultPFP.png?alt=media&token=93a30cef-5994-4701-9fab-9ad9fdec913c",
 				displayName: username,
 				JoinedDate: formattedDate,
 				Location: null,

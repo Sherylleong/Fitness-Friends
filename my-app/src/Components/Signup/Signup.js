@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { auth } from "../FirebaseDb/Firebase";
 import { createUserWithEmailAndPassword} from "firebase/auth"
 import "../Login/Login.css";
 import { redirect, Link, useNavigate } from "react-router-dom";
 import { dispatch } from "../../App"
+import { addDoc, collection} from "firebase/firestore";
+import { firestore, auth } from "../FirebaseDb/Firebase";
 
 export default function SignUp() {
 	const [username, setUsername] = useState("");
@@ -32,7 +33,18 @@ export default function SignUp() {
 			// console.log(reply);
 			dispatch({newId: reply.user.uid});
 			alert("Account created successfully");
-			navigate("/CompleteRegistration");
+			const today = new Date();
+			const formattedDate = today.getDate() + "/" + (today.getMonth() + 1) + "/" + today.getFullYear();
+
+            addDoc(collection(firestore, 'users'), {
+                userId: reply.user.uid,
+                profilePic: "https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/defaultPFP.png?alt=media&token=93a30cef-5994-4701-9fab-9ad9fdec913c",
+				displayName: null,
+				JoinedDate: formattedDate,
+				Location: null,
+				Bio: null
+            });
+            navigate("/Login"); //Navigate to login to do login demo
 		}).catch((error) => {
 			let code = error.code;
 			switch (code) {
