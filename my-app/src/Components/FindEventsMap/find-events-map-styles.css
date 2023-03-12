@@ -68,9 +68,13 @@
 }
 
 #locationsearch{
-    font-size: 20px;
+    width: 250px;
+    font-size: 25px;
     margin-top: 10px;
-    margin-bottom: 0px;
+    margin-bottom: 10px;
+    background-color: transparent;
+    border:none;
+    border-bottom: 2px solid #acacac;
 }
 
 .event-map-header {
@@ -103,8 +107,6 @@
     border: 2px solid;
     border-radius: 20px;
     overflow: hidden;
-
-
 }
 
 .crop img {
@@ -115,9 +117,53 @@
 
 }
 
+.event-list-img {
+    padding-left: 50px;
+}
+
 .event-list-card .event-list-name {
     font-size: 30px;
     font-weight: bold;
     padding: 0px;
     margin: 0px;
+}
+
+.event-list-card {
+    border-radius: 20px;
+    box-shadow: 5px 8px #acacac;
+    border: none;
+    padding: 10px;
+    padding-left: 40px;
+    padding-right: 40px;
+    margin: 10px;
+    margin-left: 40px;
+    margin-right: 40px;
+    background-color: white;
+    width: 1335px;
+    height: 200px;
+}
+
+.event-list-card .event-list-category,.event-list-card .event-list-difficulty {
+    font-size: 17px;
+    border: 2px solid;
+    width: 130px;
+    background-color: white;
+    padding: 3px;
+    border-radius: 15px;
+    text-align: center;
+    margin: 5px;
+}
+
+.events-list-list {
+    display: flex; 
+    flex-direction: column;
+    justify-content:flex-start;
+    margin:0px;
+    border-radius: 15px;
+    align-items: center;
+    background-color: rgb(231, 231, 231);
+}
+
+.list-card-desc {
+    padding: 10px;
 }

@@ -24,17 +24,19 @@ function eventsMapCard(event){
 function eventsListCard(event){
     return (
         <div className="event-list-card">
+        <div className="event-list-img">
         <div className="crop">
             <img src="http://i.stack.imgur.com/wPh0S.jpg"/>
         </div>
-        <div>
+        </div>
+        <div className="list-card-desc">
             <h1 className="event-list-name">{event.name}</h1>
             <p className="event-list-time">{event.date}, {event.time}</p>
             <p className="event-list-location">{event.location}</p>
             <p className="event-list-attendees">{event.attendees} participants</p>
 
         </div>
-        <div>
+        <div className="list-card-tags">
             <p className="event-list-category">{event.category}</p>
             <p className="event-list-difficulty">{event.difficulty}</p>
         </div>
@@ -47,14 +49,14 @@ function eventsListCard(event){
     )
 }
 
-function Searchbar({handleFilters}){
+function Searchbar({handleFilters, searchText}){
     return (
         <input 
         id="locationsearch"
         name="search"
         type="text"
         className="searchbar"
-        placeholder="Search Location"
+        placeholder={searchText}
         onChange={(e) => handleFilters(e)}
     />
     )
@@ -65,8 +67,9 @@ function EventMapHeader({eventsView,setEventsView}){
           };
     return (
             <div style={{ display:"flex", flexDirection:"row", justifyContent:"space-around"}}>
-                <h1 style={{marginTop:"0px", position:"relative", right:"270px"}}>Filters</h1>
-                <div style={{marginTop:"0px", position:"relative", left:"400px"}}>
+                <h1 style={{marginTop:"0px", position:"relative", right:"100px"}}>Filters</h1>
+                <h1 style={{marginTop:"0px", position:"relative", fontSize:"50px"}}>Search Events</h1>
+                <div style={{marginTop:"0px", position:"relative", left:"250px"}}>
                 <button id="mapview" style={{ fontWeight: eventsView === "mapview" ? "bold" : "" }} onClick={(e)=>changeView(e)}>Map View</button>
                 <button id="listview" style={{ fontWeight: eventsView === "listview" ? "bold" : "" ,marginRight:"100px"}} onClick={(e)=>changeView(e)}>List View</button>
                 </div>
@@ -78,7 +81,7 @@ function EventMapHeader({eventsView,setEventsView}){
 function EventsMapList({events, handleFilters}){
     return (
         <div className="events-map-list">
-            <Searchbar handleFilters={handleFilters}/>
+            <Searchbar handleFilters={handleFilters} searchText="Search Location..."/>
             {
                 events.map((event) => eventsMapCard(event))
             }
@@ -88,8 +91,9 @@ function EventsMapList({events, handleFilters}){
 function EventsListList({events, handleFilters}){
     return (
         <div className="events-list-list">
-            <h1>Search Events</h1>
-            <Searchbar handleFilters={handleFilters}/>
+            <div style={{ position: "relative", left:"-350px"}}>
+            <Searchbar handleFilters={handleFilters}  searchText="Search Event..."/>
+            </div>
             {
                 events.map((event) => eventsListCard(event))
             }
@@ -201,7 +205,7 @@ export default function FindEventsMap(){
                 if (eventDate > filterEndDate) return false;
             }
             if (eventsView==="mapview") return event.location.toLowerCase().indexOf(filters.search.toLowerCase()) !==-1;
-            return event.location.toLowerCase().indexOf(filters.search.toLowerCase()) !==-1;
+            return event.name.toLowerCase().indexOf(filters.search.toLowerCase()) !==-1;
         })
         return filteredEvents;
     }
