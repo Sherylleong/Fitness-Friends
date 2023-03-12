@@ -1,9 +1,11 @@
-import { useState, useRef, createContext, useContext } from "react";
-import { auth } from "../FirebaseDb/Firebase";
+import { useState, useEffect, useRef, createContext, useContext } from "react";
+
 import { signInWithEmailAndPassword} from "firebase/auth";
 import "./Login.css";
 import { dispatch } from "../../App"
 import { Link, redirect, useNavigate } from "react-router-dom";
+import { firestore, auth } from "../FirebaseDb/Firebase";
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
 
 export default function Login() {
 	const [username, setUsername] = useState("");
@@ -12,18 +14,20 @@ export default function Login() {
 	const [showMissingPassword, setMissingPassword] = useState(false);
 	const [showIncorrectLogin, setIncorrectLogin] = useState(false);
 	
+	var currUid = "";
 	const navigate = useNavigate();
 
-	const signIn = (e) => {
+	const signIn = async(e) => {
 		e.preventDefault(); //Prevent Reload on Form Submit
 		setIncorrectLogin(false);
 		if (verifyLoginData()) {
 			// console.log(auth)
 			signInWithEmailAndPassword(auth, username, password).then((reply) => {
-				console.log(reply);
+				// console.log(reply);
 				if (reply.operationType == "signIn") {
 					dispatch({newId: reply.user.uid});
-					navigate("/Events"); //Tbh idk why redirect doesnt work here, worked in Navbar tho...
+					currUid = reply.user.uid;
+					getProfile();
 				}
 			}).catch((error) => {
 				if (error.code == "auth/wrong-password" || error == "auth/user-not-found") {
@@ -34,6 +38,20 @@ export default function Login() {
 			});
 		}
 	}
+
+	const getProfile = () => {
+		console.log("getting profile")
+		const queryDb = query(collection(firestore, 'users'), where("userId", "==", currUid));
+		onSnapshot(queryDb, (querySnapshot) => {
+			querySnapshot.forEach((doc) => {
+				if (doc.data.DisplayName == null) {
+					navigate("/EditProfile");
+				}else {
+					navigate("/Events")
+				}
+			});
+			});
+	};
 
 	const verifyLoginData = (e) => {
 		setMissingPassword(false);

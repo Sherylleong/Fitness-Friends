@@ -14,6 +14,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
+
 function ViewProfile() {
   // set up attending and owned events
   const userId = useStoreState("userId");
@@ -43,6 +44,7 @@ function ViewProfile() {
     setCurrentOwnedPage(selectedOwnedPage);
   };
   const [profile2, setProfile2] = useState("");
+  
   const getProfile = async () => {
     const docRef = query(
       collection(firestore, "users"),
@@ -53,6 +55,7 @@ function ViewProfile() {
       setProfile2(doc.data());
     });
   };
+  
   useEffect(() => {
     getProfile();
   }, []);

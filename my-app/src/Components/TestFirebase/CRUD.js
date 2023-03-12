@@ -1,7 +1,7 @@
 import { useState, useRef, useReducer } from "react";
 import { firestore } from "../FirebaseDb/Firebase";
 import { doc, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
-import { collection, query, onSnapshot } from 'firebase/firestore';
+import { collection, query, onSnapshot , where} from 'firebase/firestore';
 import { clear } from "@testing-library/user-event/dist/clear";
 
 export default function CRUD() {
@@ -41,8 +41,9 @@ export default function CRUD() {
 
     function retrieveItem (e) {
 		console.log(itemList);
-		const queryDb = query(collection(firestore, 'testData'));
+		const queryDb = query(collection(firestore, 'testData'), where("i", "==", "no"));
 		onSnapshot(queryDb, (querySnapshot) => {
+			console.log(querySnapshot);
 			setItemList({type: "reset"})
 			querySnapshot.forEach((doc) => {
 				setItemList({value:{
