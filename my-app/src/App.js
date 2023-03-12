@@ -8,6 +8,7 @@ import CompleteRegistration from "./Components/CompleteRegistration/CompleteRegi
 import SignUp from "./Components/Signup/Signup";
 import ForgetPassword from "./Components/ForgetPassword/ForgetPassword";
 import FindEventsMap from "./Components/FindEventsMap/FindEventsMap";
+import FindGroups from "./Components/FindGroups/FindGroups";
 import CRUD from "./Components/TestFirebase/CRUD";
 import ViewGroup from "./Components/ViewGroup";
 import ViewEvent from "./Components/ViewEvent";
@@ -83,6 +84,7 @@ function App() {
         <Route path="/Signup" element={<SignUp />} />
         <Route path="/ForgetPassword" element={<ForgetPassword />} />
         <Route path="/Events" element={<FindEventsMap />} />
+        <Route path="/Groups" element={<FindGroups />} />
         <Route path="/CRUD" element={<CRUD />} />
         <Route path="/ViewGroup/:groupId" element={<ViewGroup />} />
         <Route path="/ViewEvent" element={<ViewEvent />} />
