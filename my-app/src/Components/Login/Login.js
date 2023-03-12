@@ -21,9 +21,7 @@ export default function Login() {
 		e.preventDefault(); //Prevent Reload on Form Submit
 		setIncorrectLogin(false);
 		if (verifyLoginData()) {
-			// console.log(auth)
 			signInWithEmailAndPassword(auth, username, password).then((reply) => {
-				// console.log(reply);
 				if (reply.operationType == "signIn") {
 					dispatch({newId: reply.user.uid});
 					currUid = reply.user.uid;
@@ -40,7 +38,6 @@ export default function Login() {
 	}
 
 	const getProfile = () => {
-		console.log("getting profile")
 		const queryDb = query(collection(firestore, 'users'), where("userId", "==", currUid));
 		onSnapshot(queryDb, (querySnapshot) => {
 			querySnapshot.forEach((doc) => {

@@ -1,7 +1,7 @@
 import { useState, useRef, useReducer } from "react";
 import { firestore } from "../FirebaseDb/Firebase";
 import { doc, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
-import { collection, query, onSnapshot , where} from 'firebase/firestore';
+import { collection, query, onSnapshot , where, getDoc} from 'firebase/firestore';
 import { clear } from "@testing-library/user-event/dist/clear";
 
 export default function CRUD() {
@@ -23,7 +23,9 @@ export default function CRUD() {
         console.log(item);
         addDoc(collection(firestore, 'testData'), {
             i: item
-        });
+        }).then(function(docRef) {
+			console.log("Document written with ID: ", docRef.id);
+		});
         console.log("Adding");
     }
 
@@ -41,6 +43,7 @@ export default function CRUD() {
 
     function retrieveItem (e) {
 		console.log(itemList);
+		getByDocID();
 		const queryDb = query(collection(firestore, 'testData'), where("i", "==", "no"));
 		onSnapshot(queryDb, (querySnapshot) => {
 			console.log(querySnapshot);
@@ -56,6 +59,16 @@ export default function CRUD() {
 		  });
     }
 
+	const getByDocID = async() => {
+		const docRef = doc(firestore, "events", "uLBa8YrgEcZ39d5ZWjmk")
+		const docSnap = await getDoc(docRef);
+		if(docSnap.exists()) {
+			console.log(docSnap.data());
+		} else {
+			console.log("Document does not exist")
+		}
+	}
+	
 	return (
         <div>
             <input type="text" placeholder="Enter item" onChange={(e) => setItem(e.target.value)}/>
