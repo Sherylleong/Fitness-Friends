@@ -1,6 +1,6 @@
 import "./filter-styles.css";
 
-export default function Filters({handleFilters, groups}){
+export default function EventFilters({handleFilters, groups}){
 
 
 	return (
