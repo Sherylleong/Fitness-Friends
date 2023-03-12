@@ -18,7 +18,7 @@ function ViewGroup() {
     setCurrentPg(selectedPage);
   };
 
-  //for fetching data using groupId
+  //for fetching groupdata using groupId in url
   const { groupId } = useParams(); // retrieve the groupId from the URL parameter
   const [group, setGroup] = useState(null); // initialize the group state to null
   console.log(groupId);
@@ -27,7 +27,7 @@ function ViewGroup() {
   const [imageUrl, setImageUrl] = useState(null); // initialize the imageUrl state to null
   const storage = getStorage();
 
-  //for data fetching
+  //for data fetching (image and groupdata)
   useEffect(() => {
     const fetchGroup = async () => {
       const groupsRef = collection(firestore, "group");
