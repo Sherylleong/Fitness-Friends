@@ -14,6 +14,7 @@ import ViewGroup from "./Components/ViewGroup";
 import ViewEvent from "./Components/ViewEvent";
 import ViewProfile from "./Components/ViewProfile";
 import CreateGroup from "./Components/CreateGroup";
+import Home from "./Components/Home";
 import { createStore } from "react-hooks-global-state";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 // import { withRouter } from "react-router";
@@ -64,7 +65,7 @@ function App() {
   //   default:
   //     break;
   // }
-
+ 
   // const [showNavBar, setShowNavBar] = useState(navBarDisplay); //Best solution I found
 
   return (
@@ -90,6 +91,7 @@ function App() {
         <Route path="/ViewEvent" element={<ViewEvent />} />
         <Route path="/ViewProfile" element={<ViewProfile />} />
         <Route path="/CreateGroup" element={<CreateGroup />} />
+        <Route path="/Home" element={<Home />} />
       </Routes>
     </>
   );
