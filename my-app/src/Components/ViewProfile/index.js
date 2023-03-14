@@ -36,6 +36,44 @@ function ViewProfile() {
     setCurrentOwnedPage(selectedOwnedPage);
   };
   const [profile2, setProfile2] = useState("");
+  const [groupsJoined112, setGroupsJoined112] = useState([]);
+  const getGroupsJoined = async () => {
+    const docRef = query(collection(firestore, "group"), where("groupmembers", "array-contains", userId));
+    const docu = await getDocs(docRef);
+    const updatedDocs = docu.docs.map(async (doc) => {
+      const updatedGroup = { ...doc.data() };
+      const groupOwner = await getGroupOwnerName(updatedGroup.groupOwner);
+      updatedGroup.groupOwner = groupOwner;
+      return updatedGroup;
+    });
+    const updatedGroups = await Promise.all(updatedDocs);
+    setGroupsJoined112(updatedGroups);
+  };
+  
+  async function getGroupOwnerName(groupOwnerId) {
+    const docRef = query(collection(firestore, "users"), where("userId", "==", groupOwnerId));
+    const docu = await getDocs(docRef);
+    const owner = docu.docs[0].data();
+    return owner.displayName;
+  }
+  
+  const [groupsOwned112, setGroupsOwned112] = useState([]);
+  const getGroupsOwned = async () => {
+    const docRef = query(collection(firestore, "group"), where("groupOwner", "==", userId));
+    const docu = await getDocs(docRef);
+    const updatedDocs = docu.docs.map(async (doc) => {
+      const updatedGroup = { ...doc.data() };
+      const groupOwner = await getGroupOwnerName(updatedGroup.groupOwner);
+      updatedGroup.groupOwner = groupOwner;
+      return updatedGroup;
+    });
+    const updatedGroups = await Promise.all(updatedDocs);
+    setGroupsOwned112(updatedGroups);
+
+
+  };
+
+  
   const getProfile = async () => {
     const docRef = query(collection(firestore, "users"), where("userId", "==", userId));
     const docu = await getDocs(docRef);
@@ -44,8 +82,13 @@ function ViewProfile() {
     });
   };
   useEffect(() => {
+    getGroupsOwned();
+    getGroupsJoined();
     getProfile();
   }, []);
+
+  console.log(groupsJoined112);
+  console.log(groupsOwned112);
   console.log({profile2});
   console.log(userId);
 
@@ -211,12 +254,12 @@ function ViewProfile() {
                 <div className="groupsjoinedtext112">Groups Joined</div>
                 
                 <div className="groupsjoinedlist112">
-                  {profile.groupsjoined.slice(currentJoinedPage*2,currentJoinedPage*2+2).map((group) => (
+                  {groupsJoined112.slice(currentJoinedPage*2,currentJoinedPage*2+2).map((group) => (
                     <div className="group-box112" key={group.groupid}>
                       <div className="group-box-left112">
-                        <div className="grouptitle112">{group.title}</div>
-                        <div className="groupmembers112">{group.attendees} members</div>
-                        <div className="group-creator112">Created by {group.creator}</div>
+                        <div className="grouptitle112">{group.groupname}</div>
+                        <div className="groupmembers112">{group.groupmembers.length} members</div>
+                        <div className="group-creator112">Created by {group.groupOwner}</div>
                       </div>
                       <div className="group-box-right112">
                         {/* add a leave group button */}
@@ -227,12 +270,12 @@ function ViewProfile() {
                     </div>
                   ))}
                 </div>
-                {profile.groupsjoined.length > 2 ? (
+                {groupsJoined112.length > 2 ? (
                   <ReactPaginate
                   previousLabel={'<'}
                     nextLabel={'>'}
                     breakLabel={'...'}
-                  pageCount={Math.ceil((attending ? profile.groupsjoined.length : profile.groupsjoined.length) / 2)}
+                  pageCount={Math.ceil(groupsJoined112.length / 2)}
                   marginPagesDisplayed={1}
                   pageRangeDisplayed={2}
                   onPageChange={(selectedJoinedPage) => handleJoinedPageChange(selectedJoinedPage.selected)}
@@ -244,12 +287,12 @@ function ViewProfile() {
               <div className="groupsjoined112">
                   <div className="groupsjoinedtext112">Groups Owned</div>
                   <div className="groupsjoinedlist112">
-                  {profile.groupsowned.slice(currentOwnedPage*2,currentOwnedPage*2+2).map((group) => (
+                    {groupsOwned112.slice(currentOwnedPage * 2, currentOwnedPage * 2 + 2).map((group) => (
                     <div className="group-box112" key={group.groupid}>
                       <div className="group-box-left112">
-                        <div className="grouptitle112">{group.title}</div>
-                        <div className="groupmembers112">{group.attendees} members</div>
-                        <div className="group-creator112">Created by {group.creator}</div>
+                        <div className="grouptitle112">{group.groupname}</div>
+                        <div className="groupmembers112">{group.groupmembers.length} members</div>
+                        <div className="group-creator112">Created by {group.groupOwner}</div>
                       </div>
                       <div className="group-box-right112">
                         <button className="manage-group112" type="submit">
@@ -259,12 +302,12 @@ function ViewProfile() {
                     </div>
                   ))}
                   </div>
-                  {profile.groupsowned.length > 2 ? (
+                  {groupsOwned112.length > 2 ? (
                     <ReactPaginate
                         previousLabel={'<'}
                       nextLabel={'>'}
                       breakLabel={'...'}
-                        pageCount={Math.ceil((attending ? profile.groupsowned.length : profile.groupsowned.length) / 2)}
+                        pageCount={Math.ceil(groupsOwned112.length / 2)}
                         marginPagesDisplayed={1}
                         pageRangeDisplayed={2}
                         onPageChange={(selectedOwnedPage) => handleOwnedPageChange(selectedOwnedPage.selected)}
