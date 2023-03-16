@@ -7,6 +7,7 @@ import { Link, redirect, useNavigate } from "react-router-dom";
 import { firestore, auth } from "../FirebaseDb/Firebase";
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
 
+
 export default function Login() {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");

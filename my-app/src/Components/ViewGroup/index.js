@@ -10,52 +10,82 @@ import { useParams } from "react-router-dom";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { firestore } from "../FirebaseDb/Firebase";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import { doc, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
+import { getDoc } from "firebase/firestore";
 
 function ViewGroup() {
+  //for join grp, check if user is logged in first
+
+  const [user, setUser] = useState(null);
+
   //for pagination
   const [currentPg, setCurrentPg] = useState(0);
   const handlePageChange = (selectedPage) => {
     setCurrentPg(selectedPage);
   };
 
+  //geenral getdocbyid function w colllectionname and docid asparameters
+  const getByDocID = async (collectionName, docID) => {
+    const docRef = doc(firestore, collectionName, docID);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return docSnap.data();
+    } else {
+      console.log("Document does not exist");
+      return null;
+    }
+  };
+
   //for fetching groupdata using groupId in url
   const { groupId } = useParams(); // retrieve the groupId from the URL parameter
   const [group, setGroup] = useState(null); // initialize the group state to null
+  const [groupEvents, setGroupEvents] = useState([]); //for groupevents
   console.log(groupId);
 
   //for image fetching, converting from url to docs/file
   const [imageUrl, setImageUrl] = useState(null); // initialize the imageUrl state to null
   const storage = getStorage();
 
-  //for data fetching (image and groupdata)
+  //for data fetching (image and groupdata includigng grpevents)
   useEffect(() => {
     const fetchGroup = async () => {
-      const groupsRef = collection(firestore, "group");
-      const q = query(groupsRef, where("groupId", "==", groupId));
-      const querySnapshot = await getDocs(q).catch((error) => {
-        console.log("Error getting documents: ", error);
-      });
-      if (querySnapshot.empty) {
-        console.log("No matching documents.");
-      } else {
-        querySnapshot.forEach((doc) => {
-          console.log(doc.id, " => ", doc.data());
-          setGroup(doc.data()); // set the group state to the data of the matching document
-          //for image
-          const imageRef = ref(storage, doc.data().groupImageURL); // create a reference to the image in Firebase Storage
-          getDownloadURL(imageRef)
-            .then((url) => {
-              setImageUrl(url); // set the imageUrl state to the download URL of the image
-            })
-            .catch((error) => {
-              console.log("Error getting image URL: ", error);
-            });
+      const groupDocId = groupId; // use groupId as the document ID to fetch data for
+      const groupData = await getByDocID("group", groupDocId); // call the getByDocID function to retrieve data for the specified document ID
+      if (groupData) {
+        console.log(groupData);
+        setGroup(groupData); // set the group state to the retrieved data
+        //for image
+        const imageRef = ref(storage, groupData.groupImageURL); // create a reference to the image in Firebase Storage
+        getDownloadURL(imageRef)
+          .then((url) => {
+            setImageUrl(url); // set the imageUrl state to the download URL of the image
+          })
+          .catch((error) => {
+            console.log("Error getting image URL: ", error);
+          });
+
+        // data fetching for eventid that has groupid inside
+        const eventsRef = collection(firestore, "events");
+        const q = query(eventsRef, where("groupId", "==", groupId));
+        const querySnapshot = await getDocs(q).catch((error) => {
+          console.log("Error getting documents: ", error);
         });
+        if (querySnapshot.empty) {
+          console.log("No matching documents.");
+        } else {
+          const fetchedEvents = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          setGroupEvents(fetchedEvents);
+        }
+      } else {
+        console.log("No matching documents.");
       }
     };
 
     fetchGroup();
-  }, [groupId]); // re-fetch the group whenever the groupId changes
+  }, [groupId, storage]); // re-fetch the group whenever the groupId changes
 
   if (!group) {
     return <div clasName="loading">Loading...</div>; // show a loading message if the group state is null
@@ -65,6 +95,29 @@ function ViewGroup() {
   console.log(groupId);
 
   //end data fetching
+
+  //data fetching for eventid that has groupid inside
+
+  // useEffect(() => {
+  //   const fetchGroupEvents = async () => {
+  //     const eventsRef = collection(firestore, "events");
+  //     const q = query(eventsRef, where("groupId", "==", groupId));
+  //     const querySnapshot = await getDocs(q).catch((error) => {
+  //       console.log("Error getting documents: ", error);
+  //     });
+  //     if (querySnapshot.empty) {
+  //       console.log("No matching documents.");
+  //     } else {
+  //       const fetchedEvents = querySnapshot.docs.map((doc) => ({
+  //         id: doc.id,
+  //         ...doc.data(),
+  //       }));
+  //       setGroupEvents(fetchedEvents);
+  //     }
+  //   };
+
+  //   fetchGroupEvents();
+  // }, [groupId]);
 
   return (
     <>
@@ -118,17 +171,19 @@ function ViewGroup() {
           <div className="bottom">
             <div className="upcoming"> Upcoming Events </div>
 
-            {group.groupevents.length !== 0 ? (
+            {groupEvents.length !== 0 ? (
               <div className="grpevents">
-                {group.groupevents
+                {groupEvents
                   .slice(currentPg * 5, currentPg * 5 + 5)
                   .map((event) => (
-                    <div className="event" key={event.eventid}>
+                    <div className="event" key={event.docid}>
                       <div className="left">
-                        <div className="eventtitle">{event.eventtitle}</div>
-                        <div className="eventdate">Date: {event.eventdate}</div>
+                        <div className="eventtitle">{event.EventTitle}</div>
+
+                        <div className="eventdate">Date: {event.EventDate}</div>
+
                         <div className="eventlocation">
-                          Location: {event.eventlocation}
+                          Location: {event.EventLocation}
                         </div>
                       </div>
 
@@ -138,7 +193,7 @@ function ViewGroup() {
                           <img src={attendee1}></img>
                         </div>
 
-                        <div>{event.eventattendees} participants</div>
+                        <div>{event.EventAttendees.length} participants</div>
                         <div className="join-event-btn">
                           <button className="join-event" type="submit">
                             Join
@@ -147,13 +202,14 @@ function ViewGroup() {
                       </div>
                     </div>
                   ))}
+
                 <div className="event-pagination112">
-                  {group.events.length > 5 ? (
+                  {groupEvents.length > 5 ? (
                     <ReactPaginate
                       previousLabel={"<"}
                       nextLabel={">"}
                       breakLabel={"..."}
-                      pageCount={Math.ceil(group.events.length / 5)}
+                      pageCount={Math.ceil(groupEvents.length / 5)}
                       marginPagesDisplayed={2}
                       pageRangeDisplayed={3}
                       onPageChange={(selectedPg) =>

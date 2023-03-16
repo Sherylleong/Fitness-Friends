@@ -87,7 +87,7 @@ function App() {
         <Route path="/Groups" element={<FindGroups />} />
         <Route path="/CRUD" element={<CRUD />} />
         <Route path="/ViewGroup/:groupId" element={<ViewGroup />} />
-        <Route path="/ViewEvent" element={<ViewEvent />} />
+        <Route path="/ViewEvent/:eventId" element={<ViewEvent />} />
         <Route path="/ViewProfile" element={<ViewProfile />} />
         <Route path="/CreateGroup" element={<CreateGroup />} />
       </Routes>
