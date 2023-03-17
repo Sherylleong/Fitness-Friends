@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword} from "firebase/auth"
 import "../Login/Login.css";
-import { redirect, Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { dispatch } from "../../App"
 import { addDoc, collection} from "firebase/firestore";
 import { firestore, auth } from "../FirebaseDb/Firebase";
@@ -42,7 +42,12 @@ export default function SignUp() {
 				displayName: null,
 				JoinedDate: formattedDate,
 				Location: null,
-				Bio: null
+				Bio: null,
+				settings: {
+					groupJoined: true,
+					eventAttending: true,
+					eventAttended: true
+				}
             });
             navigate("/Login"); //Navigate to login to do login demo
 		}).catch((error) => {

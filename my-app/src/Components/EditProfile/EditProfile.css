@@ -1,7 +1,7 @@
 .editprofile {
     display: grid;
-    margin-left: 3.2rem;
-    margin-right: 1.5rem;
+    margin-left: 13vw;
+    /* margin-right: 1.5vw; */
 }
 .editprofile .header {
     width: 100%;
@@ -15,6 +15,11 @@
     display: flex;
     flex-direction: column;
 }
+
+.editprofile .form-items .bio-input {
+    height: 23vh;
+}
+
 .editprofile-img {
     width: 300px;
     height: 300px;
@@ -22,17 +27,53 @@
     border-radius: 100%;
 }
 
+
 .editprofile button {
-    height: 7.5vh;
+    position:relative;
+    height: 50px;
+    font-size: 20px;
+    font-weight: bold;
     border-radius: 15px;
     cursor: pointer;
-    border-color: white;
     color: white;
+    border-color: white;
     background-color: #ee6b6e;
-    font-size: 20px;
-    position:relative;
-    bottom:18vh;
+}
+
+.editprofile .dull-button {
+    background-color: #666262;
+    margin-left: 1.5vw;
+}
+
+.editprofile .button-align-center button,label {
+    bottom:15vh;
     margin-left: 2.5rem;
+    padding-left: 3vw;
+    padding-right: 3vw;
+}
+
+.editprofile .button-align-from-left button {
+    margin-top: 2vh;
+    padding-left: 3vw;
+    padding-right: 2.8vw;
+}
+
+.editprofile .button-align-center label {
+    position:relative;
+    height: 50px;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 15px;
+    cursor: pointer;
+    color: white;
+    border-color: white;
+    background-color: #ee6b6e;
+    padding-bottom: 0.85vh;
+    padding-top: 0.65vh;
+}
+
+.editprofile .button-align-center input {
+    display:none;
 }
 
 .editprofile .profile-toggle-settings {
@@ -40,28 +81,59 @@
     margin-bottom: 0.5rem;
 }
 
+.editprofile .profile-toggle-settings .toggle-settings-details {
+    width: 15vw;
+}
+
 .editprofile .profile-toggle-settings div {
-    margin-right: 6.25rem;
+    margin-right: 1vw;
 }
 
 .editprofile .profile-toggle-settings b {
-    font-size: 25px;
+    font-size: 1vw;
 }
 
 .editprofile .profile-toggle-settings p {
-    font-size: 15px;
+    font-size: 0.9vw;
 }
 
 .editprofile .left-div {
-    margin-right: 23vw;
+    margin-right: 10vw;
 }
+
+.editprofile form input {
+    margin: 0.5rem 0;
+    padding: 1rem;
+    border: none;
+    width: 98%;
+    background-color: #e5e5e5e5;
+    border-radius: 5px;
+    font-size: 1.5vh;
+}
+
+.editprofile form textarea {
+    margin: 0.5rem 0;
+    padding: 1rem;
+    border: none;
+    width: 98%;
+    background-color: #e5e5e5e5;
+    border-radius: 5px;
+    font-size: 1.5vh;
+}
+
+
 /* Toggle Switch Code */
 .editprofile .switch {
-    position: relative;
+    position: sticky;
     display: inline-block;
-    width: 60px;
-    height: 34px;
+    width: 95px;
+    height: 45px;
+    /* width: 5vw;
+    height: 4vh; */
     margin-left: 5rem;
+    margin-top: 2vh;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 .editprofile .switch input {
@@ -85,9 +157,11 @@
 .editprofile .slider:before {
     position: absolute;
     content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
+    height: 37px;
+    width: 37px;
+    /* width: 3.3vh;
+    height: 3.3vh; */
+    left: 6px;
     bottom: 4px;
     background-color: white;
     -webkit-transition: .4s;
@@ -103,9 +177,12 @@
 }
 
 input:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
+    /* -webkit-transform: translateX(3.3vw);
+    -ms-transform: translateX(3.3vw);
+    transform: translateX(3.3vw); */
+    -webkit-transform: translateX(45px);
+    -ms-transform: translateX(45px);
+    transform: translateX(45px);
 }
 
 /* Rounded sliders */
