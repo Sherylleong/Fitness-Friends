@@ -13,6 +13,7 @@ import CRUD from "./Components/TestFirebase/CRUD";
 import ViewGroup from "./Components/ViewGroup";
 import ViewEvent from "./Components/ViewEvent";
 import ViewProfile from "./Components/ViewProfile";
+import EditProfile from "./Components/EditProfile";
 import CreateGroup from "./Components/CreateGroup";
 import { createStore } from "react-hooks-global-state";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
@@ -90,6 +91,7 @@ function App() {
         <Route path="/ViewEvent" element={<ViewEvent />} />
         <Route path="/ViewProfile" element={<ViewProfile />} />
         <Route path="/CreateGroup" element={<CreateGroup />} />
+        <Route path="/EditProfile" element={<EditProfile />} />
       </Routes>
     </>
   );

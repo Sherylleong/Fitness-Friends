@@ -6,6 +6,7 @@ import { dispatch, useStoreState } from "../../App";
 import { firestore } from "../FirebaseDb/Firebase";
 import "firebase/firestore";
 import { async } from "@firebase/util";
+import { useNavigate } from "react-router-dom";
 import {
   collection,
   doc,
@@ -28,6 +29,7 @@ function ViewProfile() {
     setAttending(false);
     setOwned(true);
   };
+  const navigate = useNavigate();
 
   const [currentEventPage, setcurrentEventPage] = useState(0);
   const [currentJoinedPage, setCurrentJoinedPage] = useState(0);
@@ -56,6 +58,10 @@ function ViewProfile() {
     });
   };
   
+  const navigateEditProfile = () => {
+      navigate("/EditProfile");
+  }
+
   useEffect(() => {
     getProfile();
   }, []);
@@ -80,7 +86,7 @@ function ViewProfile() {
                   </div>
 
                   <div className="edit-profile-button112">
-                    <button className="edit-profile112" type="submit">
+                    <button className="edit-profile112" type="submit" onClick={navigateEditProfile}>
                       Edit Profile
                     </button>
                   </div>

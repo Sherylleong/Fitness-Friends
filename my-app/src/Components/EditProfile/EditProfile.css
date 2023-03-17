@@ -1,0 +1,118 @@
+.editprofile {
+    display: grid;
+    margin-left: 3.2rem;
+    margin-right: 1.5rem;
+}
+.editprofile .header {
+    width: 100%;
+}
+.editprofile .body {
+    width: 100%;
+    display: flex;
+}
+
+.editprofile .form-items form {
+    display: flex;
+    flex-direction: column;
+}
+.editprofile-img {
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 100%;
+}
+
+.editprofile button {
+    height: 7.5vh;
+    border-radius: 15px;
+    cursor: pointer;
+    border-color: white;
+    color: white;
+    background-color: #ee6b6e;
+    font-size: 20px;
+    position:relative;
+    bottom:18vh;
+    margin-left: 2.5rem;
+}
+
+.editprofile .profile-toggle-settings {
+    display: flex;
+    margin-bottom: 0.5rem;
+}
+
+.editprofile .profile-toggle-settings div {
+    margin-right: 6.25rem;
+}
+
+.editprofile .profile-toggle-settings b {
+    font-size: 25px;
+}
+
+.editprofile .profile-toggle-settings p {
+    font-size: 15px;
+}
+
+.editprofile .left-div {
+    margin-right: 23vw;
+}
+/* Toggle Switch Code */
+.editprofile .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    margin-left: 5rem;
+}
+
+.editprofile .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.editprofile .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.editprofile .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.editprofile input:checked + .slider {
+    background-color: #00D722;
+}
+
+.editprofile input:focus + .slider {
+    box-shadow: 0 0 1px #00D722;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.editprofile .slider.round {
+    border-radius: 34px;
+}
+
+.editprofile .slider.round:before {
+    border-radius: 50%;
+}
