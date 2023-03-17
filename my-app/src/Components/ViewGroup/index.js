@@ -90,7 +90,7 @@ function ViewGroup() {
   }, [groupId, storage]); // re-fetch the group whenever the groupId changes
 
   //for joining  grp -- need to check
-  const handleJoinGroup = async () => {
+  const joinGroup = async () => {
     if (!userId) {
       navigate("/Login");
       return;
@@ -149,7 +149,7 @@ function ViewGroup() {
             <div className="group-title">{group.groupname}</div>
 
             <div className="join-group-btn">
-              <button className="join-grp" type="submit">
+              <button className="join-grp" onClick={joinGroup}>
                 Join this Group
               </button>
             </div>
