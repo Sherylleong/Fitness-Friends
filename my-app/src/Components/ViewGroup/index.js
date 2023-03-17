@@ -12,11 +12,13 @@ import { firestore } from "../FirebaseDb/Firebase";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { doc, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
 import { getDoc } from "firebase/firestore";
+import { dispatch, useStoreState } from "../../App";
+import { useNavigate } from "react-router-dom";
 
 function ViewGroup() {
-  //for join grp, check if user is logged in first
-
-  const [user, setUser] = useState(null);
+  //for join grp, check if user is logged in first, get use state -- need to check! (then add to viewevent)
+  const userId = useStoreState("userId");
+  const navigate = useNavigate();
 
   //for pagination
   const [currentPg, setCurrentPg] = useState(0);
@@ -87,6 +89,20 @@ function ViewGroup() {
     fetchGroup();
   }, [groupId, storage]); // re-fetch the group whenever the groupId changes
 
+  //for joining  grp -- need to check
+  const joinGroup = async () => {
+    if (!userId) {
+      navigate("/Login");
+      return;
+    }
+
+    const groupRef = doc(firestore.collection("group"), groupId);
+    const groupData = await getDoc(groupRef);
+    await updateDoc(groupRef, {
+      groupMembers: [...groupData.data().groupmembers, userId],
+    });
+  };
+
   if (!group) {
     return <div clasName="loading">Loading...</div>; // show a loading message if the group state is null
   }
@@ -133,7 +149,7 @@ function ViewGroup() {
             <div className="group-title">{group.groupname}</div>
 
             <div className="join-group-btn">
-              <button className="join-grp" type="submit">
+              <button className="join-grp" onClick={joinGroup}>
                 Join this Group
               </button>
             </div>
