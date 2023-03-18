@@ -6,10 +6,9 @@ import arrow from "../Resources/arrow.png";
 import GoogleMap from "../EventMap/EventMap.js";
 import { useEffect, useState } from "react";
 import "./ViewEvent.css";
-import { doc, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
 import { getDoc } from "firebase/firestore";
 import { useParams } from "react-router-dom";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { doc, collection, query, where, getDocs } from "firebase/firestore";
 import { firestore } from "../FirebaseDb/Firebase";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 

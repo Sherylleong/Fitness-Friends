@@ -1,26 +1,28 @@
 import { useState,useReducer, useEffect  } from "react";
 import GroupFilters from "../Filters/GroupFilters.js"
 import "./find-groups-styles.css";
-
+import { firestore } from "../FirebaseDb/Firebase";
+import { doc, collection, query, where, getDocs } from "firebase/firestore";
+import { getDoc } from "firebase/firestore";
 
 function groupsListCard(group){
     return (
         <div className="group-list-card">
         <div className="group-list-img">
         <div className="crop">
-            <img src="http://i.stack.imgur.com/wPh0S.jpg"/>
+            <img src={group.groupImageURL}/>
         </div>
         </div>
         <div className="group-card-desc">
-            <h1 className="group-list-name">{group.name}</h1>
+            <h1 className="group-list-name">{group.groupname}</h1>
             <p className="group-list-date">formed on {group.dateFormed}</p>
-            <p className="group-list-location">{group.location}</p>
-            <p className="group-list-attendees">{group.members} members</p>
+            <p className="group-list-location">{group.grouplocation}</p>
+            <p className="group-list-attendees">{group.groupmembers.length} member(s)</p>
 
         </div>
         <div className="group-card-tags">
-            <p className="group-list-category">{group.category}</p>
-            <p className="group-list-difficulty">{group.difficulty}</p>
+            <p className="group-list-category">{group.groupcategory}</p>
+            <p className="group-list-difficulty">{group.groupdifficulty}</p>
         </div>
         <div>
             
@@ -97,7 +99,30 @@ export default function FindGroups(){
 
     //const [groups, setgroups] = useState(groupsdb);
    
-    let groups = groupsdb;
+    const [groups, setGroups] = useState([]);
+    useEffect(() => {
+        const fetchGroups = async () => {
+            const groupsRef = collection(firestore, "group");
+            
+            const q = query(groupsRef);
+            const querySnapshot = await getDocs(q).catch((error) => {
+              console.log("Error getting documents: ", error);
+            });
+            if (querySnapshot.empty) {
+              console.log("No matching documents.");
+            } else {
+              const fetchedGroups = querySnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+              }));
+              console.log(querySnapshot);
+              setGroups(fetchedGroups);
+            }
+
+          };
+          fetchGroups();
+      }, []); // re-fetch the events whenever anything changes
+
     const [filters, setFilters] = useReducer(
         (state, newState) => ({ ...state, ...newState }),
         {
@@ -108,7 +133,7 @@ export default function FindGroups(){
         }
       );
 
-      groups = (filterGroups(groupsdb, filters));
+      let filteredGroups = (filterGroups(groups, filters));
 
   
 
@@ -134,14 +159,14 @@ export default function FindGroups(){
 
     function filterGroups(groups, filters){
         let filteredGroups = groups.filter((group) => {
-            if (filters.difficulty.length !==0 && !(filters.difficulty.includes(group.difficulty))) return false;
-            if (filters.category.length !==0 && !(filters.category.includes(group.category))) return false;
+            if (filters.difficulty.length !==0 && !(filters.difficulty.includes(group.groupdifficulty))) return false;
+            if (filters.category.length !==0 && !(filters.category.includes(group.groupcategory))) return false;
             let memberCnt;
-            if (group.members < 10) memberCnt = "<10";
-            else if (group.members > 30) memberCnt = ">30";
+            if (group.groupmembers.length < 10) memberCnt = "<10";
+            else if (group.groupmembers.length > 30) memberCnt = ">30";
             else memberCnt = "10-30";
             if (filters.members.length !==0 && !(filters.members.includes(memberCnt))) return false;
-            return group.name.toLowerCase().indexOf(filters.search.toLowerCase()) !==-1;
+            return group.groupname.toLowerCase().indexOf(filters.search.toLowerCase()) !==-1;
         })
         return filteredGroups;
     }
@@ -150,7 +175,7 @@ export default function FindGroups(){
     return(
         <div className="find-groups-page" >{/*col*/}
             <GroupsHeader />{/*row*/}
-            <GroupListInfo groups={groups} handleFilters={handleFilters}/>
+            <GroupListInfo groups={filteredGroups} handleFilters={handleFilters}/>
         </div>
 
     )
