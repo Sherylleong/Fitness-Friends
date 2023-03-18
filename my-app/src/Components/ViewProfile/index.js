@@ -133,7 +133,7 @@ function ViewProfile() {
                     Attended {profile.attended} events
                   </div>
                   <div className="biotext112">Bio</div>
-                  <div className="bio112">{profile.bio}</div>
+                  <div className="bio112">{profile2.Bio}</div>
                 </div>
               </div>
 
