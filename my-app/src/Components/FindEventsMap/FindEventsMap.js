@@ -134,16 +134,17 @@ export default function FindEventsMap(){
             const docRef = query(collection(firestore, "group"), where("groupmembers", "array-contains", userId));
             const docu = await getDocs(docRef);
             const updatedDocs = docu.docs.map(async (doc) => {
-              return doc.data()['groupname'];
+              return {"id":doc.id, "groupname":doc.data()['groupname']};
             });
-            const updatedGroups = await Promise.all(updatedDocs);
+            const fetchedGroups = await Promise.all(updatedDocs); // jank, has to be an easier way :(
+            let updatedGroups = {};
+            fetchedGroups.forEach((group)=>{updatedGroups[group.id] = group.groupname;});
             setGroups(updatedGroups);
           };
 
           fetchEvents();
           getGroupsJoined();
       }, []); // re-fetch the events whenever anything changes
-
 console.log(groups);
 
 /*
@@ -236,7 +237,7 @@ console.log(groups);
         let filteredEvents = events.filter((event) => {
             if (filters.difficulty.length !==0 && !(filters.difficulty.includes(event.eventDifficulty))) return false;
             if (filters.category.length !==0 && !(filters.category.includes(event.eventCategory))) return false;
-            if (filters.groups.length !==0 && !(filters.groups.includes(event.group))) return false;
+            if (filters.groups.length !==0 && !(filters.groups.includes(event.groupId))) return false;
             let eventDate = new Date(event.eventDate); 
             if (filters.startDate !== ""){
                 let filterStartDate = new Date(filters.startDate);
@@ -249,6 +250,7 @@ console.log(groups);
             if (eventsView==="mapview") return event.eventLocation.toLowerCase().indexOf(filters.search.toLowerCase()) !==-1;
             return event.eventTitle.toLowerCase().indexOf(filters.search.toLowerCase()) !==-1;
         })
+
         return filteredEvents;
     }
 
