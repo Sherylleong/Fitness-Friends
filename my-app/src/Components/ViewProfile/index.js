@@ -1,4 +1,3 @@
-import ProfileData from "./ProfileData";
 import { useState, useEffect } from "react";
 import "./ViewProfile.css";
 import ReactPaginate from "react-paginate";
@@ -27,6 +26,7 @@ function ViewProfile() {
   const [currentEventPage, setcurrentEventPage] = useState(0);
   const [currentJoinedPage, setCurrentJoinedPage] = useState(0);
   const [currentOwnedPage, setCurrentOwnedPage] = useState(0);
+  const [numEvents112, setNumEvents112] = useState(0);
 
   const handleEventPageChange = (selectedEventPage) => {
     setcurrentEventPage(selectedEventPage);
@@ -47,6 +47,9 @@ function ViewProfile() {
       const updatedGroup = { ...doc.data() };
       const groupOwner = await getGroupOwnerName(updatedGroup.groupOwner);
       updatedGroup.groupOwner = groupOwner;
+      if (updatedGroup) {
+        updatedGroup.groupId = doc.id;
+      }
       return updatedGroup;
     });
     const updatedGroups = await Promise.all(updatedDocs);
@@ -68,6 +71,10 @@ function ViewProfile() {
       const updatedGroup = { ...doc.data() };
       const groupOwner = await getGroupOwnerName(updatedGroup.groupOwner);
       updatedGroup.groupOwner = groupOwner;
+      // add the doc id into the array as a new field called groupid if updateGroup is not epmty
+      if (updatedGroup) {
+        updatedGroup.groupId = doc.id;
+      }
       return updatedGroup;
     });
     const updatedGroups = await Promise.all(updatedDocs);
@@ -76,7 +83,39 @@ function ViewProfile() {
 
   };
 
-  
+  const [eventsJoined112, setEventsJoined112] = useState([]);
+  const getEventsJoined = async () => {
+    const docRef = query(collection(firestore, "events"), where("eventAttendees", "array-contains", userId));
+    const docu = await getDocs(docRef);
+    
+    const updatedDocs = docu.docs.map(async (doc) => {
+      const updatedEvent = { ...doc.data() };
+      if (updatedEvent) {
+        updatedEvent.eventId = doc.id;
+      }
+      return updatedEvent;
+    });
+    const updatedEvents = await Promise.all(updatedDocs);
+    setEventsJoined112(updatedEvents);
+  };
+  const [eventsOwned112, setEventsOwned112] = useState([]);
+  const getEventsOwned = async () => {
+    const docRef = query(collection(firestore, "events"), where("creatorID", "==", userId));
+    const docu = await getDocs(docRef);
+     // add the doc id into the array as a new field called eventId
+    const updatedDocs = docu.docs.map(async (doc) => {
+      const updatedEvent = { ...doc.data() };
+      if (updatedEvent) {
+        updatedEvent.eventId = doc.id;
+      }
+      return updatedEvent;
+    });
+    const updatedEvents = await Promise.all(updatedDocs);
+    setEventsOwned112(updatedEvents);
+  };
+  //get number of events owned and joined
+
+
   const getProfile = async () => {
     const docRef = query(collection(firestore, "users"), where("userId", "==", userId));
     const docu = await getDocs(docRef);
@@ -85,6 +124,14 @@ function ViewProfile() {
     });
   };
   
+  const getNumEvents112 = async () => {
+    const docRef = query(collection(firestore, "events"), where("creatorID", "==", userId));
+    const docu = await getDocs(docRef);
+    const docRef1 = query(collection(firestore, "events"), where("eventAttendees", "array-contains", userId));
+    const docu1 = await getDocs(docRef1);
+    setNumEvents112(docu.docs.length + docu1.docs.length);
+  };
+
   const navigateEditProfile = () => {
       navigate("/EditProfile");
   }
@@ -93,8 +140,12 @@ function ViewProfile() {
     getGroupsOwned();
     getGroupsJoined();
     getProfile();
+    getEventsJoined();
+    getEventsOwned();
+    getNumEvents112();
   }, []);
-
+  console.log(eventsOwned112);
+  console.log(eventsJoined112);
   console.log(groupsJoined112);
   console.log(groupsOwned112);
   console.log({profile2});
@@ -104,7 +155,6 @@ function ViewProfile() {
   return (
     <>
       <div clasName="full-screen112">
-        {ProfileData.map((profile) => (
           <div className="full112">
             <div className="left112">
               <div className="left-top112">
@@ -130,7 +180,7 @@ function ViewProfile() {
                   <div className="joined112">Joined: {profile2.JoinedDate}</div>
                   <div className="locationtext112">Location: {profile2.Location}</div>
                   <div className="attended112">
-                    Attended {profile.attended} events
+                    Attended {numEvents112} events
                   </div>
                   <div className="biotext112">Bio</div>
                   <div className="bio112">{profile2.Bio}</div>
@@ -168,83 +218,77 @@ function ViewProfile() {
                       </div>
                   )}
                   <div className="events-list112">
-                    {attending && profile.eventsattending.slice(currentEventPage*3,currentEventPage*3+3).map((event) => (
-                      <div className="event112" key={event.eventid}>
+                    {attending && eventsJoined112.slice(currentEventPage*3,currentEventPage*3+3).map((event) => (
+                      <div className="event112" key={event.eventId}>
                         <div className="event-left112">
                           <div className="event-left-left112">
                             <div className="event-image-container112">
                               <img
                                 className="event-image112"
-                                src={event.eventimage}
+                                src={event.eventImage}
                               ></img>
                             </div>
                           </div>
                           <div className="event-left-right112">
                             <div className="event-title112">
-                              {event.eventtitle}
+                              {event.eventTitle}
                             </div>
                             <div className="event-location112">
-                              Location: {event.eventlocation}
+                              Location: {event.eventLocation}
                             </div>
                             <div className="event-date112">
-                              {event.eventdate}
+                              {event.date}
                             </div>
                           </div>
                         </div>
                         <div className="event-right112">
                           <div className="tags-container112">
-                            {event.eventtags.map((tag, index) => (
-                              <div key={index} className="tag112">
-                                {tag}
-                              </div>
-                            ))}
+                            <div className="tag112">{event.eventCategory}</div>
+                            <div className="tag112">{event.eventDifficulty}</div>
                           </div>
                         </div>
                       </div>
                     ))}
-                    {owned && profile.eventsowned.slice(currentEventPage*3,currentEventPage*3+3).map((event) => (
+                    {owned && eventsOwned112.slice(currentEventPage*3,currentEventPage*3+3).map((event) => (
                       <div className="event112" key={event.eventid}>
                       <div className="event-left112">
                         <div className="event-left-left112">
                           <div className="event-image-container112">
                             <img
                               className="event-image112"
-                              src={event.eventimage}
+                              src={event.eventImage}
                             ></img>
                           </div>
                         </div>
                         <div className="event-left-right112">
                           <div className="event-title112">
-                            {event.eventtitle}
+                            {event.eventTitle}
                           </div>
                           <div className="event-location112">
-                            Location: {event.eventlocation}
+                            Location: {event.eventLocation}
                           </div>
                           <div className="event-date112">
-                            {event.eventdate}
+                            {event.date}
                           </div>
                         </div>
                       </div>
                       <div className="event-right112">
                         <div className="tags-container112">
-                          {event.eventtags.map((tag, index) => (
-                            <div key={index} className="tag112">
-                              {tag}
-                            </div>
-                          ))}
+                          <div className="tag112">{event.eventCategory}</div>
+                          <div className="tag112">{event.eventDifficulty}</div>
                         </div>
                       </div>
                     </div>
                   ))}
                   </div>
                   <div className="event-pagination112">
-                  {profile.eventsattending.length > 3 ||
-                    profile.eventsowned.length > 3 ? (
+                  {eventsJoined112.length > 3 ||
+                    eventsOwned112.length > 3 ? (
                       <ReactPaginate
                         previousLabel={'<'}
                         nextLabel={'>'}
                         breakLabel={'...'}
-                        pageCount={Math.ceil((attending ? profile.eventsattending.length : profile.eventsowned.length) / 3)}
+                        pageCount={Math.ceil((attending ? eventsJoined112.length : eventsOwned112.length) / 3)}
                         marginPagesDisplayed={2}
                         pageRangeDisplayed={3}
                         onPageChange={(selectedEventPage) => handleEventPageChange(selectedEventPage.selected)}
@@ -326,7 +370,7 @@ function ViewProfile() {
               </div>
             </div>
           </div>
-        ))}
+        ))
       </div>
     </>
   );
