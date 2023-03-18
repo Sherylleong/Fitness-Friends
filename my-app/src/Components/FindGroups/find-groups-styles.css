@@ -9,9 +9,8 @@
     display: flex; 
     flex-direction: column;
     justify-content:flex-start;
-
-
 }
+
 .group-map-card {
     margin:0px;
     display: flex; 
@@ -161,8 +160,21 @@
     border-radius: 15px;
     align-items: center;
     background-color: rgb(231, 231, 231);
+    min-width: 1450px;
 }
 
 .list-card-desc {
     padding: 10px;
+}
+
+.join-group-find{
+    height:45px;
+    width: 150%;
+    border-radius: 15px;
+    cursor: pointer;
+    border-color: white;
+    color: white;
+    background-color: #ee6b6e;
+    font-size: 20px;
+
 }

@@ -5,19 +5,20 @@ import "./find-events-map-styles.css";
 import { firestore } from "../FirebaseDb/Firebase";
 import { doc, collection, query, where, getDocs } from "firebase/firestore";
 import { getDoc } from "firebase/firestore";
+import { dispatch, useStoreState } from "../../App"
 
 
 function eventsMapCard(event){
     return (
         <div className="event-map-card">
-        <div>
+        <div className="event-map-left">
             <p className="event-map-name">{event.eventTitle}</p>
-            <p className="event-map-time">{event.date}</p>
+            <p className="event-map-time">{event.date},{event.time}</p>
             <p className="event-map-location">{event.eventLocation}</p>
             <p className="event-map-category">{event.eventCategory}</p>
             <p className="event-map-difficulty">{event.eventDifficulty}</p>
         </div>
-        <div>
+        <div className="event-map-right">
             <p className="event-map-attendees">{event.eventAttendees.length} attendee(s)</p>
             <button className="join-event">Join</button>
         </div>
@@ -45,7 +46,7 @@ function eventsListCard(event){
         </div>
         <div>
             
-            <button className="join-event">Join</button>
+            <button className="join-event-find">Join</button>
         </div>
         </div>
         
@@ -70,7 +71,7 @@ function EventMapHeader({eventsView,setEventsView}){
           };
     return (
             <div style={{ display:"flex", flexDirection:"row", justifyContent:"space-around"}}>
-                <h1 style={{marginTop:"0px", position:"relative", right:"100px"}}>Filters</h1>
+                <h1 style={{marginTop:"0px", position:"relative", right:"140px"}}>Filters</h1>
                 <h1 style={{marginTop:"0px", position:"relative", fontSize:"50px"}}>Search Events</h1>
                 <div style={{marginTop:"0px", position:"relative", left:"250px"}}>
                 <button id="mapview" style={{ fontWeight: eventsView === "mapview" ? "bold" : "" }} onClick={(e)=>changeView(e)}>Map View</button>
@@ -105,7 +106,10 @@ function EventsListList({events, handleFilters}){
 }
 
 export default function FindEventsMap(){
+    const userId = useStoreState("userId");
     const [events, setEvents] = useState([]);
+    const [groups, setGroups] = useState([]); // user's joined groups
+
     useEffect(() => {
         const fetchEvents = async () => {
             const eventsRef = collection(firestore, "events");
@@ -126,8 +130,21 @@ export default function FindEventsMap(){
             }
 
           };
+          const getGroupsJoined = async () => {
+            const docRef = query(collection(firestore, "group"), where("groupmembers", "array-contains", userId));
+            const docu = await getDocs(docRef);
+            const updatedDocs = docu.docs.map(async (doc) => {
+              return doc.data()['groupname'];
+            });
+            const updatedGroups = await Promise.all(updatedDocs);
+            setGroups(updatedGroups);
+          };
+
           fetchEvents();
+          getGroupsJoined();
       }, []); // re-fetch the events whenever anything changes
+
+console.log(groups);
 
 /*
     let eventsdb = [
@@ -190,7 +207,6 @@ export default function FindEventsMap(){
             groups: []
         }
       );
-    let groups =   Array.from(new Set(events.map((event)=>event.group)));
 
     let filteredEvents = (filterEvents(events, filters, eventsView));
 

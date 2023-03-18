@@ -48,13 +48,13 @@ export default function GroupFilters({handleFilters, groups}){
                 <div className="filter-item">
                 <label>
                 <input type="checkbox" name="members" value="<10" onChange={(e) => {handleFilters(e);}}/>
-                {' '}&#60 members</label>
+                {' '}&lt;10 members</label>
                 <label>
                 <input type="checkbox" name="members" value="10-30" onChange={(e) => {handleFilters(e);}}/>
                 {' '}10-30 members</label>
                 <label>
                 <input type="checkbox" name="members" value=">30" onChange={(e) => {handleFilters(e);}}/>
-                {' '}&gt30 members </label>
+                {' '}&gt;30 members </label>
                 </div>
             </fieldset>
 		</form>

@@ -26,7 +26,7 @@ function groupsListCard(group){
         </div>
         <div>
             
-            <button className="join-group">Join</button>
+            <button className="join-group-find">Join</button>
         </div>
         </div>
         
@@ -48,8 +48,8 @@ function Searchbar({handleFilters}){
 function GroupsHeader(){
     return (
             <div style={{ display:"flex", flexDirection:"row", justifyContent:"space-around"}}>
-                <h1 style={{marginTop:"0px", position:"relative", right:"277px"}}>Filters</h1>
-                <h1 style={{marginTop:"0px", position:"relative", fontSize:"50px"}}>Search Groups</h1>
+                <h1 style={{marginTop:"0px", position:"relative", right:"330px"}}>Filters</h1>
+                <h1 style={{marginTop:"0px", position:"relative", right:"500px", fontSize:"50px"}}>Search Groups</h1>
             </div>
     )
 }
