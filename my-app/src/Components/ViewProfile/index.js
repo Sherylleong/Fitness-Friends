@@ -1,4 +1,3 @@
-import ProfileData from "./ProfileData";
 import { useState, useEffect } from "react";
 import "./ViewProfile.css";
 import ReactPaginate from "react-paginate";
