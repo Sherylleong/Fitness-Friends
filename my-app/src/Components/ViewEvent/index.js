@@ -75,10 +75,10 @@ function ViewEvent() {
             <img className="arrow1" src={arrow}></img>
 
             <div class="image-container1">
-              <img className="grp-picture1" src={event.EventImage}></img>
+              <img className="grp-picture1" src={event.eventImage}></img>
             </div>
 
-            <div className="group-title1">{event.EventTitle}</div>
+            <div className="group-title1">{event.eventTitle}</div>
 
             <div className="joineventbtn">
               <button className="joinevent" type="submit">
@@ -92,7 +92,7 @@ function ViewEvent() {
               <div clasName="location-img1">
                 <img src={iconpin}></img>
               </div>
-              <div className="location-name1">{event.EventLocation}</div>
+              <div className="location-name1">{event.eventLocation}</div>
             </div>
 
             <div className="attendees1">
@@ -100,19 +100,19 @@ function ViewEvent() {
                 <img src={attendee}></img>
               </div>
               <div className="attendee-numb1">
-                {event.EventAttendees.length} attendees{" "}
+                {event.eventAttendees.length} attendees{" "}
               </div>
             </div>
 
             <div className="middle-right1">
               <div className="difficulty ">
                 <div className="difficulty-title"> Difficulty </div>
-                <div className="tag"> {event.Difficulty}</div>
+                <div className="tag"> {event.eventDifficulty}</div>
               </div>
 
               <div className="category">
                 <div className="category-title">Category</div>
-                <div className="tag"> {event.Category}</div>
+                <div className="tag"> {event.eventCategory}</div>
               </div>
             </div>
           </div>
@@ -121,7 +121,7 @@ function ViewEvent() {
             <div className="event1">
               <div className="event-title">Event Description:</div>
 
-              <div className="event-desc">{event.EventDescription}</div>
+              <div className="event-desc">{event.eventDescription}</div>
             </div>
 
             <div className="googlemap">

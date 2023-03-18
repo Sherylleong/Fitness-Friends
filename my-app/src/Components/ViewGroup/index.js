@@ -17,8 +17,8 @@ import { useNavigate } from "react-router-dom";
 
 function ViewGroup() {
   //for join grp, check if user is logged in first, get use state -- need to check! (then add to viewevent)
-  const userId = useStoreState("userId");
-  const navigate = useNavigate();
+  // const userId = useStoreState("userId");
+  // const navigate = useNavigate();
 
   //for pagination
   const [currentPg, setCurrentPg] = useState(0);
@@ -90,24 +90,25 @@ function ViewGroup() {
   }, [groupId, storage]); // re-fetch the group whenever the groupId changes
 
   //for joining  grp -- need to check
-  const joinGroup = async () => {
-    if (!userId) {
-      navigate("/Login");
-      return;
-    }
+  // const joinGroup = async () => {
+  //   if (!userId) {
+  //     navigate("/Login");
+  //     return;
+  //   }
 
-    const groupRef = doc(firestore.collection("group"), groupId);
-    const groupData = await getDoc(groupRef);
-    await updateDoc(groupRef, {
-      groupMembers: [...groupData.data().groupmembers, userId],
-    });
-  };
+  //   const groupRef = doc(firestore.collection("group"), groupId);
+  //   const groupData = await getDoc(groupRef);
+  //   await updateDoc(groupRef, {
+  //     groupMembers: [...groupData.data().groupmembers, userId],
+  //   });
+  // };
 
   if (!group) {
     return <div clasName="loading">Loading...</div>; // show a loading message if the group state is null
   }
 
   console.log({ group });
+  console.log({ groupEvents });
   console.log(groupId);
 
   //end data fetching
@@ -149,9 +150,7 @@ function ViewGroup() {
             <div className="group-title">{group.groupname}</div>
 
             <div className="join-group-btn">
-              <button className="join-grp" onClick={joinGroup}>
-                Join this Group
-              </button>
+              <button className="join-grp">Join this Group</button>
             </div>
           </div>
 
@@ -168,7 +167,7 @@ function ViewGroup() {
               <div className="about"> About our group:</div>
               <div className="grp-desc">"{group.groupdesc}""</div>
 
-              <div className="creator">Created by {group.creator}</div>
+              <div className="creator">Created by {group.groupOwner}</div>
             </div>
 
             <div className="middle-right">
@@ -194,12 +193,12 @@ function ViewGroup() {
                   .map((event) => (
                     <div className="event" key={event.docid}>
                       <div className="left">
-                        <div className="eventtitle">{event.EventTitle}</div>
+                        <div className="eventtitle">{event.eventTitle}</div>
 
-                        <div className="eventdate">Date: {event.EventDate}</div>
+                        <div className="eventdate">Date: {event.eventDate}</div>
 
                         <div className="eventlocation">
-                          Location: {event.EventLocation}
+                          Location: {event.eventLocation}
                         </div>
                       </div>
 
@@ -209,7 +208,7 @@ function ViewGroup() {
                           <img src={attendee1}></img>
                         </div>
 
-                        <div>{event.EventAttendees.length} participants</div>
+                        <div>{event.eventAttendees.length} participants</div>
                         <div className="join-event-btn">
                           <button className="join-event" type="submit">
                             Join
