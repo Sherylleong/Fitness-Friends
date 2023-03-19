@@ -11,7 +11,7 @@ cred = credentials.Certificate("./cert.json")
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
-# source: https://data.gov.sg/dataset/f3005537-b958-479c-9ba9-d2adffeb9c73/resource/7bbfa166-5f6d-4fcb-9535-992d68e2080c/download/parks.kml
+# source: https://data.gov.sg/dataset/eb4ff7e0-765b-4681-bc38-25e5892ce045/resource/18fa1d09-3eeb-4c2e-a682-85adac9df80a/download/nparks-parks-and-nature-reserves-kml.kml
 kml_file = "./nparks-parks-and-nature-reserves-kml.kml"
 data = open(kml_file)
 doc = data.read()
@@ -26,9 +26,12 @@ folders = list(document[0].features())
 for folder in folders:
     features = list(folder.features())
 
+    i = 0
     for f in features:
         # name of location
         name = f.name
+        if "PG" in name or "Playground" in name:
+            continue
 
         polygons = list(f.geometry.geoms)
         # x
@@ -44,6 +47,10 @@ for folder in folders:
             'y': y
         }
 
+        print(data)
         db.collection('locations').document().set(data)
+        i = i + 1
+        if (i >= 5):
+            break
         # break
 

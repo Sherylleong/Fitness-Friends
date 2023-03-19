@@ -1,0 +1,75 @@
+.createEvent {
+    display: grid;
+    margin-left: 13vw;
+}
+
+.createEvent .body {
+  width: 100%;
+  display: flex;
+}
+
+.createEvent button {
+    color: white;
+    font-weight: bold;
+}
+
+.createEvent .form-items .bio-input {
+  height: 15vh;
+}
+
+.createEvent .input-ignore-width {
+  width: fit-content;
+  min-width: 11rem;
+}
+
+.event-map {
+  width: 28vw;
+  height: 60vh;
+}
+
+.createEvent .right-div {
+    display:flex;
+    flex-direction: column;
+}
+.createEvent .map-select {
+ width: 100%;
+}
+/* .event-photo{
+    position: relative;
+    left: 45px;
+}
+
+.event-img {
+    height: 200px;
+    width: 200px;
+    object-fit: cover;
+    border-radius: 50% ;
+   
+}
+
+.btn{
+    position: relative;
+    left: 30px;
+    bottom:2px;
+
+  }
+
+  .btn2 {
+    position: relative;
+    left: 60px
+  }
+
+  h5{
+    position: relative;
+    top:15px;  
+  }
+
+  .fields{
+    background-color: lightgray;
+    position: relative;
+    top:10px;
+  }
+
+  .left-box{
+    width: 50%;
+  } */

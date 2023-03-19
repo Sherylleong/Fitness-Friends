@@ -3,17 +3,24 @@
     margin-left: 13vw;
     /* margin-right: 1.5vw; */
 }
-.editprofile .header {
-    width: 100%;
-}
 .editprofile .body {
     width: 100%;
     display: flex;
 }
 
-.editprofile .form-items form {
-    display: flex;
-    flex-direction: column;
+.editprofile button {
+    color: white;
+    font-weight: bold;
+}
+
+.editprofile select {
+    margin: 0.5rem 0;
+    padding: 1rem;
+    border: none;
+    width: 98%;
+    background-color: #e5e5e5e5;
+    border-radius: 5px;
+    font-size: 1.5vh;
 }
 
 .editprofile .form-items .bio-input {
@@ -27,25 +34,7 @@
     border-radius: 100%;
 }
 
-
-.editprofile button {
-    position:relative;
-    height: 50px;
-    font-size: 20px;
-    font-weight: bold;
-    border-radius: 15px;
-    cursor: pointer;
-    color: white;
-    border-color: white;
-    background-color: #ee6b6e;
-}
-
-.editprofile .dull-button {
-    background-color: #666262;
-    margin-left: 1.5vw;
-}
-
-.editprofile .button-align-center button,label {
+.button-align-center button,label {
     bottom:15vh;
     margin-left: 2.5rem;
     padding-left: 3vw;
@@ -56,24 +45,6 @@
     margin-top: 2vh;
     padding-left: 3vw;
     padding-right: 2.8vw;
-}
-
-.editprofile .button-align-center label {
-    position:relative;
-    height: 50px;
-    font-size: 20px;
-    font-weight: bold;
-    border-radius: 15px;
-    cursor: pointer;
-    color: white;
-    border-color: white;
-    background-color: #ee6b6e;
-    padding-bottom: 0.85vh;
-    padding-top: 0.65vh;
-}
-
-.editprofile .button-align-center input {
-    display:none;
 }
 
 .editprofile .profile-toggle-settings {
@@ -101,16 +72,6 @@
     margin-right: 10vw;
 }
 
-.editprofile form input {
-    margin: 0.5rem 0;
-    padding: 1rem;
-    border: none;
-    width: 98%;
-    background-color: #e5e5e5e5;
-    border-radius: 5px;
-    font-size: 1.5vh;
-}
-
 .editprofile form textarea {
     margin: 0.5rem 0;
     padding: 1rem;
@@ -122,74 +83,3 @@
 }
 
 
-/* Toggle Switch Code */
-.editprofile .switch {
-    position: sticky;
-    display: inline-block;
-    width: 95px;
-    height: 45px;
-    /* width: 5vw;
-    height: 4vh; */
-    margin-left: 5rem;
-    margin-top: 2vh;
-    padding-left: 0px;
-    padding-right: 0px;
-}
-
-.editprofile .switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.editprofile .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: .4s;
-    transition: .4s;
-}
-
-.editprofile .slider:before {
-    position: absolute;
-    content: "";
-    height: 37px;
-    width: 37px;
-    /* width: 3.3vh;
-    height: 3.3vh; */
-    left: 6px;
-    bottom: 4px;
-    background-color: white;
-    -webkit-transition: .4s;
-    transition: .4s;
-}
-
-.editprofile input:checked + .slider {
-    background-color: #00D722;
-}
-
-.editprofile input:focus + .slider {
-    box-shadow: 0 0 1px #00D722;
-}
-
-input:checked + .slider:before {
-    /* -webkit-transform: translateX(3.3vw);
-    -ms-transform: translateX(3.3vw);
-    transform: translateX(3.3vw); */
-    -webkit-transform: translateX(45px);
-    -ms-transform: translateX(45px);
-    transform: translateX(45px);
-}
-
-/* Rounded sliders */
-.editprofile .slider.round {
-    border-radius: 34px;
-}
-
-.editprofile .slider.round:before {
-    border-radius: 50%;
-}

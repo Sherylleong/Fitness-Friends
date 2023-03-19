@@ -96,8 +96,9 @@ h2 {
 }
 .account-form-options {
   display: flex;
-  justify-content: space-between;
+  justify-content: right;
   font-size: 12px;
+  align-items: end;
 }
 
 .account-form input[type="checkbox"] {

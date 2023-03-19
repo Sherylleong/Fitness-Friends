@@ -15,6 +15,7 @@ import ViewEvent from "./Components/ViewEvent";
 import ViewProfile from "./Components/ViewProfile";
 import EditProfile from "./Components/EditProfile";
 import CreateGroup from "./Components/CreateGroup";
+import CreateEvent from "./Components/CreateEvent"
 import { createStore } from "react-hooks-global-state";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 // import { withRouter } from "react-router";
@@ -91,6 +92,7 @@ function App() {
         <Route path="/ViewEvent/:eventId" element={<ViewEvent />} />
         <Route path="/ViewProfile" element={<ViewProfile />} />
         <Route path="/CreateGroup" element={<CreateGroup />} />
+        <Route path="/CreateEvent" element={<CreateEvent />} />
         <Route path="/EditProfile" element={<EditProfile />} />
       </Routes>
     </>

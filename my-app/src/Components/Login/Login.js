@@ -82,9 +82,9 @@ export default function Login() {
 					<div style={{display: showMissingPassword ? 'block' : 'none'}} id="missing-password" className="account-form-incorrect">Password field is required.</div>
 					<div style={{display: showIncorrectLogin ? 'block' : 'none'}} id="incorrect-login" className="account-form-incorrect">Incorrect Username or Password.</div>
 					<div className="account-form-options">
-						<label className="checkbox-label">
+						{/* <label className="checkbox-label">
 							<input type="Checkbox"/> Remember me
-						</label>
+						</label> */}
 						<Link to="/ForgetPassword">Forget password?</Link>
 					</div>
 					<button type="submit">Log In</button>

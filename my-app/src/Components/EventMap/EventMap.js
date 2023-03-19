@@ -6,6 +6,7 @@ import {
   MarkerClusterer,
 } from "@react-google-maps/api";
 import "./event-map-styles.css";
+
 export default function MapContainer() {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: "AIzaSyCGCznAwZAFJ8qMQY1ckg6EfDwuczmepWI",
@@ -68,13 +69,11 @@ function Map() {
 				<Marker position={mark3} /> */}
 
         <MarkerClusterer>
-          {(clusterer) => (
-            <>
-              {markers.map((marker) => (
+          {clusterer => 
+              markers.map((marker, index) => (
                 <Marker position={marker.position} clusterer={clusterer} />
-              ))}
-            </>
-          )}
+              ))
+          }
         </MarkerClusterer>
       </GoogleMap>
     </>

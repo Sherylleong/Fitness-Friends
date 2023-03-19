@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "sc2006-fitnessfriends-66854",
+  "private_key_id": "7afd78dcc8f804f5ec6df2cb5d52ee64c887c2b5",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC4vdmg5EnDsoqW\nPQXw6AN6a9JCi+JbQFk0tZRgPD6SlIrIuGginDLTSzyRvhLjAkEBmYCWsb5wS3kC\nepbqzdCpJ/8icOFOopU+MYwt5EZHbhNzABirTsjEzicGY349r02tqJljMJ1Ndh+k\np778HqDzQW1LEj7Q2KJlMzTDLca/xEP1hLwkreGIrttxugFVxutKmKzA2FrRpEh2\n45sbQgwY4qEg7nd93g78i5DgVp8h3u34852lykXnt2rAj3hqSApeXywR+F0c+AdK\n4Asrm2VZyHPiMrPMpBdkdj93icwUbKPhtdEsGbi7QCS4HSzQnDGf4fC8QIw8g+ns\nd2N0VNfrAgMBAAECggEAD8ymFuqfMl42baiKCwh/T6d2o8anKlWuVgyCGYQyzRdo\nvRzO7x17rUgIcJBtuL4McDDAEg3hHbpz/sBxirg6Xv/ILppdHSauFn5nS39z0Tpl\nQxcK2mUSVN5/8OhuYfki7rX2FEkSkuQwyu9RApUzVPUkqIscFdazy22IgXlh6iwf\nZspVpt3APwf0gLMHrR5PuHQWt3y3L5KKtr9WZQfPk20eYC00NThYWnMHS2jJT+o5\nnQtYTnQ3H27DdAbzHOTUgyM9/B+gTKWK2L57iEcidraDCfnW8CWSZmc4B/jexmog\nCh/SJ1AKolCvP6FrU0uHyaCvtj2AJ9+oyJE1HO42/QKBgQDnq3oSPNTYFj3fqwgX\nQ74WM2HCgquuXfrE6GmnxgQNdWfmzYNTMH/Br8ExfsppGiXIA4+8fkmYAmF+mTgJ\nauHOIvq4NYG0PVrvxgFWmqjDWmQt5BRTsppTb6oZasQsbLE13u+LhpzTaNwaXCyn\n+sXT26goWWVp4t55FzKcv2H2VwKBgQDMJLERRiAKfBPAf5PleyAUpIyCcXpjniEf\nj6GRJUoWB0zwsib0Ws1Nwiw2VG1+ASrNH7W2fOnlO1bHwLT6F6XPtcJLKdTn2L8u\nTDXg38hXkd1O0tzMPsSUxIOBeYFnkZWa/Ts7kavaG4smhL4K5X7F+V6eh0t57BiO\nnEBp46LmjQKBgFBXn5YDkqz9yadv4PZwf9OjLhwOxQtLfFQdZcbRXUZtmQLp8sk+\n4I+DLDTGC9w3PTMISSjNgyg8ayNEb7KUZorehqSrqbegL5FH0d7+89gL2QIxPvtn\nzS1yZEM8S5w8dZiBIAH7RRfsHajmnnYC+ehnHQIhPpJiI1VLPjouBQMxAoGAPho3\nZ5reqnHejGQDOP+A3ebE+/XLlryHNRO7we0HIbZs2JhJs3JgHHSigJCkkn2GaMpp\nvC859Etd9fyQ0bgZ8BtKFRWPuEw+tLXoehV52/H60jzhgJzjrqIto1i0Xi5yxaid\nuVxyXDKe3UPqkGQKce2PtEhSVK/XNKMiEVR3vQ0CgYApQaM8JAlBfiwhLaelD/YX\ncCNFYMpjXz4aZ7Dtw5tuvxQhgwEkqcMlTD7kH2X8UIeja4AhtyzxPWxewX8N62Qi\nCDGybMVxoHiSL7zy+rLe2zbFPizXCzWDklOEHXy6AdmpjEN1mFzkeol8nlzWr6gm\n47gAFaFUzPCss44aZy2Gfg==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-ufkjq@sc2006-fitnessfriends-66854.iam.gserviceaccount.com",
+  "client_id": "100079578749132747311",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-ufkjq%40sc2006-fitnessfriends-66854.iam.gserviceaccount.com"
+}

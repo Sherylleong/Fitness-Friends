@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useStoreState } from "../../App"
 import { firestore, storage, auth } from "../FirebaseDb/Firebase";
 import {collection,doc, updateDoc ,getDocs, query, where } from "firebase/firestore";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { updatePassword } from "firebase/auth"
 import { useNavigate } from "react-router-dom";
 
@@ -22,9 +22,23 @@ export default function EditProfile() {
 	const [eventAttended, setEventAttended] = useState(false);
 	
 	const [newPassword, setNewPassword] = useState("");
-	
 
 	const navigate = useNavigate();
+
+	/*
+	for (i=0; i <= 24;i++) {
+    	arr.push(document.querySelector("#mw-content-text > div.mw-parser-output > table:nth-child(24) > tbody").childNodes[24+i].childNodes[1].childNodes[0].text);
+	}
+	*/
+	// Taken from wikipedia
+	const sgTowns =['Ang Mo Kio', 'Bedok', 'Bishan', 'Bukit Batok', 'Bukit Merah', 'Bukit Panjang', 'Choa Chu Kang', 'Clementi', 'Geylang', 'Hougang', 'Jurong East', 'Jurong West', 'Kallang', 'Pasir Ris', 'Punggol', 'Queenstown', 'Sembawang', 'Sengkang', 'Serangoon', 'Tampines', 'Tengah', 'Toa Payoh', 'Woodlands', 'Yishun'];
+	const townOptions = () => {
+		const options = sgTowns.map((town, index)=><option value={town}>{town}</option>)
+
+		// return <select>{options}</select>
+		return <h1>hi</h1>
+	}
+
 
 	function flipValue(id) {
 		switch(id) {
@@ -64,7 +78,7 @@ export default function EditProfile() {
 			// Handle Password Change First
 			changePassword();
 		}else {
-			updateDetails();
+			uploadFile();
 		}
 	}
 
@@ -73,7 +87,7 @@ export default function EditProfile() {
 		if (newPassword != "") {
 			updatePassword(auth.currentUser, newPassword).then(()=> {
 				console.log("Password update Success");
-				updateDetails();
+				uploadFile();
 			}).catch((error) => {
 				console.log(error);
 			});
@@ -82,14 +96,17 @@ export default function EditProfile() {
 		}
 	}
 
+	const [testFile, setTest] = useState(null);
 	const acceptFile = event => {
-		const fileUploaded = event.target.files[0];
-		uploadFile(fileUploaded);
+		var fileUploaded = event.target.files[0];
+		setTest(fileUploaded);
+		setProfilePic(URL.createObjectURL(fileUploaded));
+		// uploadFile(fileUploaded);
 	};
 
-	const uploadFile = async(file) => {
+	const uploadFile = async() => {
 		const imageRef = ref(storage, userId+"-profilepic");
-		await uploadBytes(imageRef, file);
+		await uploadBytes(imageRef, testFile);
 
 		const imageURL = await getDownloadURL(imageRef);
 		setProfilePic(imageURL);
@@ -97,13 +114,33 @@ export default function EditProfile() {
 		const updateQuery = doc(firestore, 'users', documentId);
 		updateDoc(updateQuery, {
 			profilePic: imageURL
+		}).then(() => {
+			updateDetails();
 		});
 	}
 
-	function updateDetails() {
+	// const acceptFile = event => {
+	// 	var fileUploaded = event.target.files[0];
+	// 	uploadFile(fileUploaded);
+	// };
+
+	// const uploadFile = async(file) => {
+
+	// 	const imageRef = ref(storage, userId+"-profilepic");
+	// 	await uploadBytes(imageRef, file);
+
+	// 	const imageURL = await getDownloadURL(imageRef);
+	// 	setProfilePic(imageURL);
+
+	// 	const updateQuery = doc(firestore, 'users', documentId);
+	// 	updateDoc(updateQuery, {
+	// 		profilePic: imageURL
+	// 	});
+	// }
+
+	const updateDetails = async() => {
 		const updateQuery = doc(firestore, 'users', documentId);
 		updateDoc(updateQuery, {
-			profilePic: profilePic,
 			displayName: displayName,
 			Location: location,
 			Bio: bio,
@@ -122,6 +159,10 @@ export default function EditProfile() {
 
 	const removeImage = () => {
 		setProfilePic("https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/defaultPFP.png?alt=media&token=93a30cef-5994-4701-9fab-9ad9fdec913c");
+		const updateQuery = doc(firestore, 'users', documentId);
+		updateDoc(updateQuery, {
+			profilePic: profilePic
+		});
 	}
 
 	const returnToProfilePage = () => {
@@ -142,7 +183,7 @@ export default function EditProfile() {
 				<div className="left-div">
 					<div className="button-align-center">
 						<img className="editprofile-img" src={profilePic}/>
-						<label>Change Image
+						<label className="button-upload-file">Change Image
 							<input type="file" accept="image/png, image/jpeg" onChange={acceptFile}></input>
 						</label>
 						<button className="dull-button" onClick={()=>removeImage()}>Remove Image</button>
@@ -152,7 +193,9 @@ export default function EditProfile() {
 							<b>Name (Required)</b>
 							<input lassName="default-input" type="text" value={displayName} onChange={(e)=>setDisplayName(e.target.value)}></input>
 							<b>Your Location</b>
-							<input type="text" value={location} onChange={(e)=>setLocation(e.target.value)}></input>
+							<select value={location} onChange={(e)=>setLocation(e.target.value)}>
+								{sgTowns.map(towns=> <option value={towns}>{towns}</option>)}
+							</select>
 							<b>Bio</b>
 							<textarea className="bio-input" value={bio} onChange={(e)=>setBio(e.target.value)}></textarea>
 						</form>
