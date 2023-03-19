@@ -2,20 +2,24 @@ import { useState,useReducer, useEffect  } from "react";
 import MapContainer from "../EventMap/EventMap.js"
 import EventFilters from "../Filters/EventFilters.js"
 import "./find-events-map-styles.css";
+import { firestore } from "../FirebaseDb/Firebase";
+import { doc, collection, query, where, getDocs } from "firebase/firestore";
+import { getDoc } from "firebase/firestore";
+import { dispatch, useStoreState } from "../../App"
 
 
 function eventsMapCard(event){
     return (
         <div className="event-map-card">
-        <div>
-            <p className="event-map-name">{event.name}</p>
-            <p className="event-map-time">{event.date}, {event.time}</p>
-            <p className="event-map-location">{event.location}</p>
-            <p className="event-map-category">{event.category}</p>
-            <p className="event-map-difficulty">{event.difficulty}</p>
+        <div className="event-map-left">
+            <p className="event-map-name">{event.eventTitle}</p>
+            <p className="event-map-time">{event.date},{event.time}</p>
+            <p className="event-map-location">{event.eventLocation}</p>
+            <p className="event-map-category">{event.eventCategory}</p>
+            <p className="event-map-difficulty">{event.eventDifficulty}</p>
         </div>
-        <div>
-            <p className="event-map-attendees">{event.attendees} participants</p>
+        <div className="event-map-right">
+            <p className="event-map-attendees">{event.eventAttendees.length} attendee(s)</p>
             <button className="join-event">Join</button>
         </div>
         </div>
@@ -26,23 +30,23 @@ function eventsListCard(event){
         <div className="event-list-card">
         <div className="event-list-img">
         <div className="crop">
-            <img src="http://i.stack.imgur.com/wPh0S.jpg"/>
+            <img src={event.eventImage}/>
         </div>
         </div>
         <div className="list-card-desc">
-            <h1 className="event-list-name">{event.name}</h1>
+            <h1 className="event-list-name">{event.eventTitle}</h1>
             <p className="event-list-time">{event.date}, {event.time}</p>
-            <p className="event-list-location">{event.location}</p>
-            <p className="event-list-attendees">{event.attendees} participants</p>
+            <p className="event-list-location">{event.eventLocation}</p>
+            <p className="event-list-attendees">{event.eventAttendees.length} attendee(s)</p>
 
         </div>
         <div className="list-card-tags">
-            <p className="event-list-category">{event.category}</p>
-            <p className="event-list-difficulty">{event.difficulty}</p>
+            <p className="event-list-category">{event.eventCategory}</p>
+            <p className="event-list-difficulty">{event.eventDifficulty}</p>
         </div>
         <div>
             
-            <button className="join-event">Join</button>
+            <button className="join-event-find">Join</button>
         </div>
         </div>
         
@@ -67,7 +71,7 @@ function EventMapHeader({eventsView,setEventsView}){
           };
     return (
             <div style={{ display:"flex", flexDirection:"row", justifyContent:"space-around"}}>
-                <h1 style={{marginTop:"0px", position:"relative", right:"100px"}}>Filters</h1>
+                <h1 style={{marginTop:"0px", position:"relative", right:"140px"}}>Filters</h1>
                 <h1 style={{marginTop:"0px", position:"relative", fontSize:"50px"}}>Search Events</h1>
                 <div style={{marginTop:"0px", position:"relative", left:"250px"}}>
                 <button id="mapview" style={{ fontWeight: eventsView === "mapview" ? "bold" : "" }} onClick={(e)=>changeView(e)}>Map View</button>
@@ -102,7 +106,48 @@ function EventsListList({events, handleFilters}){
 }
 
 export default function FindEventsMap(){
+    const userId = useStoreState("userId");
+    const [events, setEvents] = useState([]);
+    const [groups, setGroups] = useState([]); // user's joined groups
 
+    useEffect(() => {
+        const fetchEvents = async () => {
+            const eventsRef = collection(firestore, "events");
+            
+            const q = query(eventsRef);
+            const querySnapshot = await getDocs(q).catch((error) => {
+              console.log("Error getting documents: ", error);
+            });
+            if (querySnapshot.empty) {
+              console.log("No matching documents.");
+            } else {
+              const fetchedEvents = querySnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+              }));
+              console.log(querySnapshot);
+              setEvents(fetchedEvents);
+            }
+
+          };
+          const getGroupsJoined = async () => {
+            const docRef = query(collection(firestore, "group"), where("groupmembers", "array-contains", userId));
+            const docu = await getDocs(docRef);
+            const updatedDocs = docu.docs.map(async (doc) => {
+              return {"id":doc.id, "groupname":doc.data()['groupname']};
+            });
+            const fetchedGroups = await Promise.all(updatedDocs); // jank, has to be an easier way :(
+            let updatedGroups = {};
+            fetchedGroups.forEach((group)=>{updatedGroups[group.id] = group.groupname;});
+            setGroups(updatedGroups);
+          };
+
+          fetchEvents();
+          getGroupsJoined();
+      }, []); // re-fetch the events whenever anything changes
+console.log(groups);
+
+/*
     let eventsdb = [
         {
             name: "ippt training",
@@ -149,10 +194,9 @@ export default function FindEventsMap(){
             group: "bois"
         }
     ]
-
+*/
     //const [events, setEvents] = useState(eventsdb);
     const [eventsView, setEventsView] = useState("mapview");
-    let events = eventsdb;
     const [filters, setFilters] = useReducer(
         (state, newState) => ({ ...state, ...newState }),
         {
@@ -164,9 +208,8 @@ export default function FindEventsMap(){
             groups: []
         }
       );
-      let groups =   Array.from(new Set(events.map((event)=>event.group)));
 
-        events = (filterEvents(eventsdb, filters, eventsView));
+    let filteredEvents = (filterEvents(events, filters, eventsView));
 
   
 
@@ -192,10 +235,10 @@ export default function FindEventsMap(){
 
     function filterEvents(events, filters, eventsView){
         let filteredEvents = events.filter((event) => {
-            if (filters.difficulty.length !==0 && !(filters.difficulty.includes(event.difficulty))) return false;
-            if (filters.category.length !==0 && !(filters.category.includes(event.category))) return false;
-            if (filters.groups.length !==0 && !(filters.groups.includes(event.group))) return false;
-            let eventDate = new Date(event.date); 
+            if (filters.difficulty.length !==0 && !(filters.difficulty.includes(event.eventDifficulty))) return false;
+            if (filters.category.length !==0 && !(filters.category.includes(event.eventCategory))) return false;
+            if (filters.groups.length !==0 && !(filters.groups.includes(event.groupId))) return false;
+            let eventDate = new Date(event.eventDate); 
             if (filters.startDate !== ""){
                 let filterStartDate = new Date(filters.startDate);
                 if (eventDate < filterStartDate) return false;
@@ -204,9 +247,10 @@ export default function FindEventsMap(){
                 let filterEndDate = new Date(filters.endDate);
                 if (eventDate > filterEndDate) return false;
             }
-            if (eventsView==="mapview") return event.location.toLowerCase().indexOf(filters.search.toLowerCase()) !==-1;
-            return event.name.toLowerCase().indexOf(filters.search.toLowerCase()) !==-1;
+            if (eventsView==="mapview") return event.eventLocation.toLowerCase().indexOf(filters.search.toLowerCase()) !==-1;
+            return event.eventTitle.toLowerCase().indexOf(filters.search.toLowerCase()) !==-1;
         })
+
         return filteredEvents;
     }
 
@@ -215,8 +259,8 @@ export default function FindEventsMap(){
         <div className="find-events-page" >{/*col*/}
             <EventMapHeader eventsView={eventsView} setEventsView={setEventsView} />{/*row*/}
             {eventsView==="mapview" ?
-            (<EventMapInfo groups={groups} handleFilters={handleFilters} events={events} eventsView={eventsView} setEventsView={setEventsView} />)
-        : (<EventListInfo groups={groups} handleFilters={handleFilters} events={events} eventsView={eventsView} setEventsView={setEventsView} />)}
+            (<EventMapInfo groups={groups} handleFilters={handleFilters} events={filteredEvents} eventsView={eventsView} setEventsView={setEventsView} />)
+        : (<EventListInfo groups={groups} handleFilters={handleFilters} events={filteredEvents} eventsView={eventsView} setEventsView={setEventsView} />)}
         </div>
 
     )

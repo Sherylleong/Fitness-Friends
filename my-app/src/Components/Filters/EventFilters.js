@@ -1,7 +1,18 @@
 import "./filter-styles.css";
-
+function GroupForm({handleFilters, groups}){
+  
+    let groupIds = Object.keys(groups)
+    if (groupIds.length > 0)
+    return (groupIds.map(groupid => {
+       return (
+        <label>
+        <input type="checkbox" name="groups" value={groupid} onChange={(e) => {handleFilters(e);}}/>
+        {' '}{groups[groupid]}</label>
+       )
+ }))
+}
 export default function EventFilters({handleFilters, groups}){
-
+    let groupIds = Object.keys(groups)
 
 	return (
 		<form className="events-form">
@@ -57,19 +68,10 @@ export default function EventFilters({handleFilters, groups}){
                 </div>
             </fieldset>
             <fieldset>
-                <legend>Groups</legend>
+                <legend>Your Groups</legend>
                 <div className="filter-item">
-                {groups.map(group => {
-           		return (
-                    
-                    <label>
-                    <input type="checkbox" name="groups" value={group} onChange={(e) => {handleFilters(e);}}/>
-                    {' '}{group}</label>
-                    
-           		)
-                   
-         	})}
-            </div>
+                <GroupForm handleFilters={handleFilters} groups={groups} />
+                </div>
             </fieldset>
 		</form>
 	  );

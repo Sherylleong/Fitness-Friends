@@ -3,14 +3,13 @@
     font-size: 20px;
     display: flex; 
     flex-direction: column;
-
 }
 
 .events-map-list {
     display: flex; 
     flex-direction: column;
     justify-content:flex-start;
-
+    min-width: 340px;
 
 }
 .event-map-card {
@@ -20,6 +19,7 @@
     justify-content:space-between;
     align-items: center;
     border-bottom: 2px solid;
+
 }
 
 .event-list-card {
@@ -35,6 +35,10 @@
     font-size: 25px;
     border: none;
     background-color: white;
+}
+
+.event-map-card .event-map-left {
+    padding-right: 40px;
 }
 
 .event-map-card .event-map-name {
@@ -56,17 +60,24 @@
 .event-map-card .event-map-category,.event-map-card .event-map-difficulty {
     font-size: 15px;
     border: 2px solid;
+    width:130px;
     padding: 0px;
     border-radius: 15px;
     text-align: center;
     margin: 5px;
 }
 
-.event-map-card .join-event {
-    font-size: 18px;
-    padding: 0px;
-}
+.join-event-find{
+    height:45px;
+    width: 150%;
+    border-radius: 15px;
+    cursor: pointer;
+    border-color: white;
+    color: white;
+    background-color: #ee6b6e;
+    font-size: 20px;
 
+}
 #locationsearch{
     width: 250px;
     font-size: 25px;
@@ -162,6 +173,7 @@
     border-radius: 15px;
     align-items: center;
     background-color: rgb(231, 231, 231);
+    min-width: 1450px;
 }
 
 .list-card-desc {
