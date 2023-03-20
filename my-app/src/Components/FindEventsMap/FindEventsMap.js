@@ -41,7 +41,14 @@ function EventsMapCard(event) {
   );
 }
 
-function eventsListCard(event) {
+function EventsListCard(event) {
+  console.log("event:");
+  console.log(event.id);
+  const eventId = event.id;
+  const navigate = useNavigate();
+  const handleView = () => {
+    navigate("ViewEvent/" + eventId);
+  };
   return (
     <div className="event-list-card">
       <div className="event-list-img">
@@ -64,7 +71,9 @@ function eventsListCard(event) {
         <p className="event-list-difficulty">{event.eventDifficulty}</p>
       </div>
       <div>
-        <button className="join-event-find">Join</button>
+        <button className="view-event-find" onClick={handleView}>
+          View
+        </button>
       </div>
     </div>
   );
@@ -139,7 +148,7 @@ function EventsListList({ events, handleFilters }) {
       <div style={{ position: "relative", left: "-350px" }}>
         <Searchbar handleFilters={handleFilters} searchText="Search Event..." />
       </div>
-      {events.map((event) => eventsListCard(event))}
+      {events.map((event) => EventsListCard(event))}
     </div>
   );
 }

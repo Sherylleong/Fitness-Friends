@@ -8,13 +8,17 @@ import { useEffect, useState } from "react";
 import "./ViewEvent.css";
 import { getDoc } from "firebase/firestore";
 import { useParams } from "react-router-dom";
-import { doc, collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import { firestore } from "../FirebaseDb/Firebase";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { dispatch, useStoreState } from "../../App";
+import { useNavigate } from "react-router-dom";
+import { arrayUnion, arrayRemove } from "firebase/firestore";
+import { doc, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
 
 function ViewEvent() {
   const userId = useStoreState("userId");
+  const navigate = useNavigate();
   // FirebaseAuth.getInstance().getCurrentUser()
   console.log("userid:");
   if (!userId) {
@@ -35,10 +39,17 @@ function ViewEvent() {
     }
   };
 
-  //for fetching groupdata using groupId in url
-  const { eventId } = useParams(); // retrieve the groupId from the URL parameter
+  //for fetching eventdata using eventid in url
+  const { eventId: urlEventId } = useParams(); // retrieve the groupId from the URL parameter
+  const [eventId, setEventId] = useState(null); // add a state variable for groupId
   const [event, setEvent] = useState(null); // initialize the group state to null
   // const [groupEvents, setGroupEvents] = useState([]); //for groupevents
+  console.log(eventId);
+
+  useEffect(() => {
+    setEventId(urlEventId);
+  }, [urlEventId]);
+
   console.log(eventId);
 
   //for image fetching, converting from url to docs/file
@@ -70,6 +81,31 @@ function ViewEvent() {
     fetchEvent();
   }, [eventId, storage]); // re-fetch the group whenever the groupId changes
 
+  //for joining event
+
+  const joinEvent = async () => {
+    console.log("joining event===");
+    console.log(userId);
+    console.log(eventId);
+
+    if (!userId) {
+      //ok this part works
+      navigate("/Login");
+      return;
+    }
+
+    const eventRef = doc(collection(firestore, "events"), eventId);
+
+    await updateDoc(eventRef, {
+      eventAttendees: arrayUnion(userId),
+    });
+
+    // await updateDoc(groupRef, {
+    //   groupmembers: arrayUnion(userId), // Add the userId to the groupmembers array
+    // });
+    // console.log("successfully joined");
+  };
+
   if (!event) {
     return <div clasName="loading">Loading...</div>; // show a loading message if the group state is null
   }
@@ -91,7 +127,7 @@ function ViewEvent() {
             <div className="group-title1">{event.eventTitle}</div>
 
             <div className="joineventbtn">
-              <button className="joinevent" type="submit">
+              <button className="joinevent" onClick={joinEvent}>
                 Join this Event
               </button>
             </div>
