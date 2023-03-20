@@ -17,8 +17,16 @@ import { useNavigate } from "react-router-dom";
 
 function ViewGroup() {
   //for join grp, check if user is logged in first, get use state -- need to check! (then add to viewevent)
-  // const userId = useStoreState("userId");
-  // const navigate = useNavigate();
+  const userId = useStoreState("userId");
+  // FirebaseAuth.getInstance().getCurrentUser()
+  console.log("userid:");
+  if (!userId) {
+    console.log("no user id");
+  } else {
+    console.log(userId);
+  }
+
+  const navigate = useNavigate();
 
   //for pagination
   const [currentPg, setCurrentPg] = useState(0);

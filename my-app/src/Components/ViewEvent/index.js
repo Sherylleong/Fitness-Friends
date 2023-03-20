@@ -11,8 +11,18 @@ import { useParams } from "react-router-dom";
 import { doc, collection, query, where, getDocs } from "firebase/firestore";
 import { firestore } from "../FirebaseDb/Firebase";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import { dispatch, useStoreState } from "../../App";
 
 function ViewEvent() {
+  const userId = useStoreState("userId");
+  // FirebaseAuth.getInstance().getCurrentUser()
+  console.log("userid:");
+  if (!userId) {
+    console.log("no user id");
+  } else {
+    console.log(userId);
+  }
+
   //geenral getdocbyid function w colllectionname and docid asparameters
   const getByDocID = async (collectionName, docID) => {
     const docRef = doc(firestore, collectionName, docID);
