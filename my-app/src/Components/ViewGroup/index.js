@@ -1,5 +1,5 @@
 import iconpin from "../Resources/location.png";
-import attendee from "../Resources/attendees.png";
+import aboutgroup from "../Resources/aboutgroup.png";
 import attendee1 from "../Resources/attendee.png";
 import arrow from "../Resources/arrow.png";
 import { useEffect, useState } from "react";
@@ -14,6 +14,7 @@ import { getDoc } from "firebase/firestore";
 import { dispatch, useStoreState } from "../../App";
 import { useNavigate } from "react-router-dom";
 import { arrayUnion, arrayRemove } from "firebase/firestore";
+import calender from "../Resources/calender.png";
 
 function ViewGroup() {
   //for user id
@@ -159,8 +160,6 @@ function ViewGroup() {
       <div clasName="full-screen">
         <div className="full">
           <div className="top">
-            <img className="arrow" src={arrow}></img>
-
             <div class="image-container">
               <img className="grp-picture" src={imageUrl}></img>
             </div>
@@ -175,20 +174,47 @@ function ViewGroup() {
           </div>
 
           <div className="middle">
-            <div className="attendees">
-              <div className="attendee-img">
-                <img src={attendee}></img>
+            <div className="creator-member1">
+              <div className="creator-event">
+                <div className="creatortitle">
+                  <div className="attendee3">
+                    <img src={attendee1}></img>
+                  </div>
+                  <div> Creator: </div>
+                </div>
+
+                <div className="creatorname"> </div>
               </div>
-              <div className="attendee-numb">
-                {group.groupmembers.length} attendees{" "}
+              <div className="creator-event">
+                <div className="creatortitle">
+                  <div className="attendee3">
+                    <img src={attendee1}></img>
+                  </div>
+                  <div> Members: </div>
+                </div>
+
+                <div className="creatorname"> </div>
               </div>
             </div>
-            <div className="containerhehe">
+
+            <div className="date2">
+              <div className="date1-top">
+                <div className="calender">
+                  <img src={aboutgroup}></img>
+                </div>
+
+                <div className="date1-title">About Group</div>
+              </div>
+
+              <div className="about-group">{group.groupdesc}</div>
+            </div>
+
+            {/* <div className="containerhehe">
               <div className="about"> About our group:</div>
               <div className="grp-desc">"{group.groupdesc}""</div>
 
               <div className="creator">Created by {group.groupOwner}</div>
-            </div>
+            </div> */}
 
             <div className="middle-right">
               <div className="difficulty ">

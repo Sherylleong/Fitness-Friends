@@ -1,5 +1,7 @@
 import EventData from "./EventData";
 import iconpin from "../Resources/location.png";
+import calender from "../Resources/calender.png";
+import location from "../Resources/locationfinal.png";
 import attendee from "../Resources/attendees.png";
 import attendee1 from "../Resources/attendee.png";
 import arrow from "../Resources/arrow.png";
@@ -118,8 +120,6 @@ function ViewEvent() {
       <div className="full-screen">
         <div className="full">
           <div className="top1">
-            <img className="arrow1" src={arrow}></img>
-
             <div class="image-container1">
               <img className="grp-picture1" src={event.eventImage}></img>
             </div>
@@ -134,19 +134,59 @@ function ViewEvent() {
           </div>
 
           <div className="middle1">
-            <div className="location1">
-              <div clasName="location-img1">
-                <img src={iconpin}></img>
+            {/* add eventTime and date, followed up eventlocation, then tags */}
+
+            <div className="date1">
+              <div className="date1-top">
+                <div className="calender">
+                  <img src={calender}></img>
+                </div>
+
+                <div className="date1-title">When and Where</div>
               </div>
-              <div className="location-name1">{event.eventLocation}</div>
+
+              <div className="event-date-time">
+                <div className="event-date"> Date: {event.date}</div>
+                <div className="event-time"> Time: {event.eventTime}</div>
+              </div>
             </div>
 
-            <div className="attendees1">
-              <div className="attendee-img1">
-                <img src={attendee}></img>
+            <div className="date1">
+              <div className="date1-top">
+                <div className="location3">
+                  <img src={location}></img>
+                </div>
+
+                <div className="date1-title">Location of event</div>
               </div>
-              <div className="attendee-numb1">
-                {event.eventAttendees.length} attendees{" "}
+
+              <div className="event-date-time">
+                <div className="event-time"> {event.eventLocation}</div>
+              </div>
+            </div>
+
+            {/* add the creaor n members*/}
+
+            <div className="creator-member">
+              <div className="creator-event">
+                <div className="creatortitle">
+                  <div className="attendee3">
+                    <img src={attendee1}></img>
+                  </div>
+                  <div> Creator: </div>
+                </div>
+
+                <div className="creatorname"> {event.creatorID}</div>
+              </div>
+              <div className="creator-event">
+                <div className="creatortitle">
+                  <div className="attendee3">
+                    <img src={attendee1}></img>
+                  </div>
+                  <div> Members: </div>
+                </div>
+
+                <div className="creatorname"> {event.creatorID}</div>
               </div>
             </div>
 
