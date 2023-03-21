@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { collection, doc, documentId, getDocs, query, where,getDoc} from "firebase/firestore";
+import { collection, doc, getDocs, query, where,getDoc} from "firebase/firestore";
 import { firestore } from "../FirebaseDb/Firebase";
 import 'firebase/firestore';
 import { useNavigate } from "react-router-dom";
@@ -64,8 +64,13 @@ function ViewMembersGroup() {
             {/*groupMembersData is an array of arrays, display each entry's profilePic and displayName*/}
             {groupMembersData.map((groupMembersData) => (
                 <div className="ViewMemberCard" key={groupMembersData.userId}>
-                    <img className="ViewMemberCardProfilePic" src={groupMembersData.profilePic} alt="Profile Pic" />
-                    <div className="ViewMemberCardDisplayName">{groupMembersData.displayName}</div>
+                    
+                    <div className="ViewMemberPFPContainer">
+                        <img className="ViewMemberCardProfilePic" src={groupMembersData.profilePic} alt="Profile Pic" />
+                    </div>
+                    <div className="ViewMemberDisplayNameContainer">
+                        <div className="ViewMemberCardDisplayName">{groupMembersData.displayName}</div>
+                    </div>
                 </div>
             ))}
         </div>
