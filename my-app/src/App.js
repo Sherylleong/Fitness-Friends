@@ -16,6 +16,8 @@ import ViewProfile from "./Components/ViewProfile";
 import EditProfile from "./Components/EditProfile";
 import CreateGroup from "./Components/CreateGroup";
 import CreateEvent from "./Components/CreateEvent";
+import ViewMembersEvent from "./Components/ViewMembersEvent";
+import ViewMembersGroup from "./Components/ViewMembersGroup";
 import Home from "./Components/Home";
 import { createStore } from "react-hooks-global-state";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
@@ -90,7 +92,9 @@ function App() {
         <Route path="/Groups" element={<FindGroups />} />
         <Route path="/CRUD" element={<CRUD />} />
         <Route path="Groups/ViewGroup/:groupId" element={<ViewGroup />} />
+        <Route path="Groups/ViewGroup/:groupId/ViewMembersGroup" element={<ViewMembersGroup />} />
         <Route path="/Events/ViewEvent/:eventId" element={<ViewEvent />} />
+        <Route path="/Events/ViewEvent/:eventId/ViewMembersEvent" element={<ViewMembersEvent />} />
         <Route path="/ViewProfile" element={<ViewProfile />} />
         <Route path="/CreateGroup" element={<CreateGroup />} />
         <Route path="/CreateEvent" element={<CreateEvent />} />
