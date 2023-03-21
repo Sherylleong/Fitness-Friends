@@ -112,6 +112,10 @@ function ViewEvent() {
     return <div clasName="loading">Loading...</div>; // show a loading message if the group state is null
   }
 
+  const handleViewMember = () => {
+    navigate("ViewMembers/" + eventId);
+  };
+
   console.log({ event });
   console.log(eventId);
 
@@ -170,7 +174,7 @@ function ViewEvent() {
             <div className="creator-member">
               <div className="creator-event">
                 <div className="creatortitle">
-                  <div className="attendee3">
+                  <div className="attendee3" onClick={handleViewMember}>
                     <img src={attendee1}></img>
                   </div>
                   <div> Creator: </div>
