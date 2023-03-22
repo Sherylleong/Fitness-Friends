@@ -55,14 +55,17 @@ function ViewMembersEvent() {
     const navigate = useNavigate();
     const handleViewMemberReturn = () => {
         navigate(-1);
-      };
+    };
+    const handleViewMemberProfile = (memberId) => {
+        navigate("ViewMemberProfile/" + memberId);
+    };
     return (
         <div className="ViewMembersFull">
             <button className="ViewMembersBackButton" onClick={handleViewMemberReturn}>&lt; Back</button>
             <div className="ViewMembersTitle">Members</div>
             {/*eventAttendeesData is an array of arrays, display each entry's profilePic and displayName*/}
             {eventAttendeesData.map((eventAttendeeData) => (
-                <div className="ViewMemberCard" key={eventAttendeeData.userId}>
+                <div className="ViewMemberCard" onClick={handleViewMemberProfile(eventAttendeeData.userId)}>
                     <div className="ViewMemberPFPContainer"><img className="ViewMemberCardProfilePic" src={eventAttendeeData.profilePic} alt="Profile Pic" /></div>
                     <div className="ViewMemberDisplayNameContainer"><div className="ViewMemberCardDisplayName">{eventAttendeeData.displayName}</div></div>
                 </div>
