@@ -6,7 +6,7 @@ import { firestore } from "../FirebaseDb/Firebase";
 import { doc, collection, query, where, getDocs } from "firebase/firestore";
 import { getDoc } from "firebase/firestore";
 import { dispatch, useStoreState } from "../../App";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function EventsMapCard(event) {
   console.log("event:");
