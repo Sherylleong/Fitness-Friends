@@ -13,14 +13,25 @@ import { useMemo } from "react";
 import { render } from "@testing-library/react";
 
 export default function CreateEvent() {
-    const userId = useStoreState("userId");
+    // const userId = useStoreState("userId");
+    const userId = "ha"
 	const [documentId, setDocumentId] = useState("");
 
 	const [pic, setPic] = useState("https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/defaultPFP.png?alt=media&token=93a30cef-5994-4701-9fab-9ad9fdec913c");
 	const [title, setTitle] = useState("");
-	const [eventDate, setEventDate] = useState("");
-    const [eventTime, setEventTime] = useState("");
+    var today = new Date()
+    var month = today.getMonth() < 10 ? "0" + today.getMonth() : today.getMonth()
+	const [eventDate, setEventDate] = useState(today.getFullYear() + "-" + month + "-" + today.getDate());
+    var hour = today.getHours() < 10 ? "0" + today.getHours()  : today.getHours()
+    var minutes = today.getMinutes() < 10 ? "0" + today.getMinutes()  : today.getMinutes()
+    const [eventTime, setEventTime] = useState(hour + ":" + minutes);
 	const [bio, setBio] = useState("");
+    const [difficulty, setDifficulty] = useState()
+    const [eventActivity, setActivity] = useState()
+
+    const difficultyChoices = ["Beginner", "Intermediate", "Advanced"]
+    const activityChoices = ["Walking", "Jogging", "Running", "Climbing","Biking","Sports","Others"]
+
     const [selected, setSelected] = useState({
         name:"",
         position: {lat: 1.348578045634617,
@@ -34,7 +45,7 @@ export default function CreateEvent() {
     const [filterMapData, setFilterMapData] = useState([]);
 
     const getMarkerLoc = async () => {
-        const docRef = query(collection(firestore, "locations"), limit(10));
+        const docRef = query(collection(firestore, "locations"), limit(5));
 		const docu = await getDocs(docRef);
         var mapArr = [];
 		docu.forEach((doc) => {
@@ -101,7 +112,20 @@ export default function CreateEvent() {
 
     function createEventClick() {
         addDoc(collection(firestore, 'events'), {
-                test: "hi"
+                creatorID: userId,
+                date: eventDate,
+                time: eventTime,
+                eventDifficulty: difficulty,
+                eventCategory: eventActivity,
+                eventLocation: selected.name,
+                eventPosition: {
+                    lat: selected.position.lat,
+                    lng: selected.position.lng
+                },
+                eventTitle: title,
+                eventDescription: bio,
+                eventType: "individual",
+                eventImage: pic
             }
         );
     }
@@ -130,10 +154,30 @@ export default function CreateEvent() {
                         <form>
                             <b>Title</b>
                             <input lassName="default-input" type="text" value={title} onChange={(e)=>setTitle(e.target.value)}></input>
-                            <b>Date of Event </b>
-                            <input className="input-ignore-width" type="date" value={eventDate} onChange={(e)=>setEventDate(e.target.value)}></input>
-                            <b>Time of Event </b>
-                            <input className="input-ignore-width" type="time" value={eventTime} onChange={(e)=>setEventTime(e.target.value)}></input>
+                            <div className="user-inputs">
+                                <div>
+                                <b>Date of Event </b>
+                                <input className="input-ignore-width" type="date" value={eventDate} onChange={(e)=>setEventDate(e.target.value)}></input>
+                                </div>
+                                <div>
+                                <b>Time of Event </b>
+                                <input className="input-ignore-width" type="time" value={eventTime} onChange={(e)=>setEventTime(e.target.value)}></input>
+                                </div>
+                            </div>
+                            <div className="user-inputs">
+                                <div>
+                                <b>Select Event Difficulty</b>
+                                <select value={difficulty} onChange={(e)=>setDifficulty(e.target.value)}>
+								    {difficultyChoices.map(item=> <option value={item}>{item}</option>)}
+							    </select>
+                                </div>
+                                <div>
+                                <b>Select Event Activitiy</b>
+                                <select value={eventActivity} onChange={(e)=>setActivity(e.target.value)}>
+								    {activityChoices.map(item=> <option value={item}>{item}</option>)}
+							    </select>
+                                </div>
+                            </div>
                             <b>Event Description</b>
                             <textarea className="bio-input" value={bio} onChange={(e)=>setBio(e.target.value)}></textarea>
                         </form>
@@ -141,12 +185,16 @@ export default function CreateEvent() {
                 </div>
                 <div className="right-div">
                     <div className="map-select">
-                        <b>Selected Location</b>
-                        <p>{selected.name}</p>
-                        <MapContainer state={selected} setState={setSelected} mapData={mapData}/>
-                        <input type="text" value={filterValue} onChange={(e)=>changeFilter(e)}></input>
                         <div>
-                            {filterMapData.map(data=> <div onClick={()=>setSelected(data)}>{data.name}</div>)}
+                            <b>Selected Location</b>
+                            <p>{selected.name}</p>
+                            <MapContainer state={selected} setState={setSelected} mapData={mapData}/>
+                        </div>
+                        <div>
+                            <input type="text" value={filterValue} onChange={(e)=>changeFilter(e)}></input>
+                            <div>
+                                {filterMapData.map(data=> <div onClick={()=>setSelected(data)}>{data.name}</div>)}
+                            </div>
                         </div>
                     </div>
                     <div className="button-align-from-left">
@@ -167,17 +215,19 @@ function MapContainer({state, setState, mapData}) {
     return <EventMap state={state} setState={setState} mapData={mapData}/>;
 }
 
-function EventMap({state, setState, mapData}) {
 
+function EventMap({state, setState, mapData}) {
+    const [zoom, setZoom] = useState(18)
     const onMarkerClick = (event) => {
         console.log(event);
         setState(event);
+        setZoom(14)
     }
 
     return (
         <>
           <GoogleMap
-            zoom={18}
+            zoom={zoom}
             center={state.position}
             mapContainerClassName="event-map">
                 <MarkerClusterer>

@@ -33,14 +33,9 @@
     object-fit: cover;
     border-radius: 100%;
 }
-
-.button-align-center button,label {
-    bottom:15vh;
-    margin-left: 2.5rem;
-    padding-left: 3vw;
-    padding-right: 3vw;
+.editprofile .button-align-from-left {
+    display: flex;
 }
-
 .editprofile .button-align-from-left button {
     margin-top: 2vh;
     padding-left: 3vw;

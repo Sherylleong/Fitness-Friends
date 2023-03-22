@@ -1,6 +1,6 @@
 .createEvent {
     display: grid;
-    margin-left: 13vw;
+    margin-left: 5vw;
 }
 
 .createEvent .body {
@@ -22,6 +22,9 @@
   min-width: 11rem;
 }
 
+.map-select { 
+  display: flex;
+}
 .event-map {
   width: 28vw;
   height: 60vh;
@@ -32,7 +35,16 @@
     flex-direction: column;
 }
 .createEvent .map-select {
- width: 100%;
+  width: 100%;
+}
+
+.createEvent .user-inputs {
+  display: flex;
+}
+
+.createEvent .user-inputs div{
+  display: flex;
+  flex-direction: column;
 }
 /* .event-photo{
     position: relative;

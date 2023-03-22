@@ -44,7 +44,6 @@
 
 /* Button Styling */
 button {
-  position:relative;
   height: 50px;
   font-size: 20px;
   border-radius: 15px;
@@ -59,11 +58,15 @@ button {
 }
 
 /* Upload Image Button Placement */
-.button-align-center ::is(button, label) {
-  bottom:15vh;
+.button-align-center {
+  display: flex;
+  align-items: center;
+}
+.button-align-center :is(button, label) {
+  /* bottom:15vh; */
   margin-left: 2.5rem;
-  padding-left: 3vw;
-  padding-right: 3vw;
+  padding-left: 1.5vw;
+  padding-right: 1.5vw;
 }
 
 /* Form Styling */
@@ -97,8 +100,6 @@ form textarea {
 
 /* File Upload Button */
 .button-upload-file {
-  position:relative;
-  height: 50px;
   font-size: 20px;
   font-weight: bold;
   border-radius: 15px;
@@ -106,8 +107,11 @@ form textarea {
   color: white;
   border-color: white;
   background-color: #ee6b6e;
-  padding-bottom: 0.85vh;
-  padding-top: 0.65vh;
+  /* padding-bottom: 0.85vh;
+  padding-top: 0.65vh; */
+  min-height: 50px;
+  display: flex;
+  align-items: center;
 }
 
 .button-upload-file input {
