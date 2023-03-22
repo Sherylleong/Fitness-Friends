@@ -6,7 +6,7 @@ import { firestore } from "../FirebaseDb/Firebase";
 import { doc, collection, query, where, getDocs } from "firebase/firestore";
 import { getDoc } from "firebase/firestore";
 import { dispatch, useStoreState } from "../../App"
-
+import { useNavigate, useLocation } from "react-router-dom";
 
 function eventsMapCard(event){
     return (
@@ -106,6 +106,8 @@ function EventsListList({events, handleFilters}){
 }
 
 export default function FindEventsMap(){
+    const navigate = useNavigate();
+    const location = useLocation();
     const userId = useStoreState("userId");
     const [events, setEvents] = useState([]);
     const [groups, setGroups] = useState([]); // user's joined groups
@@ -145,56 +147,7 @@ export default function FindEventsMap(){
           fetchEvents();
           getGroupsJoined();
       }, []); // re-fetch the events whenever anything changes
-console.log(groups);
 
-/*
-    let eventsdb = [
-        {
-            name: "ippt training",
-            date: "2023-02-05",
-            time: "7pm",
-            location: "tekong",
-            category: "Jogging",
-            difficulty: "Intermediate",
-            description: " ord loh",
-            attendees: 5,
-            group: "tekong bois"
-        },
-        {
-            name: "naruto run",
-            date: "2023-03-01",
-            time: "7pm",
-            location: "tampines",
-            category: "Running",
-            difficulty: "Beginner",
-            description: "SASUKEEEE",
-            attendees: 5,
-            group: "naruto bois"
-        },
-        {
-            name: "sasuke run",
-            date: "2023-02-01",
-            time: "7pm",
-            location: "tampines",
-            category: "Running",
-            difficulty: "Beginner",
-            description: "SASUKEEEE",
-            attendees: 5,
-            group: "naruto bois"
-        },
-        {
-            name: "zumba",
-            date: "2023-02-02",
-            time: "7pm",
-            location: "tampines",
-            category: "Other",
-            difficulty: "Beginner",
-            description: "dududu",
-            attendees: 5,
-            group: "bois"
-        }
-    ]
-*/
     //const [events, setEvents] = useState(eventsdb);
     const [eventsView, setEventsView] = useState("mapview");
     const [filters, setFilters] = useReducer(
@@ -204,10 +157,11 @@ console.log(groups);
             difficulty: [],
             startDate: "",
             endDate: "",
-            category: [],
+            category: location.state? [location.state.category] : [],
             groups: []
         }
       );
+      console.log(filters);
 
     let filteredEvents = (filterEvents(events, filters, eventsView));
 
@@ -259,27 +213,27 @@ console.log(groups);
         <div className="find-events-page" >{/*col*/}
             <EventMapHeader eventsView={eventsView} setEventsView={setEventsView} />{/*row*/}
             {eventsView==="mapview" ?
-            (<EventMapInfo groups={groups} handleFilters={handleFilters} events={filteredEvents} eventsView={eventsView} setEventsView={setEventsView} />)
-        : (<EventListInfo groups={groups} handleFilters={handleFilters} events={filteredEvents} eventsView={eventsView} setEventsView={setEventsView} />)}
+            (<EventMapInfo groups={groups} filters={filters} handleFilters={handleFilters} events={filteredEvents} eventsView={eventsView} setEventsView={setEventsView} />)
+        : (<EventListInfo groups={groups} filters={filters} handleFilters={handleFilters} events={filteredEvents} eventsView={eventsView} setEventsView={setEventsView} />)}
         </div>
 
     )
 }
 
-function EventMapInfo({groups, handleFilters, events, eventsView, setEventsView}){
+function EventMapInfo({groups, filters, handleFilters, events, eventsView, setEventsView}){
     return (
         <div className="event-map-info">
-        <EventFilters groups={groups} handleFilters={handleFilters}/>
+        <EventFilters groups={groups} filters={filters} handleFilters={handleFilters}/>
         <MapContainer />
         <EventsMapList events={events} eventsView={eventsView} setEventsView={setEventsView} handleFilters={handleFilters}/>    
     </div>
     )
 }
 
-function EventListInfo({groups, handleFilters, events, eventsView, setEventsView}){
+function EventListInfo({groups, filters, handleFilters, events, eventsView, setEventsView}){
     return (
         <div className="event-list-info">
-        <EventFilters groups={groups} handleFilters={handleFilters}/>
+        <EventFilters groups={groups} filters={filters} handleFilters={handleFilters}/>
         <EventsListList events={events} eventsView={eventsView} setEventsView={setEventsView} handleFilters={handleFilters}/>    
     </div>
     )

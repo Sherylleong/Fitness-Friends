@@ -11,7 +11,7 @@ function GroupForm({handleFilters, groups}){
        )
  }))
 }
-export default function EventFilters({handleFilters, groups}){
+export default function EventFilters({filters, handleFilters, groups}){
     let groupIds = Object.keys(groups)
 
 	return (
@@ -45,25 +45,25 @@ export default function EventFilters({handleFilters, groups}){
                 <legend>Category</legend>
                 <div className="filter-item">
                 <label>
-                <input type="checkbox" name="category" value="Walking" onChange={(e) => {handleFilters(e);}}/>
+                <input type="checkbox" name="category" value="Walking"  defaultChecked={filters['category'].includes("Walking")} onChange={(e) => {handleFilters(e);}}/>
                 {' '}Walking </label>
                 <label>
-                <input type="checkbox" name="category" value="Jogging" onChange={(e) => {handleFilters(e);}}/>
+                <input type="checkbox" name="category" value="Jogging" defaultChecked={filters['category'].includes("Jogging")} onChange={(e) => {handleFilters(e);}}/>
                 {' '}Jogging </label>
                 <label>
-                <input type="checkbox" name="category" value="Running" onChange={(e) => {handleFilters(e);}}/>
+                <input type="checkbox" name="category" value="Running" defaultChecked={filters['category'].includes("Running")} onChange={(e) => {handleFilters(e);}}/>
                 {' '}Running </label>
                 <label>
-                <input type="checkbox" name="category" value="Climbing" onChange={(e) => {handleFilters(e);}}/>
+                <input type="checkbox" name="category" value="Climbing" defaultChecked={filters['category'].includes("Climbing")} onChange={(e) => {handleFilters(e);}}/>
                 {' '}Climbing </label>
                 <label>
-                <input type="checkbox" name="category" value="Biking" onChange={(e) => {handleFilters(e);}}/>
+                <input type="checkbox" name="category" value="Biking" defaultChecked={filters['category'].includes("Biking")} onChange={(e) => {handleFilters(e);}}/>
                 {' '}Biking </label>
                 <label>
-                <input type="checkbox" name="category" value="Sports" onChange={(e) => {handleFilters(e);}}/>
+                <input type="checkbox" name="category" value="Sports" defaultChecked={filters['category'].includes("Sports")} onChange={(e) => {handleFilters(e);}}/>
                 {' '}Sports </label>
                 <label>
-                <input type="checkbox" name="category" value="Other" onChange={(e) => {handleFilters(e);}}/>
+                <input type="checkbox" name="category" value="Other" defaultChecked={filters['category'].includes("Other")} onChange={(e) => {handleFilters(e);}}/>
                 {' '}Other </label>
                 </div>
             </fieldset>
