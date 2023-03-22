@@ -122,6 +122,13 @@ function ViewGroup() {
     // console.log("successfully joined");
   };
 
+  //for viewing grp event
+
+  const handleViewEvent = (eventId) => {
+    // history.push(`/Events/ViewEvent/${eventId}`);
+    window.location.replace(`/Events/ViewEvent/` + eventId);
+  };
+
   if (!group) {
     return <div clasName="loading">Loading...</div>; // show a loading message if the group state is null
   }
@@ -237,7 +244,7 @@ function ViewGroup() {
                 {groupEvents
                   .slice(currentPg * 5, currentPg * 5 + 5)
                   .map((event) => (
-                    <div className="event" key={event.docid}>
+                    <div className="event" key={event.id}>
                       <div className="left">
                         <div className="eventtitle">{event.eventTitle}</div>
 
@@ -256,7 +263,12 @@ function ViewGroup() {
 
                         <div>{event.eventAttendees.length} participants</div>
                         <div className="join-event-btn">
-                          <button className="join-event">Join</button>
+                          <button
+                            className="join-event"
+                            onClick={() => handleViewEvent(event.id)}
+                          >
+                            View
+                          </button>
                         </div>
                       </div>
                     </div>
