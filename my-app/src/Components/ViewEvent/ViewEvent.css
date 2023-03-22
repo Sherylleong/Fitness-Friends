@@ -16,7 +16,8 @@
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  background-image: url("../Resources/Background2.jpg");
+  background-image: url("../Resources/background.jpg");
+  background-color: #f5eaea;
   background-size: cover; /* adjust size of background image */
   background-position: center; /* adjust position of background image */
 }
@@ -36,18 +37,13 @@
   width: 100%;
   border-radius: 15px;
   cursor: pointer;
-  border-color: white;
+  border-color: #f5eaea;
   color: white;
   background-color: #ee6b6e;
   font-size: 20px;
 }
 
-.arrow1 {
-  width: 20px;
-  height: 20px;
-  margin-left: 30px;
-  margin-right: 30px;
-}
+
 
 .image-container1 {
   width: 100px;
@@ -87,54 +83,130 @@
   color: #949494;
 }
 
-.location1 {
+/* start here for one box !!!!!!!*/
+.date1 {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  background-color: #ecf2ff;
-  width: 270px;
+
+  width: 300px;
   height: 250px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+
+  padding: 10px;
 }
 
-.location-name1 {
-  font-family: "Roboto";
-  font-style: normal;
+.date1-title {
+  font-size: 20px;
   font-weight: 700;
-  font-size: 25px;
-
-  line-height: 1.5;
 }
 
-.attendees1 {
+.date1-top {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+}
+.event-date-time {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-start;
+  height: 60%;
+  padding-bottom: 15px;
+}
+
+.calender {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-right: 10px;
+  padding: 15px;
+  border-radius: 30px;
+  background-color: #f5eaea;
+  width: 60px;
+  height: 60px;
+}
+
+.calender img {
+  width: 30px;
+  height: auto;
+}
+
+/* until here for one box */
+
+/* location satrt here, j change the img, so on for the rest */
+
+.location3 {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-right: 10px;
+  padding: 15px;
+  border-radius: 30px;
+  background-color: #f5eaea;
+  width: 60px;
+  height: 60px;
+}
+
+.location3 img {
+  width: 30px;
+  height: auto;
+}
+/* end for location*/
+
+/* creator and member*/
+
+.creator-member {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  background-color: #ecf2ff;
-  width: 270px;
+  width: 450px;
   height: 250px;
+}
+
+.creator-event {
+  height: 120px;
+  width: 450px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  border-radius: 15px;
 }
 
-.attendee-numb1 {
-  font-family: "Roboto";
-  font-style: normal;
+.creatortitle {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 2px;
+  font-size: 20px;
   font-weight: 700;
-  font-size: 25px;
-  line-height: 1.5;
+}
+.attendee3 {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-right: 10px;
+  padding: 15px;
+  border-radius: 30px;
+  background-color: #f5eaea;
+  width: 60px;
+  height: 60px;
 }
 
-.location1 img {
-  width: 150px;
+.attendee3 img {
+  width: 30px;
   height: auto;
 }
 
-.attendees1 img {
-  width: 150px;
-  height: auto;
-}
+/* end */
 
 .containerhehe1 {
   display: flex;
@@ -218,7 +290,7 @@
   justify-content: space-around;
   align-items: center;
   width: 100%;
-  height: 700px;
+  height: 1300px;
   align-items: flex-start;
   margin-bottom: 20px;
 }
@@ -236,7 +308,8 @@
   height: 80%;
   padding: 15px;
   margin: 40px;
-  background-image: url("../Resources/blue.jpeg");
+  background-color: #f5eaea;
+  border-radius: 15px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   background-size: cover; /* adjust size of background image */
   background-position: center; /* adjust position of background image */

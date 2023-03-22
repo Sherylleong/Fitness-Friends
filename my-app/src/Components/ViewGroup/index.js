@@ -1,6 +1,5 @@
-import GroupData from "./GroupData";
 import iconpin from "../Resources/location.png";
-import attendee from "../Resources/attendees.png";
+import aboutgroup from "../Resources/aboutgroup.png";
 import attendee1 from "../Resources/attendee.png";
 import arrow from "../Resources/arrow.png";
 import { useEffect, useState } from "react";
@@ -14,11 +13,14 @@ import { doc, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
 import { getDoc } from "firebase/firestore";
 import { dispatch, useStoreState } from "../../App";
 import { useNavigate } from "react-router-dom";
+import { arrayUnion, arrayRemove } from "firebase/firestore";
+import calender from "../Resources/calender.png";
 
 function ViewGroup() {
-  //for join grp, check if user is logged in first, get use state -- need to check! (then add to viewevent)
-  // const userId = useStoreState("userId");
-  // const navigate = useNavigate();
+  //for user id
+  const userId = useStoreState("userId");
+  console.log(userId);
+  const navigate = useNavigate();
 
   //for pagination
   const [currentPg, setCurrentPg] = useState(0);
@@ -26,7 +28,7 @@ function ViewGroup() {
     setCurrentPg(selectedPage);
   };
 
-  //geenral getdocbyid function w colllectionname and docid asparameters
+  //general getdocbyid function w colllectionname and docid asparameters
   const getByDocID = async (collectionName, docID) => {
     const docRef = doc(firestore, collectionName, docID);
     const docSnap = await getDoc(docRef);
@@ -39,9 +41,15 @@ function ViewGroup() {
   };
 
   //for fetching groupdata using groupId in url
-  const { groupId } = useParams(); // retrieve the groupId from the URL parameter
+  const { groupId: urlGroupId } = useParams(); // retrieve the groupId from the URL parameter
+  const [groupId, setGroupId] = useState(null); // add a state variable for groupId
   const [group, setGroup] = useState(null); // initialize the group state to null
   const [groupEvents, setGroupEvents] = useState([]); //for groupevents
+
+  useEffect(() => {
+    setGroupId(urlGroupId);
+  }, [urlGroupId]);
+
   console.log(groupId);
 
   //for image fetching, converting from url to docs/file
@@ -89,19 +97,30 @@ function ViewGroup() {
     fetchGroup();
   }, [groupId, storage]); // re-fetch the group whenever the groupId changes
 
-  //for joining  grp -- need to check
-  // const joinGroup = async () => {
-  //   if (!userId) {
-  //     navigate("/Login");
-  //     return;
-  //   }
+  // for joining  grp -- it works yay!
 
-  //   const groupRef = doc(firestore.collection("group"), groupId);
-  //   const groupData = await getDoc(groupRef);
-  //   await updateDoc(groupRef, {
-  //     groupMembers: [...groupData.data().groupmembers, userId],
-  //   });
-  // };
+  const joinGroup = async () => {
+    console.log("joining grp===");
+    console.log(userId);
+    console.log(groupId);
+
+    if (!userId) {
+      //ok this part works
+      navigate("/Login");
+      return;
+    }
+
+    const groupRef = doc(collection(firestore, "group"), groupId);
+
+    await updateDoc(groupRef, {
+      groupmembers: arrayUnion(userId),
+    });
+
+    // await updateDoc(groupRef, {
+    //   groupmembers: arrayUnion(userId), // Add the userId to the groupmembers array
+    // });
+    // console.log("successfully joined");
+  };
 
   if (!group) {
     return <div clasName="loading">Loading...</div>; // show a loading message if the group state is null
@@ -141,8 +160,6 @@ function ViewGroup() {
       <div clasName="full-screen">
         <div className="full">
           <div className="top">
-            <img className="arrow" src={arrow}></img>
-
             <div class="image-container">
               <img className="grp-picture" src={imageUrl}></img>
             </div>
@@ -150,25 +167,54 @@ function ViewGroup() {
             <div className="group-title">{group.groupname}</div>
 
             <div className="join-group-btn">
-              <button className="join-grp">Join this Group</button>
+              <button className="join-grp" onClick={joinGroup}>
+                Join this Group
+              </button>
             </div>
           </div>
 
           <div className="middle">
-            <div className="attendees">
-              <div className="attendee-img">
-                <img src={attendee}></img>
+            <div className="creator-member1">
+              <div className="creator-event">
+                <div className="creatortitle">
+                  <div className="attendee3">
+                    <img src={attendee1}></img>
+                  </div>
+                  <div> Creator: </div>
+                </div>
+
+                <div className="creatorname"> </div>
               </div>
-              <div className="attendee-numb">
-                {group.groupmembers.length} attendees{" "}
+              <div className="creator-event">
+                <div className="creatortitle">
+                  <div className="attendee3">
+                    <img src={attendee1}></img>
+                  </div>
+                  <div> Members: </div>
+                </div>
+
+                <div className="creatorname"> </div>
               </div>
             </div>
-            <div className="containerhehe">
+
+            <div className="date2">
+              <div className="date1-top">
+                <div className="calender">
+                  <img src={aboutgroup}></img>
+                </div>
+
+                <div className="date1-title">About Group</div>
+              </div>
+
+              <div className="about-group">{group.groupdesc}</div>
+            </div>
+
+            {/* <div className="containerhehe">
               <div className="about"> About our group:</div>
               <div className="grp-desc">"{group.groupdesc}""</div>
 
               <div className="creator">Created by {group.groupOwner}</div>
-            </div>
+            </div> */}
 
             <div className="middle-right">
               <div className="difficulty ">
@@ -210,9 +256,7 @@ function ViewGroup() {
 
                         <div>{event.eventAttendees.length} participants</div>
                         <div className="join-event-btn">
-                          <button className="join-event" type="submit">
-                            Join
-                          </button>
+                          <button className="join-event">Join</button>
                         </div>
                       </div>
                     </div>

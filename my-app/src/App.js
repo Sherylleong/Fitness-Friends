@@ -15,7 +15,7 @@ import ViewEvent from "./Components/ViewEvent";
 import ViewProfile from "./Components/ViewProfile";
 import EditProfile from "./Components/EditProfile";
 import CreateGroup from "./Components/CreateGroup";
-import CreateEvent from "./Components/CreateEvent"
+import CreateEvent from "./Components/CreateEvent";
 import Home from "./Components/Home";
 import { createStore } from "react-hooks-global-state";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
@@ -67,7 +67,7 @@ function App() {
   //   default:
   //     break;
   // }
- 
+
   // const [showNavBar, setShowNavBar] = useState(navBarDisplay); //Best solution I found
 
   return (
@@ -89,8 +89,8 @@ function App() {
         <Route path="/Events" element={<FindEventsMap />} />
         <Route path="/Groups" element={<FindGroups />} />
         <Route path="/CRUD" element={<CRUD />} />
-        <Route path="/ViewGroup/:groupId" element={<ViewGroup />} />
-        <Route path="/ViewEvent/:eventId" element={<ViewEvent />} />
+        <Route path="Groups/ViewGroup/:groupId" element={<ViewGroup />} />
+        <Route path="/Events/ViewEvent/:eventId" element={<ViewEvent />} />
         <Route path="/ViewProfile" element={<ViewProfile />} />
         <Route path="/CreateGroup" element={<CreateGroup />} />
         <Route path="/CreateEvent" element={<CreateEvent />} />

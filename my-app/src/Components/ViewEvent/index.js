@@ -1,5 +1,7 @@
 import EventData from "./EventData";
 import iconpin from "../Resources/location.png";
+import calender from "../Resources/calender.png";
+import location from "../Resources/locationfinal.png";
 import attendee from "../Resources/attendees.png";
 import attendee1 from "../Resources/attendee.png";
 import arrow from "../Resources/arrow.png";
@@ -8,11 +10,25 @@ import { useEffect, useState } from "react";
 import "./ViewEvent.css";
 import { getDoc } from "firebase/firestore";
 import { useParams } from "react-router-dom";
-import { doc, collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import { firestore } from "../FirebaseDb/Firebase";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import { dispatch, useStoreState } from "../../App";
+import { useNavigate } from "react-router-dom";
+import { arrayUnion, arrayRemove } from "firebase/firestore";
+import { doc, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
 
 function ViewEvent() {
+  const userId = useStoreState("userId");
+  const navigate = useNavigate();
+  // FirebaseAuth.getInstance().getCurrentUser()
+  console.log("userid:");
+  if (!userId) {
+    console.log("no user id");
+  } else {
+    console.log(userId);
+  }
+
   //geenral getdocbyid function w colllectionname and docid asparameters
   const getByDocID = async (collectionName, docID) => {
     const docRef = doc(firestore, collectionName, docID);
@@ -25,10 +41,17 @@ function ViewEvent() {
     }
   };
 
-  //for fetching groupdata using groupId in url
-  const { eventId } = useParams(); // retrieve the groupId from the URL parameter
+  //for fetching eventdata using eventid in url
+  const { eventId: urlEventId } = useParams(); // retrieve the groupId from the URL parameter
+  const [eventId, setEventId] = useState(null); // add a state variable for groupId
   const [event, setEvent] = useState(null); // initialize the group state to null
   // const [groupEvents, setGroupEvents] = useState([]); //for groupevents
+  console.log(eventId);
+
+  useEffect(() => {
+    setEventId(urlEventId);
+  }, [urlEventId]);
+
   console.log(eventId);
 
   //for image fetching, converting from url to docs/file
@@ -60,6 +83,31 @@ function ViewEvent() {
     fetchEvent();
   }, [eventId, storage]); // re-fetch the group whenever the groupId changes
 
+  //for joining event
+
+  const joinEvent = async () => {
+    console.log("joining event===");
+    console.log(userId);
+    console.log(eventId);
+
+    if (!userId) {
+      //ok this part works
+      navigate("/Login");
+      return;
+    }
+
+    const eventRef = doc(collection(firestore, "events"), eventId);
+
+    await updateDoc(eventRef, {
+      eventAttendees: arrayUnion(userId),
+    });
+
+    // await updateDoc(groupRef, {
+    //   groupmembers: arrayUnion(userId), // Add the userId to the groupmembers array
+    // });
+    // console.log("successfully joined");
+  };
+
   if (!event) {
     return <div clasName="loading">Loading...</div>; // show a loading message if the group state is null
   }
@@ -72,8 +120,6 @@ function ViewEvent() {
       <div className="full-screen">
         <div className="full">
           <div className="top1">
-            <img className="arrow1" src={arrow}></img>
-
             <div class="image-container1">
               <img className="grp-picture1" src={event.eventImage}></img>
             </div>
@@ -81,26 +127,66 @@ function ViewEvent() {
             <div className="group-title1">{event.eventTitle}</div>
 
             <div className="joineventbtn">
-              <button className="joinevent" type="submit">
+              <button className="joinevent" onClick={joinEvent}>
                 Join this Event
               </button>
             </div>
           </div>
 
           <div className="middle1">
-            <div className="location1">
-              <div clasName="location-img1">
-                <img src={iconpin}></img>
+            {/* add eventTime and date, followed up eventlocation, then tags */}
+
+            <div className="date1">
+              <div className="date1-top">
+                <div className="calender">
+                  <img src={calender}></img>
+                </div>
+
+                <div className="date1-title">When and Where</div>
               </div>
-              <div className="location-name1">{event.eventLocation}</div>
+
+              <div className="event-date-time">
+                <div className="event-date"> Date: {event.date}</div>
+                <div className="event-time"> Time: {event.eventTime}</div>
+              </div>
             </div>
 
-            <div className="attendees1">
-              <div className="attendee-img1">
-                <img src={attendee}></img>
+            <div className="date1">
+              <div className="date1-top">
+                <div className="location3">
+                  <img src={location}></img>
+                </div>
+
+                <div className="date1-title">Location of event</div>
               </div>
-              <div className="attendee-numb1">
-                {event.eventAttendees.length} attendees{" "}
+
+              <div className="event-date-time">
+                <div className="event-time"> {event.eventLocation}</div>
+              </div>
+            </div>
+
+            {/* add the creaor n members*/}
+
+            <div className="creator-member">
+              <div className="creator-event">
+                <div className="creatortitle">
+                  <div className="attendee3">
+                    <img src={attendee1}></img>
+                  </div>
+                  <div> Creator: </div>
+                </div>
+
+                <div className="creatorname"> {event.creatorID}</div>
+              </div>
+              <div className="creator-event">
+                <div className="creatortitle">
+                  <div className="attendee3">
+                    <img src={attendee1}></img>
+                  </div>
+                  <div> Members: </div>
+                </div>
+
+                <div className="creatorname"> {event.creatorID}</div>
               </div>
             </div>
 
