@@ -16,6 +16,10 @@ export default function MapContainer({events, setFilters}) {
 }
 
 function Map({events, setFilters}) {
+  if (events == undefined) {
+    events = [];
+  }
+  console.log("running");
   const onMarkerClick = (event) => {
     setFilters({location: event.eventLocation});
   }
