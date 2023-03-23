@@ -65,7 +65,7 @@ function ViewMembersEvent() {
             <div className="ViewMembersTitle">Members</div>
             {/*eventAttendeesData is an array of arrays, display each entry's profilePic and displayName*/}
             {eventAttendeesData.map((eventAttendeeData) => (
-                <div className="ViewMemberCard"}>
+                <div className="ViewMemberCard">
                     <div className="ViewMemberPFPContainer"><img className="ViewMemberCardProfilePic" src={eventAttendeeData.profilePic} alt="Profile Pic" /></div>
                     <div className="ViewMemberDisplayNameContainer"><div className="ViewMemberCardDisplayName">{eventAttendeeData.displayName}</div></div>
                 </div>
