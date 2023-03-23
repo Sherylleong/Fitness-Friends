@@ -5,7 +5,12 @@ import location from "../Resources/locationfinal.png";
 import attendee from "../Resources/attendees.png";
 import attendee1 from "../Resources/attendee.png";
 import arrow from "../Resources/arrow.png";
-import GoogleMap from "../EventMap/EventMap.js";
+import {
+  GoogleMap,
+  useLoadScript,
+  Marker,
+  MarkerClusterer,
+} from "@react-google-maps/api";
 import { useEffect, useState } from "react";
 import "./ViewEvent.css";
 import { getDoc } from "firebase/firestore";
@@ -19,6 +24,9 @@ import { arrayUnion, arrayRemove } from "firebase/firestore";
 import { doc, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
 
 function ViewEvent() {
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: "AIzaSyCGCznAwZAFJ8qMQY1ckg6EfDwuczmepWI",
+  });
   const userId = useStoreState("userId");
   const navigate = useNavigate();
   // FirebaseAuth.getInstance().getCurrentUser()
@@ -116,7 +124,8 @@ function ViewEvent() {
     navigate("ViewMembersEvent/");
   };
 
-  console.log({ event });
+  console.log("Events")
+  console.log({event});
   console.log(eventId);
 
   return (
@@ -146,7 +155,7 @@ function ViewEvent() {
                   <img src={calender}></img>
                 </div>
 
-                <div className="date1-title">When and Where</div>
+                <div className="date1-title">Date and Time</div>
               </div>
 
               <div className="event-date-time">
@@ -184,7 +193,7 @@ function ViewEvent() {
               </div>
               <div className="creator-event" onClick={handleViewMember}>
                 <div className="creatortitle">
-                  <div className="attendee3" >
+                  <div className="attendee3">
                     <img src={attendee1}></img>
                   </div>
                   <div> Members: </div>
@@ -215,7 +224,8 @@ function ViewEvent() {
             </div>
 
             <div className="googlemap">
-              <GoogleMap />
+            {/* {event.eventPosition} */}
+              <MapContainer event={event}/>
             </div>
           </div>
         </div>
@@ -224,4 +234,34 @@ function ViewEvent() {
   );
 }
 
+function MapContainer({event}) {
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: "AIzaSyCGCznAwZAFJ8qMQY1ckg6EfDwuczmepWI",
+  });
+  if (!isLoaded) return <div>..Loading</div>;
+  return <Map event={event}/>;
+}
+
+function Map({event}) {
+  return (
+    <>
+      <GoogleMap
+        zoom={18}
+        center={event.eventPosition}
+        mapContainerClassName="map-container"
+        options={{
+          fullscreenControl: false,
+          zoomControl: false,
+          gestureHandling: "none",
+          keyboardShortcuts: false
+        }}
+      >
+        <Marker position={event.eventPosition}/>
+      </GoogleMap>
+    </>
+  );
+}
+
 export default ViewEvent;
+
+
