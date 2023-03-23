@@ -210,7 +210,8 @@ export default function FindEventsMap() {
             startDate: "",
             endDate: "",
             category: location.state? [location.state.category] : [],
-            groups: []
+            groups: [],
+            location: ""
         }
       );
       console.log(filters);
