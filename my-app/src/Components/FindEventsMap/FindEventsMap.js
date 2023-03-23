@@ -31,7 +31,7 @@ function EventsMapCard(event) {
       </div>
       <div className="event-map-right">
         <p className="event-map-attendees">
-          {event.eventAttendees.length} attendee(s)
+          {event.eventAttendees.length + 1} attendee(s) {/*+1 because must include creator*/}
         </p>
         <button className="view-event" onClick={handleView}>
           View
