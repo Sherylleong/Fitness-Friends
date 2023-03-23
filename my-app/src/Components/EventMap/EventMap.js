@@ -7,16 +7,16 @@ import {
 } from "@react-google-maps/api";
 import "./event-map-styles.css";
 
-export default function MapContainer() {
+export default function MapContainer({events, setFilter}) {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: "AIzaSyCGCznAwZAFJ8qMQY1ckg6EfDwuczmepWI",
   });
 
   if (!isLoaded) return <div>..Loading</div>;
-  return <Map />;
+  return <Map events={events} filterVal={setFilter}/>;
 }
 
-function Map() {
+function Map({events, setFilter}) {
   const markers = [
     {
       position: useMemo(() => ({
@@ -43,6 +43,12 @@ function Map() {
       })),
     },
   ];
+  console.log(events)
+
+  const onMarkerClick = (event) => {
+    // console.log(event);
+    setFilter({[location]: event.eventLocation});
+  }
   /*
 	const ntu = useMemo(() => ({lat: 1.348578045634617, lng: 103.6831722481014}), [])
 	const mark1 = useMemo(() => ({lat: 1.3485887714987213, lng: 103.68382670706136}))
@@ -58,7 +64,7 @@ function Map() {
     <>
       <GoogleMap
         zoom={18}
-        center={markers[1].position}
+        center={{lat:1.348578045634617,lng:103.6831722481014}}
         mapContainerClassName="map-container"
       >
         {/* <Marker icon={"https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png"}
@@ -69,11 +75,11 @@ function Map() {
 				<Marker position={mark3} /> */}
 
         <MarkerClusterer>
-          {clusterer => 
-              markers.map((marker, index) => (
-                <Marker position={marker.position} clusterer={clusterer} />
-              ))
-          }
+                {clusterer => 
+                    events.map((marker, index) => (
+                        <Marker key={"marker-" + index} id={index} position={marker.eventPosition} clusterer={clusterer} onClick={()=>onMarkerClick(marker)}/>
+                    ))
+                }
         </MarkerClusterer>
       </GoogleMap>
     </>

@@ -30,7 +30,7 @@ for folder in folders:
     for f in features:
         # name of location
         name = f.name
-        if "PG" in name or "Playground" in name:
+        if ("PK" in name or "Park" in name or "PARK" in name) == False:
             continue
 
         polygons = list(f.geometry.geoms)
@@ -50,7 +50,7 @@ for folder in folders:
         print(data)
         db.collection('locations').document().set(data)
         i = i + 1
-        if (i >= 5):
+        if (i >= 50):
             break
         # break
 

@@ -295,7 +295,7 @@ function EventMapInfo({groups, filters, handleFilters, events, eventsView, setEv
     return (
         <div className="event-map-info">
         <EventFilters groups={groups} filters={filters} handleFilters={handleFilters}/>
-        <MapContainer />
+        <MapContainer events={events} filterVal={setFilters}/>
         <EventsMapList events={events} eventsView={eventsView} setEventsView={setEventsView} handleFilters={handleFilters}/>    
     </div>
   );

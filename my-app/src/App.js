@@ -4,7 +4,6 @@ import logo from "./logo.svg";
 import "./App.css";
 import Navbar from "./Components/Navbar/Navbar";
 import Login from "./Components/Login/Login";
-import CompleteRegistration from "./Components/CompleteRegistration/CompleteRegistration";
 import SignUp from "./Components/Signup/Signup";
 import ForgetPassword from "./Components/ForgetPassword/ForgetPassword";
 import FindEventsMap from "./Components/FindEventsMap/FindEventsMap";
@@ -80,10 +79,6 @@ function App() {
       ].includes(useLocation().pathname) && <Navbar />}
       <Routes>
         <Route path="/Login" element={<Login />} />
-        <Route
-          path="/CompleteRegistration"
-          element={<CompleteRegistration />}
-        />
         <Route path="/Signup" element={<SignUp />} />
         <Route path="/ForgetPassword" element={<ForgetPassword />} />
         <Route path="/Events" element={<FindEventsMap />} />

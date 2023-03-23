@@ -26,8 +26,8 @@ export default function CreateEvent() {
     var minutes = today.getMinutes() < 10 ? "0" + today.getMinutes()  : today.getMinutes()
     const [eventTime, setEventTime] = useState(hour + ":" + minutes);
 	const [bio, setBio] = useState("");
-    const [difficulty, setDifficulty] = useState()
-    const [eventActivity, setActivity] = useState()
+    const [difficulty, setDifficulty] = useState("Beginner")
+    const [eventActivity, setActivity] = useState("Walking")
 
     const difficultyChoices = ["Beginner", "Intermediate", "Advanced"]
     const activityChoices = ["Walking", "Jogging", "Running", "Climbing","Biking","Sports","Others"]
@@ -45,7 +45,7 @@ export default function CreateEvent() {
     const [filterMapData, setFilterMapData] = useState([]);
 
     const getMarkerLoc = async () => {
-        const docRef = query(collection(firestore, "locations"), limit(5));
+        const docRef = query(collection(firestore, "locations"), limit(50));
 		const docu = await getDocs(docRef);
         var mapArr = [];
 		docu.forEach((doc) => {
@@ -118,6 +118,7 @@ export default function CreateEvent() {
                 eventDifficulty: difficulty,
                 eventCategory: eventActivity,
                 eventLocation: selected.name,
+                eventAttendees:[],
                 eventPosition: {
                     lat: selected.position.lat,
                     lng: selected.position.lng
@@ -185,15 +186,15 @@ export default function CreateEvent() {
                 </div>
                 <div className="right-div">
                     <div className="map-select">
-                        <div>
-                            <b>Selected Location</b>
-                            <p>{selected.name}</p>
+                        <b>Selected Location</b>
+                        <p>{selected.name}</p>
+                        <div className="map-contain">
                             <MapContainer state={selected} setState={setSelected} mapData={mapData}/>
-                        </div>
-                        <div>
-                            <input type="text" value={filterValue} onChange={(e)=>changeFilter(e)}></input>
-                            <div>
-                                {filterMapData.map(data=> <div onClick={()=>setSelected(data)}>{data.name}</div>)}
+                            <div className="search-location">
+                                <input type="text" value={filterValue} onChange={(e)=>changeFilter(e)}></input>
+                                <div className="location-list">
+                                    {filterMapData.map(data=> <div onClick={()=>setSelected(data)}>{data.name}</div>)}
+                                </div>
                             </div>
                         </div>
                     </div>
