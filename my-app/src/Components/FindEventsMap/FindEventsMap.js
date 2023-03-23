@@ -8,11 +8,11 @@ import { getDoc } from "firebase/firestore";
 import { dispatch, useStoreState } from "../../App";
 import { useNavigate, useLocation } from "react-router-dom";
 
-function EventsMapCard(event) {
+function EventsMapCard(event, navigate) {
   console.log("event:");
   console.log(event.id);
   const eventId = event.id;
-  const navigate = useNavigate();
+
 
   const handleView = () => {
     navigate("ViewEvent/" + eventId);
@@ -41,11 +41,10 @@ function EventsMapCard(event) {
   );
 }
 
-function EventsListCard(event) {
+function EventsListCard(event, navigate) {
   console.log("event:");
   console.log(event.id);
   const eventId = event.id;
-  const navigate = useNavigate();
   const handleView = () => {
     navigate("ViewEvent/" + eventId);
   };
@@ -131,31 +130,31 @@ function EventMapHeader({ eventsView, setEventsView }) {
     </div>
   );
 }
-function EventsMapList({ events, handleFilters }) {
+function EventsMapList({ events, handleFilters, navigate }) {
   return (
     <div className="events-map-list">
       <Searchbar
         handleFilters={handleFilters}
         searchText="Search Location..."
       />
-      {events.map((event) => EventsMapCard(event))}
+      {events.map((event) => EventsMapCard(event,navigate))}
     </div>
   );
 }
-function EventsListList({ events, handleFilters }) {
+function EventsListList({ events, handleFilters,navigate }) {
   return (
     <div className="events-list-list">
       <div style={{ position: "relative", left: "-350px" }}>
         <Searchbar handleFilters={handleFilters} searchText="Search Event..." />
       </div>
-      {events.map((event) => EventsListCard(event))}
+      {events.map((event) => EventsListCard(event, navigate))}
     </div>
   );
 }
 
 export default function FindEventsMap() {
-    const navigate = useNavigate();
-    const location = useLocation();
+  const navigate = useNavigate();
+  const location = useLocation();
   const userId = useStoreState("userId");
   const [events, setEvents] = useState([]);
   const [groups, setGroups] = useState([]); // user's joined groups
@@ -282,34 +281,34 @@ export default function FindEventsMap() {
   }
 
   let filteredEvents = filterEvents(events, filters, eventsView);
-  console.log(filteredEvents);
+console.log(filteredEvents);
 
     return(
         <div className="find-events-page" >{/*col*/}
             <EventMapHeader eventsView={eventsView} setEventsView={setEventsView} />{/*row*/}
             {eventsView==="mapview" ?
-            (<EventMapInfo groups={groups} filters={filters} setFilters={setFilters} handleFilters={handleFilters} events={filteredEvents} eventsView={eventsView} setEventsView={setEventsView} />)
-        : (<EventListInfo groups={groups} filters={filters} handleFilters={handleFilters} events={filteredEvents} eventsView={eventsView} setEventsView={setEventsView} />)}
+            (<EventMapInfo navigate={navigate} groups={groups} filters={filters} setFilters={setFilters} handleFilters={handleFilters} events={filteredEvents} eventsView={eventsView} setEventsView={setEventsView} />)
+        : (<EventListInfo navigate={navigate} groups={groups} filters={filters} handleFilters={handleFilters} events={filteredEvents} eventsView={eventsView} setEventsView={setEventsView} />)}
         </div>
 
     )
 }
 
-function EventMapInfo({groups, filters, setFilters, handleFilters, events, eventsView, setEventsView}){
+function EventMapInfo({groups, navigate, filters, setFilters, handleFilters, events, eventsView, setEventsView}){
     return (
         <div className="event-map-info">
         <EventFilters groups={groups} filters={filters} handleFilters={handleFilters}/>
         <MapContainer events={events} setFilters={setFilters}/>
-        <EventsMapList events={events} eventsView={eventsView} setEventsView={setEventsView} handleFilters={handleFilters}/>    
+        <EventsMapList navigate={navigate} events={events} eventsView={eventsView} setEventsView={setEventsView} handleFilters={handleFilters}/>    
     </div>
   );
 }
 
-function EventListInfo({groups, filters, handleFilters, events, eventsView, setEventsView}){
+function EventListInfo({groups, navigate, filters, handleFilters, events, eventsView, setEventsView}){
     return (
         <div className="event-list-info">
         <EventFilters groups={groups} filters={filters} handleFilters={handleFilters}/>
-        <EventsListList events={events} eventsView={eventsView} setEventsView={setEventsView} handleFilters={handleFilters}/>    
+        <EventsListList navigate={navigate} events={events} eventsView={eventsView} setEventsView={setEventsView} handleFilters={handleFilters}/>    
     </div>
   );
 }
