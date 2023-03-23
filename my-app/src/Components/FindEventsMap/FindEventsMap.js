@@ -285,18 +285,18 @@ export default function FindEventsMap() {
         <div className="find-events-page" >{/*col*/}
             <EventMapHeader eventsView={eventsView} setEventsView={setEventsView} />{/*row*/}
             {eventsView==="mapview" ?
-            (<EventMapInfo groups={groups} filters={filters} handleFilters={handleFilters} events={filteredEvents} eventsView={eventsView} setEventsView={setEventsView} />)
+            (<EventMapInfo groups={groups} filters={filters} setFilters={setFilters} handleFilters={handleFilters} events={filteredEvents} eventsView={eventsView} setEventsView={setEventsView} />)
         : (<EventListInfo groups={groups} filters={filters} handleFilters={handleFilters} events={filteredEvents} eventsView={eventsView} setEventsView={setEventsView} />)}
         </div>
 
     )
 }
 
-function EventMapInfo({groups, filters, handleFilters, events, eventsView, setEventsView}){
+function EventMapInfo({groups, filters, setFilters, handleFilters, events, eventsView, setEventsView}){
     return (
         <div className="event-map-info">
         <EventFilters groups={groups} filters={filters} handleFilters={handleFilters}/>
-        <MapContainer events={events} filterVal={setFilters}/>
+        <MapContainer events={events} setFilters={setFilters}/>
         <EventsMapList events={events} eventsView={eventsView} setEventsView={setEventsView} handleFilters={handleFilters}/>    
     </div>
   );

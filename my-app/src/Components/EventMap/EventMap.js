@@ -7,47 +7,17 @@ import {
 } from "@react-google-maps/api";
 import "./event-map-styles.css";
 
-export default function MapContainer({events, setFilter}) {
+export default function MapContainer({events, setFilters}) {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: "AIzaSyCGCznAwZAFJ8qMQY1ckg6EfDwuczmepWI",
   });
-
   if (!isLoaded) return <div>..Loading</div>;
-  return <Map events={events} filterVal={setFilter}/>;
+  return <Map events={events} setFilters={setFilters}/>;
 }
 
-function Map({events, setFilter}) {
-  const markers = [
-    {
-      position: useMemo(() => ({
-        lat: 1.348578045634617,
-        lng: 103.6831722481014,
-      })),
-    },
-    {
-      position: useMemo(() => ({
-        lat: 1.3485887714987213,
-        lng: 103.68382670706136,
-      })),
-    },
-    {
-      position: useMemo(() => ({
-        lat: 1.3458889951752477,
-        lng: 103.69933201581368,
-      })),
-    },
-    {
-      position: useMemo(() => ({
-        lat: 1.3451843416350524,
-        lng: 103.69917596458055,
-      })),
-    },
-  ];
-  console.log(events)
-
+function Map({events, setFilters}) {
   const onMarkerClick = (event) => {
-    // console.log(event);
-    setFilter({[location]: event.eventLocation});
+    setFilters({location: event.eventLocation});
   }
   /*
 	const ntu = useMemo(() => ({lat: 1.348578045634617, lng: 103.6831722481014}), [])
