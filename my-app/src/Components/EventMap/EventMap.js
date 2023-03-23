@@ -21,7 +21,7 @@ function Map({events, setFilters}) {
   }
   console.log("running");
   const onMarkerClick = (event) => {
-    setFilters({location: event.eventLocation});
+    setFilters({search: event.eventLocation});
   }
   /*
 	const ntu = useMemo(() => ({lat: 1.348578045634617, lng: 103.6831722481014}), [])

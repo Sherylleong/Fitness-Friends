@@ -78,12 +78,13 @@ function EventsListCard(event, navigate) {
   );
 }
 
-function Searchbar({ handleFilters, searchText }) {
+function Searchbar({ handleFilters, searchText, filters}) {
   return (
     <input
       id="locationsearch"
       name="search"
       type="text"
+      value={filters.search}
       className="searchbar"
       placeholder={searchText}
       onChange={(e) => handleFilters(e)}
@@ -130,10 +131,11 @@ function EventMapHeader({ eventsView, setEventsView }) {
     </div>
   );
 }
-function EventsMapList({ events, handleFilters, navigate }) {
+function EventsMapList({ filters, events, handleFilters, navigate }) {
   return (
     <div className="events-map-list">
       <Searchbar
+        filters={filters}
         handleFilters={handleFilters}
         searchText="Search Location..."
       />
@@ -141,11 +143,11 @@ function EventsMapList({ events, handleFilters, navigate }) {
     </div>
   );
 }
-function EventsListList({ events, handleFilters,navigate }) {
+function EventsListList({ filters, events, handleFilters,navigate }) {
   return (
     <div className="events-list-list">
       <div style={{ position: "relative", left: "-350px" }}>
-        <Searchbar handleFilters={handleFilters} searchText="Search Event..." />
+        <Searchbar filters={filters} handleFilters={handleFilters} searchText="Search Event..." />
       </div>
       {events.map((event) => EventsListCard(event, navigate))}
     </div>
@@ -210,8 +212,7 @@ export default function FindEventsMap() {
             startDate: "",
             endDate: "",
             category: location.state? [location.state.category] : [],
-            groups: [],
-            location: ""
+            groups: []
         }
       );
       console.log(filters);
@@ -299,7 +300,7 @@ function EventMapInfo({groups, navigate, filters, setFilters, handleFilters, eve
         <div className="event-map-info">
         <EventFilters groups={groups} filters={filters} handleFilters={handleFilters}/>
         <MapContainer events={events} setFilters={setFilters}/>
-        <EventsMapList navigate={navigate} events={events} eventsView={eventsView} setEventsView={setEventsView} handleFilters={handleFilters}/>    
+        <EventsMapList filters={filters} navigate={navigate} events={events} eventsView={eventsView} setEventsView={setEventsView} handleFilters={handleFilters}/>    
     </div>
   );
 }
@@ -308,7 +309,7 @@ function EventListInfo({groups, navigate, filters, handleFilters, events, events
     return (
         <div className="event-list-info">
         <EventFilters groups={groups} filters={filters} handleFilters={handleFilters}/>
-        <EventsListList navigate={navigate} events={events} eventsView={eventsView} setEventsView={setEventsView} handleFilters={handleFilters}/>    
+        <EventsListList filters={filters} navigate={navigate} events={events} eventsView={eventsView} setEventsView={setEventsView} handleFilters={handleFilters}/>    
     </div>
   );
 }
