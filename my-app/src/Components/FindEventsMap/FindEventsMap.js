@@ -31,7 +31,7 @@ function EventsMapCard(event) {
       </div>
       <div className="event-map-right">
         <p className="event-map-attendees">
-          {event.eventAttendees.length + 1} attendee(s) {/*+1 because must include creator*/}
+          {event.eventAttendees.length + 1} attendee(s) 
         </p>
         <button className="view-event" onClick={handleView}>
           View
@@ -202,6 +202,7 @@ export default function FindEventsMap() {
 
     //const [events, setEvents] = useState(eventsdb);
     const [eventsView, setEventsView] = useState("mapview");
+
     const [filters, setFilters] = useReducer(
         (state, newState) => ({ ...state, ...newState }),
         {
@@ -216,7 +217,6 @@ export default function FindEventsMap() {
       );
       console.log(filters);
 
-  let filteredEvents = filterEvents(events, filters, eventsView);
 
   function handleFilters(event) {
     const name = event.target.name;
@@ -238,6 +238,7 @@ export default function FindEventsMap() {
       setFilters({ [name]: newValue });
     }
   }
+
 
   function filterEvents(events, filters, eventsView) {
     let filteredEvents = events.filter((event) => {
@@ -280,6 +281,8 @@ export default function FindEventsMap() {
     return filteredEvents;
   }
 
+  let filteredEvents = filterEvents(events, filters, eventsView);
+  console.log(filteredEvents);
 
     return(
         <div className="find-events-page" >{/*col*/}
