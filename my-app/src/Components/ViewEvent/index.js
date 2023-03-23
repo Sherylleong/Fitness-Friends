@@ -155,7 +155,7 @@ function ViewEvent() {
                   <img src={calender}></img>
                 </div>
 
-                <div className="date1-title">When and Where</div>
+                <div className="date1-title">Date and Time</div>
               </div>
 
               <div className="event-date-time">
@@ -193,7 +193,7 @@ function ViewEvent() {
               </div>
               <div className="creator-event" onClick={handleViewMember}>
                 <div className="creatortitle">
-                  <div className="attendee3" >
+                  <div className="attendee3">
                     <img src={attendee1}></img>
                   </div>
                   <div> Members: </div>
