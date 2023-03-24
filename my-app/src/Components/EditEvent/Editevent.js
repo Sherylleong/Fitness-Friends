@@ -67,6 +67,15 @@ export default function EditEvent() {
                 name: d.eventLocation,
                 position: d.eventPosition
             });
+            const getGroupDocId = query(collection(firestore, "group"), where("groupId","==", d.groupId));
+            try {
+                const groupDocId = await getDocs(getGroupDocId);
+                groupDocId.forEach((doc) => {
+                    setGroupSelected(doc.id);
+                });
+            }catch(error) {
+                console.log(error)
+            }
         } catch(error) {
             console.log(error)
         }
@@ -78,6 +87,7 @@ export default function EditEvent() {
         var fetchGroup = [];
         docu.forEach((doc)=> {
             fetchGroup = [...fetchGroup, {
+                // id: doc.data().groupId,
                 id: doc.id,
                 name: doc.data().groupname
             }]
