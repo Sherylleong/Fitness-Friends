@@ -1,37 +1,32 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { useStoreState } from "../../App"
 import "../Create.css";
 
 import { firestore, storage } from "../FirebaseDb/Firebase";
-import { collection ,getDocs, query, limit, addDoc, where } from "firebase/firestore";
+import { collection,doc, updateDoc ,getDocs, getDoc, query, limit, addDoc, where } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 
 import { GoogleMap, useLoadScript, Marker, MarkerClusterer, MarkerF } from "@react-google-maps/api";
-import { useMemo } from "react";
-import { render } from "@testing-library/react";
 
-export default function CreateEvent() {
-    const userId = useStoreState("userId");
+export default function EditEvent() {
+    // const userId = useStoreState("userId");
+    const userId = "ha"
 	const [documentId, setDocumentId] = useState("");
 
-	const [pic, setPic] = useState("https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/defaultPFP.png?alt=media&token=93a30cef-5994-4701-9fab-9ad9fdec913c");
+	const [pic, setPic] = useState("");
 	const [title, setTitle] = useState("");
-
-    // Calculate Date and Time
     var today = new Date()
     var month = today.getMonth() < 10 ? "0" + today.getMonth() : today.getMonth()
+	const [eventDate, setEventDate] = useState("");
     var hour = today.getHours() < 10 ? "0" + today.getHours()  : today.getHours()
     var minutes = today.getMinutes() < 10 ? "0" + today.getMinutes()  : today.getMinutes()
-
-    const [eventDate, setEventDate] = useState(today.getFullYear() + "-" + month + "-" + today.getDate());
-    const [eventTime, setEventTime] = useState(hour + ":" + minutes);
+    const [eventTime, setEventTime] = useState("");
 	const [bio, setBio] = useState("");
-    const [difficulty, setDifficulty] = useState("Beginner");
-    const [eventActivity, setActivity] = useState("Walking");
-    const [eventGroup, setEventGroup] = useState("None");
-    const [groupsOwned, setGroupsOwned] = useState([]);
+    const [difficulty, setDifficulty] = useState("")
+    const [eventActivity, setActivity] = useState("")
 
     const difficultyChoices = ["Beginner", "Intermediate", "Advanced"]
     const activityChoices = ["Walking", "Jogging", "Running", "Climbing","Biking","Sports","Others"]
@@ -47,23 +42,28 @@ export default function CreateEvent() {
 
     const [mapData, setMapData] = useState([]);
     const [filterMapData, setFilterMapData] = useState([]);
-    const [groupList, setGroupList] = useState([{
-        id:"",
-        name:"None"
-    }]);
-    const [groupSelected, setGroupSelected] = useState("");
 
-    const getUserGroup = async() => {
-        const docRef = query(collection(firestore, "group"), where("groupOwner", "==", userId));
-        const docu = await getDocs(docRef);
-        var fetchGroup = [];
-        docu.forEach((doc)=> {
-            fetchGroup = [...fetchGroup, {
-                id: doc.id,
-                name: doc.data().groupname
-            }]
-        })
-        setGroupList([...groupList, ...fetchGroup]);
+    const { eventId: urlEventId } = useParams();
+
+    const getEventDetails = async () => {
+        const docRef = doc(firestore, "events", urlEventId);
+        try {
+            const docu = await getDoc(docRef);
+            var d = docu.data();
+            setPic(d.eventImage);
+            setTitle(d.eventTitle);
+            setEventDate(d.date);
+            setEventTime(d.time);
+            setBio(d.eventDescription);
+            setDifficulty(d.eventDifficulty);
+            setActivity(d.eventCategory);
+            setSelected({
+                name: d.eventLocation,
+                position: d.eventPosition
+            });
+        } catch(error) {
+            console.log(error)
+        }
     }
 
     const getMarkerLoc = async () => {
@@ -78,33 +78,10 @@ export default function CreateEvent() {
                     lng: doc.data().y
                 }
             });
+            setMapData(mapArr);
+            setFilterMapData(mapArr);
 		});
-        setMapData(mapArr);
-        setFilterMapData(mapArr);
     }
-
-    // get groups owned by user. added by kit ye
-    const getGroupsOwned = async () => {
-        const docRef = query(
-          collection(firestore, "group"),
-          where("groupOwner", "==", userId)
-        );
-        const docu = await getDocs(docRef);
-        const updatedDocs = docu.docs.map(async (doc) => {
-          return { id: doc.id, groupname: doc.data()["groupname"] };
-        });
-        const fetchedGroupsOwned = await Promise.all(updatedDocs); // jank, has to be an easier way :(
-        let updatedGroupsOwned = {};
-        fetchedGroupsOwned.forEach((group) => {
-            updatedGroupsOwned[group.id] = group.groupname;
-        });
-        setGroupsOwned(updatedGroupsOwned);
-      };
-      getGroupsOwned();
-      console.log(groupsOwned)
-      let groupIds = Object.keys(groupsOwned);
-      console.log(groupIds);
-    //
 
     const changeFilter = (e) => {
         setFilterValue(e.target.value);
@@ -128,24 +105,20 @@ export default function CreateEvent() {
 	};
 
 	const uploadFile = async() => {
-        if (userFile != null) {
-            const imageRef = ref(storage, eventId+"-eventpic");
+        if(userFile != null)  {
+            const imageRef = ref(storage, urlEventId+"-eventpic");
             await uploadBytes(imageRef, userFile);
 
             getDownloadURL(imageRef).then((url)=> {
-                addEvent(url);
+                updateEvent(url);
             });
         }else {
-            addEvent(pic);
+            updateEvent(pic);
         }
     }
 
-    const addEvent = (url) => {
-        var eventType = "individual";
-        if (groupSelected != "") {
-            eventType = "group";
-        }
-        addDoc(collection(firestore, 'events'), {
+    const updateEvent = (url) => {
+        updateDoc(doc(firestore, 'events', urlEventId), {
             creatorID: userId,
             date: eventDate,
             time: eventTime,
@@ -159,8 +132,7 @@ export default function CreateEvent() {
             },
             eventTitle: title,
             eventDescription: bio,
-            eventType: eventType,
-            groupId: groupSelected,
+            eventType: "individual",
             eventImage: url
         });
     }
@@ -176,14 +148,14 @@ export default function CreateEvent() {
 
 
     useEffect(() => {
+        getEventDetails();
 		getMarkerLoc();
-        getUserGroup();
 	  }, []);
 
     return (
         <div className="createDiv">
             <div className ="header">
-                <h1>Create Event</h1>
+                <h1>Edit Event</h1>
                 <p><b></b></p>
             </div>
             <div className="body">
@@ -222,12 +194,6 @@ export default function CreateEvent() {
 								    {activityChoices.map(item=> <option value={item}>{item}</option>)}
 							    </select>
                                 </div>
-                                <div>
-                                <b>Select Group</b>
-                                <select value={groupSelected} onChange={(e)=>setGroupSelected(e.target.value)}>
-								    {groupList.map(item=> <option value={item.id}>{item.name}</option>)}
-							    </select>
-                                </div>
                             </div>
                             <b>Event Description</b>
                             <textarea className="bio-input" value={bio} onChange={(e)=>setBio(e.target.value)}></textarea>
@@ -249,7 +215,7 @@ export default function CreateEvent() {
                         </div>
                     </div>
                     <div className="button-align-from-left">
-                        <button onClick={()=>createEventClick()}>Create Event</button>
+                        <button onClick={()=>createEventClick()}>Save Changes</button>
                         <button className="dull-button" onClick={()=>{}}>Cancel</button>
                     </div>
                 </div>
@@ -292,3 +258,4 @@ function EventMap({state, setState, mapData}) {
         </>
       );
 }
+
