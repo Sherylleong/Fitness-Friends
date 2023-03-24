@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useStoreState } from "../../App"
-import "./CreateEvent.css";
+import "../Create.css";
 
 import { firestore, storage } from "../FirebaseDb/Firebase";
 import { collection,doc, updateDoc ,getDocs, query, limit, addDoc } from "firebase/firestore";
@@ -45,7 +45,7 @@ export default function CreateEvent() {
     const [filterMapData, setFilterMapData] = useState([]);
 
     const getMarkerLoc = async () => {
-        const docRef = query(collection(firestore, "locations"), limit(50));
+        const docRef = query(collection(firestore, "locations"), limit(15));
 		const docu = await getDocs(docRef);
         var mapArr = [];
 		docu.forEach((doc) => {
@@ -82,36 +82,20 @@ export default function CreateEvent() {
               })
     }
 
-    const [testFile, setTest] = useState(null);
+    const [userFile, setUserFile] = useState(null);
 	const acceptFile = event => {
 		var fileUploaded = event.target.files[0];
-		setTest(fileUploaded);
+		setUserFile(fileUploaded);
 		setPic(URL.createObjectURL(fileUploaded));
-		// uploadFile(fileUploaded);
 	};
 
 	const uploadFile = async() => {
-
 		const imageRef = ref(storage, eventId+"-eventpic");
-		await uploadBytes(imageRef, testFile);
+		await uploadBytes(imageRef, userFile);
 
-		const imageURL = await getDownloadURL(imageRef);
-		setPic(imageURL);
-
-        // Need Find way to 
-		// const updateQuery = doc(firestore, 'events', documentId);
-		// updateDoc(updateQuery, {
-		// 	profilePic: imageURL
-		// });
-	}
-
-
-    const removeImage = () => {
-		setPic("https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/defaultPFP.png?alt=media&token=93a30cef-5994-4701-9fab-9ad9fdec913c");
-	}
-
-    function createEventClick() {
-        addDoc(collection(firestore, 'events'), {
+		getDownloadURL(imageRef).then((url)=> {
+            
+            addDoc(collection(firestore, 'event'), {
                 creatorID: userId,
                 date: eventDate,
                 time: eventTime,
@@ -126,9 +110,18 @@ export default function CreateEvent() {
                 eventTitle: title,
                 eventDescription: bio,
                 eventType: "individual",
-                eventImage: pic
-            }
-        );
+                eventImage: url
+            });
+        });
+    }
+
+
+    const removeImage = () => {
+		setPic("https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/defaultPFP.png?alt=media&token=93a30cef-5994-4701-9fab-9ad9fdec913c");
+	}
+
+    function createEventClick() {
+        uploadFile();
     }
 
 
@@ -137,7 +130,7 @@ export default function CreateEvent() {
 	  }, []);
 
     return (
-        <div className="createEvent">
+        <div className="createDiv">
             <div className ="header">
                 <h1>Create Event</h1>
                 <p><b></b></p>

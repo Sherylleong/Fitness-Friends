@@ -6,21 +6,23 @@ import { firestore } from "../FirebaseDb/Firebase";
 import { addDoc } from "firebase/firestore";
 import { collection } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import "./CreateGroup.css";
+// import "./CreateGroup.css";
+import "../Create.css"
 import { v4 as uuidv4 } from "uuid";
 
 function CreateGroup() {
   const [groupname, setGroupname] = useState("");
   const [groupdesc, setGroupdesc] = useState("");
-  const [groupdifficulty, setGroupdifficulty] = useState("");
-  const [groupcategory, setGroupcategory] = useState("");
-  const [groupmembers, setGroupmembers] = useState([]);
-  const [groupevents, setGroupevents] = useState([]);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [difficulty, setDifficulty] = useState("Beginner")
+  const [groupActivity, setActivity] = useState("Walking")
+  const [pic, setPic] = useState("https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/defaultPFP.png?alt=media&token=93a30cef-5994-4701-9fab-9ad9fdec913c");
 
   const navigate = useNavigate();
   const storage = getStorage();
   const groupId = uuidv4();
+
+  const difficultyChoices = ["Beginner", "Intermediate", "Advanced"]
+  const activityChoices = ["Walking", "Jogging", "Running", "Climbing","Biking","Sports","Others"]
 
   //   const submitgroup = (e) => {
   //     e.preventDefault(); //Prevent Reload on Form Submit
@@ -37,98 +39,81 @@ function CreateGroup() {
 
   //   };
 
-  const submitGroup = async (e) => {
-    e.preventDefault(); // Prevent Reload on Form Submit
+  const [userFile, setUserFile] = useState(null);
+	const acceptFile = event => {
+		var fileUploaded = event.target.files[0];
+		setUserFile(fileUploaded);
+		setPic(URL.createObjectURL(fileUploaded));
+	};
 
-    // Upload image to Firebase Storage
-    if (selectedImage) {
-      const imageRef = ref(storage, selectedImage.name);
-      await uploadBytes(imageRef, selectedImage);
+	const createGroup = async() => {
+		const imageRef = ref(storage, groupId+"-grouppic");
+		await uploadBytes(imageRef, userFile);
 
-      // Get the download URL of the uploaded file
-      const imageURL = await getDownloadURL(imageRef);
-
-      // Store the URL in your database
-      await addDoc(collection(firestore, "group"), {
-        groupname: groupname,
-        groupdesc: groupdesc,
-        groupdifficulty: groupdifficulty,
-        groupcategory: groupcategory,
-        groupmembers: groupmembers,
-        groupevents: groupevents,
-        groupImageURL: imageURL,
-        groupId: groupId,
+      getDownloadURL(imageRef).then((url)=> {     
+        addDoc(collection(firestore, "group"), {
+          groupname: groupname,
+          groupdesc: groupdesc,
+          groupdifficulty: difficulty,
+          groupcategory: groupActivity,
+          groupmembers: [],
+          groupevents: [],
+          groupId: groupId,
+          groupImageURL: url
+        });
       });
     }
-  };
+
+  const removeImage = () => {
+		setPic("https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/defaultPFP.png?alt=media&token=93a30cef-5994-4701-9fab-9ad9fdec913c");
+	}
+
   return (
-    <div className="creategroup-form">
-      <div className="creategroup-form-container">
-        <h1>Create Group Form </h1>
-        <div> This information will be displayed on your group page</div>
-        <form className="group-form" onSubmit={submitGroup}>
-          <div className="grpimage">
-            <label>Group image</label>
-            <div className="img-input">
-              <input
-                className="img-input-btn"
-                type="file"
-                onChange={(e) => setSelectedImage(e.target.files[0])}
-              />
-            </div>
-          </div>
-
-          <div className="grptitle">
-            <label>Group Title</label>
-            <input
-              type="groupname"
-              placeholder="Enter your group title"
-              onChange={(e) => setGroupname(e.target.value)}
-            />
-          </div>
-
-          <div className="grpdesc">
-            <label>Group description</label>
-            <textarea
-              type="groupdesc"
-              placeholder="Enter your group description (max 600 characters)"
-              onChange={(e) => setGroupdesc(e.target.value)}
-              maxlength="600"
-            />
-          </div>
-
-          <div className="selection">
-            <div className="grpdifficulty">
-              <label>Group difficulty</label>
-              <select onChange={(e) => setGroupdifficulty(e.target.value)}>
-                <option value="beginner">Beginner</option>
-                <option value="intermediate">Intermediate</option>
-                <option value="advanced">Advanced</option>
-              </select>
-            </div>
-
-            <div className="grpcategory">
-              <label>Group category</label>
-              <select onChange={(e) => setGroupcategory(e.target.value)}>
-                <option value="Walking">Walking</option>
-                <option value="Jogging">Jogging</option>
-                <option value="Running">Running</option>
-                <option value="Climbing">Climbing</option>
-                <option value="Biking">Biking</option>
-                <option value="Sports">Sports</option>
-                <option value="Other">Others</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="create-grp">
-            <button type="submit" className="create-grp-btn">
-              Create Group{" "}
-            </button>
-          </div>
-        </form>
-      </div>
+<div className="createDiv">
+  <div className ="header">
+    <h1>Create Group</h1>
+    <p><b></b></p>
     </div>
+    <div className="body">
+      <div className="left-div">
+        <div className="button-align-center">
+          <img className="editprofile-img" src={pic}/>
+          <label className="button-upload-file">Change Image
+              <input type="file" accept="image/png, image/jpeg" onChange={acceptFile}></input>
+          </label>
+          <button className="dull-button" onClick={()=>removeImage()}>Remove Image</button>
+        </div>
+        <div className="form-items">
+            <form>
+              <b>Group Name</b>
+              <input lassName="default-input" type="text" value={groupname} onChange={(e)=>setGroupname(e.target.value)}></input>
+              <div className="user-inputs">
+                  <div>
+                    <b>Select Group Difficulty</b>
+                    <select value={difficulty} onChange={(e)=>setDifficulty(e.target.value)}>
+                        {difficultyChoices.map(item=> <option value={item}>{item}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <b>Select Group Activitiy</b>
+                    <select value={groupActivity} onChange={(e)=>setActivity(e.target.value)}>
+                        {activityChoices.map(item=> <option value={item}>{item}</option>)}
+                    </select>
+                  </div>
+              </div>
+              <b>Group Description</b>
+              <textarea className="bio-input" value={groupdesc} onChange={(e)=>setGroupdesc(e.target.value)}></textarea>
+            </form>
+        </div>
+      </div>
+      <div className="right-div">
+        <div className="button-align-from-left">
+            <button onClick={()=>createGroup()}>Create Group</button>
+            <button className="dull-button" onClick={()=>{}}>Cancel</button>
+        </div>
+      </div>
+  </div>
+</div>
   );
 }
 

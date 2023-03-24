@@ -11,6 +11,7 @@ import FindGroups from "./Components/FindGroups/FindGroups";
 import CRUD from "./Components/TestFirebase/CRUD";
 import ViewGroup from "./Components/ViewGroup";
 import ViewEvent from "./Components/ViewEvent";
+import EditEvent from "./Components/EditEvent/Editevent";
 import ViewProfile from "./Components/ViewProfile";
 import EditProfile from "./Components/EditProfile/Editprofile";
 import CreateGroup from "./Components/CreateGroup";
@@ -91,6 +92,7 @@ function App() {
         <Route path="Groups/ViewGroup/:groupId/ViewMembersGroup" element={<ViewMembersGroup />} />
         <Route path="Groups/ViewGroup/:groupId/ViewMembersGroup/ViewMemberProfile/:memberId" element={<ViewMemberProfile />} />
         <Route path="/Events/ViewEvent/:eventId" element={<ViewEvent />} />
+        <Route path="/EditEvent/:eventId" element={<EditEvent />} />
         <Route path="/Events/ViewEvent/:eventId/ViewMembersEvent" element={<ViewMembersEvent />} />
         <Route path="/Events/ViewEvent/:eventId/ViewMembersEvent/ViewMemberProfile/:memberId" element={<ViewMemberProfile />} />
         <Route path="/ViewProfile" element={<ViewProfile />} />
