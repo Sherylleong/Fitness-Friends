@@ -3,7 +3,7 @@ import { useStoreState } from "../../App"
 import "./CreateEvent.css";
 
 import { firestore, storage } from "../FirebaseDb/Firebase";
-import { collection,doc, updateDoc ,getDocs, query, limit, addDoc } from "firebase/firestore";
+import { collection,doc, updateDoc ,getDocs, query, where, limit, addDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
@@ -13,8 +13,8 @@ import { useMemo } from "react";
 import { render } from "@testing-library/react";
 
 export default function CreateEvent() {
-    // const userId = useStoreState("userId");
-    const userId = "ha"
+    const userId = useStoreState("userId");
+
 	const [documentId, setDocumentId] = useState("");
 
 	const [pic, setPic] = useState("https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/defaultPFP.png?alt=media&token=93a30cef-5994-4701-9fab-9ad9fdec913c");
@@ -26,8 +26,10 @@ export default function CreateEvent() {
     var minutes = today.getMinutes() < 10 ? "0" + today.getMinutes()  : today.getMinutes()
     const [eventTime, setEventTime] = useState(hour + ":" + minutes);
 	const [bio, setBio] = useState("");
-    const [difficulty, setDifficulty] = useState("Beginner")
-    const [eventActivity, setActivity] = useState("Walking")
+    const [difficulty, setDifficulty] = useState("Beginner");
+    const [eventActivity, setActivity] = useState("Walking");
+    const [eventGroup, setEventGroup] = useState("None");
+    const [groupsOwned, setGroupsOwned] = useState([]);
 
     const difficultyChoices = ["Beginner", "Intermediate", "Advanced"]
     const activityChoices = ["Walking", "Jogging", "Running", "Climbing","Biking","Sports","Others"]
@@ -67,6 +69,29 @@ export default function CreateEvent() {
             // }]);
 		});
     }
+
+    // get groups owned by user. added by kit ye
+    const getGroupsOwned = async () => {
+        const docRef = query(
+          collection(firestore, "group"),
+          where("groupOwner", "==", userId)
+        );
+        const docu = await getDocs(docRef);
+        const updatedDocs = docu.docs.map(async (doc) => {
+          return { id: doc.id, groupname: doc.data()["groupname"] };
+        });
+        const fetchedGroupsOwned = await Promise.all(updatedDocs); // jank, has to be an easier way :(
+        let updatedGroupsOwned = {};
+        fetchedGroupsOwned.forEach((group) => {
+            updatedGroupsOwned[group.id] = group.groupname;
+        });
+        setGroupsOwned(updatedGroupsOwned);
+      };
+      getGroupsOwned();
+      console.log(groupsOwned)
+      let groupIds = Object.keys(groupsOwned);
+      console.log(groupIds);
+    //
 
     const changeFilter = (e) => {
         setFilterValue(e.target.value);
@@ -125,8 +150,9 @@ export default function CreateEvent() {
                 },
                 eventTitle: title,
                 eventDescription: bio,
-                eventType: "individual",
-                eventImage: pic
+                eventType: eventGroup? "group" : "individual",
+                eventImage: pic,
+                groupId: eventGroup
             }
         );
     }
@@ -176,6 +202,13 @@ export default function CreateEvent() {
                                 <b>Select Event Activitiy</b>
                                 <select value={eventActivity} onChange={(e)=>setActivity(e.target.value)}>
 								    {activityChoices.map(item=> <option value={item}>{item}</option>)}
+							    </select>
+                                </div>
+                                <div>
+                                <b>Select Group Event is Under</b>
+                                <select value={eventGroup} onChange={(e)=>setEventGroup(e.target.value)}>
+                                    <option value="" selected="selected">None</option>
+								    {groupIds.map(groupId=> <option value={groupId}>{groupsOwned[groupId]}</option>)}
 							    </select>
                                 </div>
                             </div>
