@@ -28,8 +28,10 @@ export default function CreateEvent() {
     const [eventDate, setEventDate] = useState(today.getFullYear() + "-" + month + "-" + today.getDate());
     const [eventTime, setEventTime] = useState(hour + ":" + minutes);
 	const [bio, setBio] = useState("");
-    const [difficulty, setDifficulty] = useState("Beginner")
-    const [eventActivity, setActivity] = useState("Walking")
+    const [difficulty, setDifficulty] = useState("Beginner");
+    const [eventActivity, setActivity] = useState("Walking");
+    const [eventGroup, setEventGroup] = useState("None");
+    const [groupsOwned, setGroupsOwned] = useState([]);
 
     const difficultyChoices = ["Beginner", "Intermediate", "Advanced"]
     const activityChoices = ["Walking", "Jogging", "Running", "Climbing","Biking","Sports","Others"]
@@ -80,6 +82,29 @@ export default function CreateEvent() {
         setMapData(mapArr);
         setFilterMapData(mapArr);
     }
+
+    // get groups owned by user. added by kit ye
+    const getGroupsOwned = async () => {
+        const docRef = query(
+          collection(firestore, "group"),
+          where("groupOwner", "==", userId)
+        );
+        const docu = await getDocs(docRef);
+        const updatedDocs = docu.docs.map(async (doc) => {
+          return { id: doc.id, groupname: doc.data()["groupname"] };
+        });
+        const fetchedGroupsOwned = await Promise.all(updatedDocs); // jank, has to be an easier way :(
+        let updatedGroupsOwned = {};
+        fetchedGroupsOwned.forEach((group) => {
+            updatedGroupsOwned[group.id] = group.groupname;
+        });
+        setGroupsOwned(updatedGroupsOwned);
+      };
+      getGroupsOwned();
+      console.log(groupsOwned)
+      let groupIds = Object.keys(groupsOwned);
+      console.log(groupIds);
+    //
 
     const changeFilter = (e) => {
         setFilterValue(e.target.value);
