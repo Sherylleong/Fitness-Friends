@@ -67,7 +67,7 @@ export default function CreateEvent() {
     }
 
     const getMarkerLoc = async () => {
-        const docRef = query(collection(firestore, "locations"), limit(15));
+        const docRef = query(collection(firestore, "locations"));
 		const docu = await getDocs(docRef);
         var mapArr = [];
 		docu.forEach((doc) => {
@@ -172,6 +172,7 @@ export default function CreateEvent() {
 
     function createEventClick() {
         uploadFile();
+
     }
 
 
@@ -237,13 +238,13 @@ export default function CreateEvent() {
                 <div className="right-div">
                     <div className="map-select">
                         <b>Selected Location</b>
-                        <p>{selected.name}</p>
+                        <p className="dropdown-select">{selected.name}</p>
                         <div className="map-contain">
                             <MapContainer state={selected} setState={setSelected} mapData={mapData}/>
                             <div className="search-location">
-                                <input type="text" value={filterValue} onChange={(e)=>changeFilter(e)}></input>
+                                <input className="create-searchbar" type="text" value={filterValue} placeholder="Search Location..." onChange={(e)=>changeFilter(e)}></input>
                                 <div className="location-list">
-                                    {filterMapData.map(data=> <div onClick={()=>setSelected(data)}>{data.name}</div>)}
+                                    {filterMapData.map(data=> <div className="location-item" onClick={()=>setSelected(data)}>{data.name}</div>)}
                                 </div>
                             </div>
                         </div>

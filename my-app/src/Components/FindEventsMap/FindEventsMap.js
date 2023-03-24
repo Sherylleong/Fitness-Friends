@@ -33,7 +33,7 @@ function EventsMapCard(event, navigate) {
         <p className="event-map-attendees">
           {event.eventAttendees.length + 1} attendee(s) 
         </p>
-        <button className="view-event" onClick={handleView}>
+        <button className="view-event-find-map" onClick={handleView}>
           View
         </button>
       </div>
@@ -134,12 +134,16 @@ function EventMapHeader({ eventsView, setEventsView }) {
 function EventsMapList({ filters, events, handleFilters, navigate }) {
   return (
     <div className="events-map-list">
+      <div>
       <Searchbar
         filters={filters}
         handleFilters={handleFilters}
         searchText="Search Location..."
       />
-      {events.map((event) => EventsMapCard(event,navigate))}
+      </div>
+      <div className="events-map-list-div">
+        {events.map((event) => EventsMapCard(event,navigate))}
+      </div>
     </div>
   );
 }

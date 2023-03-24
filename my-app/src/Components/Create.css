@@ -63,3 +63,50 @@
   flex-direction: column;
   margin-right: 2vw;
 }
+
+.search-location {
+  padding-left: 15px;
+}
+
+.create-searchbar {
+  background: url("https://assets.stickpng.com/images/585e4ae1cb11b227491c3393.png") top left no-repeat;
+  width: 250px;
+  font-size: 25px;
+  margin-bottom: 10px;
+  background-color: transparent;
+  border:none;
+  border-bottom: 2px solid #acacac;
+
+}
+
+.location-item {
+  padding: 6px;
+  cursor: pointer;
+
+}
+
+.location-item:hover {
+  background-color: rgb(238, 238, 238);
+  
+}
+
+/*kit ye added styles */
+.right-div {
+  padding: 10px;
+  padding-left: 25px;
+}
+
+.button-align-from-left {
+  padding-top: 10px;
+}
+.location-list {
+  height: 480px;
+  overflow-y: auto;
+}
+
+.editprofile-img {
+
+  max-width: 280px;
+  max-height: 280px;
+
+}
