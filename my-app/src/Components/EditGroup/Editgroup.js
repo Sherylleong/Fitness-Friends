@@ -1,20 +1,20 @@
-import { useState, useRef, createContext, useContext } from "react";
+import { useState, useRef, createContext, useContext, useEffect } from "react";
 import { auth } from "../FirebaseDb/Firebase";
 import { dispatch, useStoreState } from "../../App";
-import { Link, redirect, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { firestore } from "../FirebaseDb/Firebase";
-import { addDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { collection } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 // import "./CreateGroup.css";
 import "../Create.css"
 import { v4 as uuidv4 } from "uuid";
 
-function CreateGroup() {
+function EditGroup() {
   const [groupname, setGroupname] = useState("");
   const [groupdesc, setGroupdesc] = useState("");
-  const [difficulty, setDifficulty] = useState("Beginner")
-  const [groupActivity, setActivity] = useState("Walking")
+  const [difficulty, setDifficulty] = useState("")
+  const [groupActivity, setActivity] = useState("")
   const [pic, setPic] = useState("https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/defaultPFP.png?alt=media&token=93a30cef-5994-4701-9fab-9ad9fdec913c");
 
   const navigate = useNavigate();
@@ -23,6 +23,24 @@ function CreateGroup() {
 
   const difficultyChoices = ["Beginner", "Intermediate", "Advanced"]
   const activityChoices = ["Walking", "Jogging", "Running", "Climbing","Biking","Sports","Others"]
+
+  const { groupId: urlGroupId } = useParams();
+
+  const getEventDetails = async () => {
+        console.log(urlGroupId);
+      const docRef = doc(firestore, "group", urlGroupId);
+      try {
+          const docu = await getDoc(docRef);
+          var d = docu.data();
+          setPic(d.groupImageURL);
+          setGroupname(d.groupname);
+          setGroupdesc(d.groupdesc);
+          setDifficulty(d.groupdifficulty);
+          setActivity(d.groupcategory);
+      } catch(error) {
+          console.log(error)
+      }
+  }
 
   const [userFile, setUserFile] = useState(null);
 	const acceptFile = event => {
@@ -36,22 +54,19 @@ function CreateGroup() {
       const imageRef = ref(storage, groupId+"-grouppic");
       await uploadBytes(imageRef, userFile);
         getDownloadURL(imageRef).then((url)=> {     
-            createGroup(url);
+            updateGroup(url);
         });
     }else {
-        createGroup(pic);
+        updateGroup(pic);
     }
   }
 
-  const createGroup = (url) => {
-      addDoc(collection(firestore, "group"), {
+  const updateGroup = (url) => {
+      updateDoc(doc(firestore, "group", urlGroupId), {
         groupname: groupname,
         groupdesc: groupdesc,
         groupdifficulty: difficulty,
         groupcategory: groupActivity,
-        groupmembers: [],
-        groupevents: [],
-        groupId: groupId,
         groupImageURL: url
       });
   }
@@ -61,10 +76,14 @@ function CreateGroup() {
 		setPic("https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/defaultPFP.png?alt=media&token=93a30cef-5994-4701-9fab-9ad9fdec913c");
 	}
 
+    useEffect(() => {
+        getEventDetails();
+    }, []);
+
   return (
 <div className="createDiv">
   <div className ="header">
-    <h1>Create Group</h1>
+    <h1>Edit Group</h1>
     <p><b></b></p>
     </div>
     <div className="body">
@@ -101,7 +120,7 @@ function CreateGroup() {
       </div>
       <div className="right-div">
         <div className="button-align-from-left">
-            <button onClick={()=>uploadImage()}>Create Group</button>
+            <button onClick={()=>uploadImage()}>Update Group</button>
             <button className="dull-button" onClick={()=>{}}>Cancel</button>
         </div>
       </div>
@@ -110,4 +129,4 @@ function CreateGroup() {
   );
 }
 
-export default CreateGroup;
+export default EditGroup;

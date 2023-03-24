@@ -19,7 +19,7 @@
 
 .createDiv .input-ignore-width {
   width: fit-content;
-  min-width: 11rem;
+  min-width: 10.4rem;
 }
 
 .map-select { 
@@ -55,9 +55,11 @@
 }
 .createDiv .user-inputs {
   display: flex;
+  margin-bottom:1rem;
 }
 
 .createDiv .user-inputs div{
   display: flex;
   flex-direction: column;
+  margin-right: 2vw;
 }

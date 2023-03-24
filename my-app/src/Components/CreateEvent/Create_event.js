@@ -3,7 +3,7 @@ import { useStoreState } from "../../App"
 import "../Create.css";
 
 import { firestore, storage } from "../FirebaseDb/Firebase";
-import { collection,doc, updateDoc ,getDocs, query, limit, addDoc } from "firebase/firestore";
+import { collection ,getDocs, query, limit, addDoc, where } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
@@ -13,17 +13,19 @@ import { useMemo } from "react";
 import { render } from "@testing-library/react";
 
 export default function CreateEvent() {
-    // const userId = useStoreState("userId");
-    const userId = "ha"
+    const userId = useStoreState("userId");
 	const [documentId, setDocumentId] = useState("");
 
 	const [pic, setPic] = useState("https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/defaultPFP.png?alt=media&token=93a30cef-5994-4701-9fab-9ad9fdec913c");
 	const [title, setTitle] = useState("");
+
+    // Calculate Date and Time
     var today = new Date()
     var month = today.getMonth() < 10 ? "0" + today.getMonth() : today.getMonth()
-	const [eventDate, setEventDate] = useState(today.getFullYear() + "-" + month + "-" + today.getDate());
     var hour = today.getHours() < 10 ? "0" + today.getHours()  : today.getHours()
     var minutes = today.getMinutes() < 10 ? "0" + today.getMinutes()  : today.getMinutes()
+
+    const [eventDate, setEventDate] = useState(today.getFullYear() + "-" + month + "-" + today.getDate());
     const [eventTime, setEventTime] = useState(hour + ":" + minutes);
 	const [bio, setBio] = useState("");
     const [difficulty, setDifficulty] = useState("Beginner")
@@ -43,6 +45,24 @@ export default function CreateEvent() {
 
     const [mapData, setMapData] = useState([]);
     const [filterMapData, setFilterMapData] = useState([]);
+    const [groupList, setGroupList] = useState([{
+        id:"",
+        name:"None"
+    }]);
+    const [groupSelected, setGroupSelected] = useState("");
+
+    const getUserGroup = async() => {
+        const docRef = query(collection(firestore, "group"), where("groupOwner", "==", userId));
+        const docu = await getDocs(docRef);
+        var fetchGroup = [];
+        docu.forEach((doc)=> {
+            fetchGroup = [...fetchGroup, {
+                id: doc.id,
+                name: doc.data().groupname
+            }]
+        })
+        setGroupList([...groupList, ...fetchGroup]);
+    }
 
     const getMarkerLoc = async () => {
         const docRef = query(collection(firestore, "locations"), limit(15));
@@ -56,16 +76,9 @@ export default function CreateEvent() {
                     lng: doc.data().y
                 }
             });
-            setMapData(mapArr);
-            setFilterMapData(mapArr);
-            // setMapData(oldMapData => [...oldMapData, {
-            //     name: doc.data().name,
-            //     position: {
-            //         lat: doc.data().x,
-            //         lng: doc.data().y
-            //     }
-            // }]);
 		});
+        setMapData(mapArr);
+        setFilterMapData(mapArr);
     }
 
     const changeFilter = (e) => {
@@ -90,33 +103,45 @@ export default function CreateEvent() {
 	};
 
 	const uploadFile = async() => {
-		const imageRef = ref(storage, eventId+"-eventpic");
-		await uploadBytes(imageRef, userFile);
+        if (userFile != null) {
+            const imageRef = ref(storage, eventId+"-eventpic");
+            await uploadBytes(imageRef, userFile);
 
-		getDownloadURL(imageRef).then((url)=> {
-            
-            addDoc(collection(firestore, 'event'), {
-                creatorID: userId,
-                date: eventDate,
-                time: eventTime,
-                eventDifficulty: difficulty,
-                eventCategory: eventActivity,
-                eventLocation: selected.name,
-                eventAttendees:[],
-                eventPosition: {
-                    lat: selected.position.lat,
-                    lng: selected.position.lng
-                },
-                eventTitle: title,
-                eventDescription: bio,
-                eventType: "individual",
-                eventImage: url
+            getDownloadURL(imageRef).then((url)=> {
+                addEvent(url);
             });
+        }else {
+            addEvent(pic);
+        }
+    }
+
+    const addEvent = (url) => {
+        var eventType = "individual";
+        if (groupSelected != "") {
+            eventType = "group";
+        }
+        addDoc(collection(firestore, 'events'), {
+            creatorID: userId,
+            date: eventDate,
+            time: eventTime,
+            eventDifficulty: difficulty,
+            eventCategory: eventActivity,
+            eventLocation: selected.name,
+            eventAttendees:[],
+            eventPosition: {
+                lat: selected.position.lat,
+                lng: selected.position.lng
+            },
+            eventTitle: title,
+            eventDescription: bio,
+            eventType: eventType,
+            groupId: groupSelected,
+            eventImage: url
         });
     }
 
-
     const removeImage = () => {
+        setUserFile(null);
 		setPic("https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/defaultPFP.png?alt=media&token=93a30cef-5994-4701-9fab-9ad9fdec913c");
 	}
 
@@ -127,6 +152,7 @@ export default function CreateEvent() {
 
     useEffect(() => {
 		getMarkerLoc();
+        getUserGroup();
 	  }, []);
 
     return (
@@ -169,6 +195,12 @@ export default function CreateEvent() {
                                 <b>Select Event Activitiy</b>
                                 <select value={eventActivity} onChange={(e)=>setActivity(e.target.value)}>
 								    {activityChoices.map(item=> <option value={item}>{item}</option>)}
+							    </select>
+                                </div>
+                                <div>
+                                <b>Select Group</b>
+                                <select value={groupSelected} onChange={(e)=>setGroupSelected(e.target.value)}>
+								    {groupList.map(item=> <option value={item.id}>{item.name}</option>)}
 							    </select>
                                 </div>
                             </div>
