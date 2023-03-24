@@ -42,8 +42,14 @@ export default function EditEvent() {
 
     const [mapData, setMapData] = useState([]);
     const [filterMapData, setFilterMapData] = useState([]);
+    const [groupList, setGroupList] = useState([{
+        id:"",
+        name:"None"
+    }]);
+    const [groupSelected, setGroupSelected] = useState("");
 
     const { eventId: urlEventId } = useParams();
+
 
     const getEventDetails = async () => {
         const docRef = doc(firestore, "events", urlEventId);
@@ -61,10 +67,34 @@ export default function EditEvent() {
                 name: d.eventLocation,
                 position: d.eventPosition
             });
+            const getGroupDocId = query(collection(firestore, "group"), where("groupId","==", d.groupId));
+            try {
+                const groupDocId = await getDocs(getGroupDocId);
+                groupDocId.forEach((doc) => {
+                    setGroupSelected(doc.id);
+                });
+            }catch(error) {
+                console.log(error)
+            }
         } catch(error) {
             console.log(error)
         }
     }
+
+    const getUserGroup = async() => {
+        const docRef = query(collection(firestore, "group"), where("groupOwner", "==", userId));
+        const docu = await getDocs(docRef);
+        var fetchGroup = [];
+        docu.forEach((doc)=> {
+            fetchGroup = [...fetchGroup, {
+                // id: doc.data().groupId,
+                id: doc.id,
+                name: doc.data().groupname
+            }]
+        })
+        setGroupList([...groupList, ...fetchGroup]);
+    }
+
 
     const getMarkerLoc = async () => {
         const docRef = query(collection(firestore, "locations"), limit(15));
@@ -118,21 +148,25 @@ export default function EditEvent() {
     }
 
     const updateEvent = (url) => {
-        updateDoc(doc(firestore, 'events', urlEventId), {
+        var eventType = "individual";
+        if (groupSelected != "") {
+            eventType = "group";
+        }
+        updateDoc(collection(firestore, 'events',urlEventId), {
             creatorID: userId,
             date: eventDate,
             time: eventTime,
             eventDifficulty: difficulty,
             eventCategory: eventActivity,
             eventLocation: selected.name,
-            eventAttendees:[],
             eventPosition: {
                 lat: selected.position.lat,
                 lng: selected.position.lng
             },
             eventTitle: title,
             eventDescription: bio,
-            eventType: "individual",
+            eventType: eventType,
+            groupId: groupSelected,
             eventImage: url
         });
     }
@@ -150,6 +184,7 @@ export default function EditEvent() {
     useEffect(() => {
         getEventDetails();
 		getMarkerLoc();
+        getUserGroup();
 	  }, []);
 
     return (
@@ -192,6 +227,12 @@ export default function EditEvent() {
                                 <b>Select Event Activitiy</b>
                                 <select value={eventActivity} onChange={(e)=>setActivity(e.target.value)}>
 								    {activityChoices.map(item=> <option value={item}>{item}</option>)}
+							    </select>
+                                </div>
+                                <div>
+                                <b>Select Group</b>
+                                <select value={groupSelected} onChange={(e)=>setGroupSelected(e.target.value)}>
+								    {groupList.map(item=> <option value={item.id}>{item.name}</option>)}
 							    </select>
                                 </div>
                             </div>
