@@ -14,7 +14,6 @@ export default function Login() {
 	const [showMissingUsername, setMissingUsername] = useState(false);
 	const [showMissingPassword, setMissingPassword] = useState(false);
 	const [showIncorrectLogin, setIncorrectLogin] = useState(false);
-	const [showInvalidEmail, setShowInvalidEmail] = useState(false);
 	var currUid = "";
 	const navigate = useNavigate();
 
@@ -29,13 +28,10 @@ export default function Login() {
 					getProfile();
 				}
 			}).catch((error) => {
-				if (error.code == "auth/wrong-password" || error.code == "auth/user-not-found") {
+				if (error.code == "auth/wrong-password" || error.code == "auth/invalid-email" || error.code == "auth/user-not-found") {
 					setIncorrectLogin(true);
 				}else if (error.code == "auth/user-not-found") {
 					//If needed to seperate
-				}
-				else if (error.code == "auth/invalid-email") {
-					setShowInvalidEmail(true);
 				}
 				else console.log(error);
 			});
@@ -85,7 +81,6 @@ export default function Login() {
 					<div style={{display: showMissingUsername ? 'block' : 'none'}} id="missing-username" className="account-form-incorrect">Username field is required.</div>
 					<div style={{display: showMissingPassword ? 'block' : 'none'}} id="missing-password" className="account-form-incorrect">Password field is required.</div>
 					<div style={{display: showIncorrectLogin ? 'block' : 'none'}} id="incorrect-login" className="account-form-incorrect">Incorrect Username or Password.</div>
-					<div style={{display: showInvalidEmail ? 'block' : 'none'}} id="incorrect-login" className="account-form-incorrect">Valid email is required.</div>
 					<div className="account-form-options">
 						{/* <label className="checkbox-label">
 							<input type="Checkbox"/> Remember me
