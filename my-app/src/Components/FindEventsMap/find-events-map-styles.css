@@ -36,11 +36,12 @@
     border-bottom: 2px solid;
 }
 #mapview, #listview {
-    margin: 5px;
+
     font-size: 25px;
     border: none;
     background-color: white;
 }
+
 
 .event-map-card .event-map-left {
     padding-right: 40px;

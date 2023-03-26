@@ -9,8 +9,7 @@ import { dispatch, useStoreState } from "../../App";
 import { useNavigate, useLocation } from "react-router-dom";
 
 function EventsMapCard(event, navigate) {
-  console.log("event:");
-  console.log(event.id);
+
   const eventId = event.id;
 
 
@@ -96,20 +95,14 @@ function EventMapHeader({ eventsView, setEventsView }) {
     setEventsView(e.target.id);
   }
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-around",
-      }}
-    >
-      <h1 style={{ marginTop: "0px", position: "relative", right: "140px" }}>
+    <div style={{display: "flex", flexDirection: "row", justifyContent: "space-around"}}>
+      <h1 style={{ marginTop: "0px", position: "relative", right: "130px" }}>
         Filters
       </h1>
       <h1 style={{ marginTop: "0px", position: "relative", fontSize: "50px" }}>
         Search Events
       </h1>
-      <div style={{ marginTop: "0px", position: "relative", left: "250px" }}>
+      <div style={{ marginTop: "0px", position: "relative", left: "150px" }}>
         <button
           id="mapview"
           style={{ fontWeight: eventsView === "mapview" ? "bold" : "" }}
@@ -120,8 +113,7 @@ function EventMapHeader({ eventsView, setEventsView }) {
         <button
           id="listview"
           style={{
-            fontWeight: eventsView === "listview" ? "bold" : "",
-            marginRight: "100px",
+            fontWeight: eventsView === "listview" ? "bold" : ""
           }}
           onClick={(e) => changeView(e)}
         >
@@ -180,7 +172,6 @@ export default function FindEventsMap() {
           id: doc.id,
           ...doc.data(),
         }));
-        console.log(querySnapshot);
         setEvents(fetchedEvents);
       }
     };
@@ -219,7 +210,6 @@ export default function FindEventsMap() {
             groups: []
         }
       );
-      console.log(filters);
 
 
   function handleFilters(event) {
@@ -286,7 +276,7 @@ export default function FindEventsMap() {
   }
 
   let filteredEvents = filterEvents(events, filters, eventsView);
-console.log(filteredEvents);
+
 
     return(
         <div className="find-events-page" >{/*col*/}
@@ -301,11 +291,11 @@ console.log(filteredEvents);
 
 function EventMapInfo({groups, navigate, filters, setFilters, handleFilters, events, eventsView, setEventsView}){
     return (
-        <div className="event-map-info">
+      <div className="event-map-info">
         <EventFilters groups={groups} filters={filters} handleFilters={handleFilters}/>
         <MapContainer events={events} setFilters={setFilters}/>
         <EventsMapList filters={filters} navigate={navigate} events={events} eventsView={eventsView} setEventsView={setEventsView} handleFilters={handleFilters}/>    
-    </div>
+      </div>
   );
 }
 
