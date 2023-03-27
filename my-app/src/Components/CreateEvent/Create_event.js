@@ -13,6 +13,7 @@ import { useMemo } from "react";
 import { render } from "@testing-library/react";
 
 export default function CreateEvent() {
+    const navigate = useNavigate();
     const userId = useStoreState("userId");
 	const [documentId, setDocumentId] = useState("");
 
@@ -53,6 +54,11 @@ export default function CreateEvent() {
     }]);
     const [groupSelected, setGroupSelected] = useState("");
 
+    const [showMissingTitle, setShowMissingTitle] = useState(false);
+    const [showMissingDesc, setShowMissingDesc] = useState(false);
+    const [showMissingLocation, setShowMissingLocation] = useState(false);
+    const [incorrectEventForm, setIncorrectEventForm] = useState(false);
+    
     const getUserGroup = async() => {
         const docRef = query(collection(firestore, "group"), where("groupOwner", "==", userId));
         const docu = await getDocs(docRef);
@@ -82,29 +88,6 @@ export default function CreateEvent() {
         setMapData(mapArr);
         setFilterMapData(mapArr);
     }
-
-    // get groups owned by user. added by kit ye
-    const getGroupsOwned = async () => {
-        const docRef = query(
-          collection(firestore, "group"),
-          where("groupOwner", "==", userId)
-        );
-        const docu = await getDocs(docRef);
-        const updatedDocs = docu.docs.map(async (doc) => {
-          return { id: doc.id, groupname: doc.data()["groupname"] };
-        });
-        const fetchedGroupsOwned = await Promise.all(updatedDocs); // jank, has to be an easier way :(
-        let updatedGroupsOwned = {};
-        fetchedGroupsOwned.forEach((group) => {
-            updatedGroupsOwned[group.id] = group.groupname;
-        });
-        setGroupsOwned(updatedGroupsOwned);
-      };
-      getGroupsOwned();
-      console.log(groupsOwned)
-      let groupIds = Object.keys(groupsOwned);
-      console.log(groupIds);
-    //
 
     const changeFilter = (e) => {
         setFilterValue(e.target.value);
@@ -138,6 +121,9 @@ export default function CreateEvent() {
         }else {
             addEvent(pic);
         }
+        
+
+
     }
 
     const addEvent = (url) => {
@@ -162,7 +148,7 @@ export default function CreateEvent() {
             eventType: eventType,
             groupId: groupSelected,
             eventImage: url
-        });
+        }).then((docRef)=>{navigate("/Events/ViewEvent/"+docRef.id)})
     }
 
     const removeImage = () => {
@@ -171,8 +157,21 @@ export default function CreateEvent() {
 	}
 
     function createEventClick() {
-        uploadFile();
-
+        setShowMissingTitle(false);
+        setShowMissingDesc(false);
+        setShowMissingLocation(false);
+        setIncorrectEventForm(false);
+        if (!title) {
+            setShowMissingTitle(true);
+            setIncorrectEventForm(true);}
+        if (!bio) {
+            setShowMissingDesc(true);  
+            setIncorrectEventForm(true);}
+        if (!(selected.name)) {
+            setShowMissingLocation(true);  
+            setIncorrectEventForm(true);
+        }
+        if (!incorrectEventForm) {uploadFile(); alert("Event successfully created!")}
     }
 
 
@@ -200,6 +199,8 @@ export default function CreateEvent() {
                         <form>
                             <b>Title</b>
                             <input lassName="default-input" type="text" value={title} onChange={(e)=>setTitle(e.target.value)}></input>
+                            <div style={{display: showMissingTitle ? 'block' : 'none'}} id="missing-title" className="account-form-incorrect">Event title is required.</div>
+
                             <div className="user-inputs">
                                 <div>
                                 <b>Date of Event </b>
@@ -232,13 +233,15 @@ export default function CreateEvent() {
                             </div>
                             <b>Event Description</b>
                             <textarea className="bio-input" value={bio} onChange={(e)=>setBio(e.target.value)}></textarea>
+                            <div style={{display: showMissingDesc ? 'block' : 'none'}} id="missing-desc" className="account-form-incorrect">Event description is required.</div>
                         </form>
                     </div>
                 </div>
                 <div className="right-div">
                     <div className="map-select">
                         <b>Selected Location</b>
-                        <p className="dropdown-select">{selected.name}</p>
+                        <p className="dropdown-select">{selected.name ? selected.name : "None"}</p>
+                        <div style={{display: showMissingLocation ? 'block' : 'none'}} id="missing-location" className="account-form-incorrect">Location selection is required.</div>
                         <div className="map-contain">
                             <MapContainer state={selected} setState={setSelected} mapData={mapData}/>
                             <div className="search-location">
@@ -251,7 +254,7 @@ export default function CreateEvent() {
                     </div>
                     <div className="button-align-from-left">
                         <button onClick={()=>createEventClick()}>Create Event</button>
-                        <button className="dull-button" onClick={()=>{}}>Cancel</button>
+                        <button className="dull-button" onClick={()=>{navigate("/ViewProfile")}}>Cancel</button>
                     </div>
                 </div>
             </div>
