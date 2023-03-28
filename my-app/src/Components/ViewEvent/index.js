@@ -22,6 +22,7 @@ import { dispatch, useStoreState } from "../../App";
 import { useNavigate } from "react-router-dom";
 import { arrayUnion, arrayRemove } from "firebase/firestore";
 import { doc, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
+import { onSnapshot } from "firebase/firestore";
 
 function ViewEvent() {
   const { isLoaded } = useLoadScript({
@@ -69,13 +70,16 @@ function ViewEvent() {
   //for data fetching (image and groupdata includigng grpevents)
   useEffect(() => {
     const fetchEvent = async () => {
-      const eventDocId = eventId; // use groupId as the document ID to fetch data for
-      const eventData = await getByDocID("events", eventDocId); // call the getByDocID function to retrieve data for the specified document ID
-      if (eventData) {
-        console.log(eventData);
-        setEvent(eventData); // set the group state to the retrieved data
+      // const eventDocId = eventId; // use groupId as the document ID to fetch data for
+      // const eventData = await getByDocID("events", eventDocId); // call the getByDocID function to retrieve data for the specified document ID
+      const eventRef = doc(collection(firestore, "events"), eventId);
+
+      if (eventRef) {
+        const unsubscribe = onSnapshot(eventRef, (doc) => {
+          setEvent(doc.data());
+        });
         //for image
-        const imageRef = ref(storage, eventData.eventImage); // create a reference to the image in Firebase Storage
+        const imageRef = ref(storage, eventRef.eventImage); // create a reference to the image in Firebase Storage
         getDownloadURL(imageRef)
           .then((url) => {
             setImageUrl(url); // set the imageUrl state to the download URL of the image
@@ -84,14 +88,34 @@ function ViewEvent() {
             console.log("Error getting image URL: ", error);
           });
       } else {
-        console.log("No matching documents.");
+        console.log("No matching documents");
       }
+
+      // if (eventData) {
+      //   console.log(eventData);
+      //   setEvent(eventData); // set the group state to the retrieved data
+      //   //for image
+      //   const imageRef = ref(storage, eventData.eventImage); // create a reference to the image in Firebase Storage
+      //   getDownloadURL(imageRef)
+      //     .then((url) => {
+      //       setImageUrl(url); // set the imageUrl state to the download URL of the image
+      //     })
+      //     .catch((error) => {
+      //       console.log("Error getting image URL: ", error);
+      //     });
+      // } else {
+      //   console.log("No matching documents.");
+      // }
     };
 
     fetchEvent();
   }, [eventId, storage]); // re-fetch the group whenever the groupId changes
 
   //for joining event
+
+  // console.log("eventAttendee user id=====");
+  // console.log(userId);
+  // console.log(event.eventAttendees.includes(userId));
 
   const joinEvent = async () => {
     console.log("joining event===");
@@ -106,14 +130,26 @@ function ViewEvent() {
 
     const eventRef = doc(collection(firestore, "events"), eventId);
 
-    await updateDoc(eventRef, {
-      eventAttendees: arrayUnion(userId),
-    });
+    console.log("======++++");
+    //this doesnt like check again if it includes or not, like after doing it once, it doesnt update anymore the includes or not..
+    console.log(userId);
+    console.log(event.eventAttendees.includes(userId));
+    if (event.eventAttendees.includes(userId)) {
+      await updateDoc(eventRef, {
+        eventAttendees: arrayRemove(userId),
+      });
+      console.log("successfully left");
+    } else {
+      await updateDoc(eventRef, {
+        eventAttendees: arrayUnion(userId),
+      });
+      console.log("successfully joined");
+    }
+    // setIsJoined(!isJoined);
 
     // await updateDoc(groupRef, {
     //   groupmembers: arrayUnion(userId), // Add the userId to the groupmembers array
     // });
-    // console.log("successfully joined");
   };
 
   if (!event) {
@@ -124,8 +160,8 @@ function ViewEvent() {
     navigate("ViewMembersEvent/");
   };
 
-  console.log("Events")
-  console.log({event});
+  console.log("Events");
+  console.log({ event });
   console.log(eventId);
 
   return (
@@ -141,7 +177,9 @@ function ViewEvent() {
 
             <div className="joineventbtn">
               <button className="joinevent" onClick={joinEvent}>
-                Join this Event
+                {/* {event.eventAttendees.includes(userId) ? "Leave" : "Join"} this
+                Event */}
+                Join Event
               </button>
             </div>
           </div>
@@ -224,8 +262,8 @@ function ViewEvent() {
             </div>
 
             <div className="googlemap">
-            {/* {event.eventPosition} */}
-              <MapContainer event={event}/>
+              {/* {event.eventPosition} */}
+              <MapContainer event={event} />
             </div>
           </div>
         </div>
@@ -234,15 +272,15 @@ function ViewEvent() {
   );
 }
 
-function MapContainer({event}) {
+function MapContainer({ event }) {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: "AIzaSyCGCznAwZAFJ8qMQY1ckg6EfDwuczmepWI",
   });
   if (!isLoaded) return <div>..Loading</div>;
-  return <Map event={event}/>;
+  return <Map event={event} />;
 }
 
-function Map({event}) {
+function Map({ event }) {
   return (
     <>
       <GoogleMap
@@ -253,15 +291,13 @@ function Map({event}) {
           fullscreenControl: false,
           zoomControl: false,
           gestureHandling: "none",
-          keyboardShortcuts: false
+          keyboardShortcuts: false,
         }}
       >
-        <Marker position={event.eventPosition}/>
+        <Marker position={event.eventPosition} />
       </GoogleMap>
     </>
   );
 }
 
 export default ViewEvent;
-
-
