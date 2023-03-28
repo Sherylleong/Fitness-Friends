@@ -177,9 +177,9 @@ function ViewEvent() {
 
             <div className="joineventbtn">
               <button className="joinevent" onClick={joinEvent}>
-                {/* {event.eventAttendees.includes(userId) ? "Leave" : "Join"} this
-                Event */}
-                Join Event
+                {event.eventAttendees.includes(userId) ? "Leave" : "Join"} this
+                Event
+                {/* Join Event */}
               </button>
             </div>
           </div>
