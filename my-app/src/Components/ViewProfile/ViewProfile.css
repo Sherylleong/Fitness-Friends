@@ -414,6 +414,7 @@
     margin-right: 200px;
 }
 .groupsjoinedlist112 {
+    margin-top: 10px;
     display: flex;
     height: 300px;
     width: 450px;
@@ -538,4 +539,16 @@
     background-color: teal;
     font-size: 15px;
     margin-right: 275px;
+}
+
+.edit-event-button112{
+    height: 30px;
+    width: 200px;
+    margin-bottom: 10px;
+    border-radius: 15px;
+    cursor: pointer;
+    border-color: lightgray;
+    color: white;
+    background-color: teal;
+    font-size: 20px;
 }

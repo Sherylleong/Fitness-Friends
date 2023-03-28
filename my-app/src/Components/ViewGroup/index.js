@@ -133,7 +133,7 @@ function ViewGroup() {
     return <div clasName="loading">Loading...</div>; // show a loading message if the group state is null
   }
   const handleViewMember = () => {
-    navigate("ViewMembersGroup/");
+    navigate("/ViewMembersGroup/"+groupId);
   };
   console.log({ group });
   console.log({ groupEvents });

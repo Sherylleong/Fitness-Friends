@@ -157,7 +157,7 @@ function ViewEvent() {
   }
 
   const handleViewMember = () => {
-    navigate("ViewMembersEvent/");
+    navigate("/ViewMembersEvent/"+eventId);
   };
 
   console.log("Events");
