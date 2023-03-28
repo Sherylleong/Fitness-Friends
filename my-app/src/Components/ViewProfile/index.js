@@ -161,6 +161,16 @@ function ViewProfile() {
   const CreateGroupHandler = () => {
     navigate(`/CreateGroup`);
   }
+  const ViewEventHandler = (eventId) => {
+    console.log(eventId);
+    navigate(`/ViewEvent/` + eventId);
+  }
+
+  const ViewGroupHandler = (groupId) => {
+    console.log(groupId);
+    navigate(`/ViewGroup/` + groupId);
+  }
+
   console.log(eventsOwned112);
   console.log(eventsJoined112);
   console.log(groupsJoined112);
@@ -236,7 +246,7 @@ function ViewProfile() {
                   )}
                   <div className="events-list112">
                     {attending && eventsJoined112.slice(currentEventPage*3,currentEventPage*3+3).map((event) => (
-                      <div className="event112">
+                      <div className="event112" onClick={()=>ViewEventHandler(event.eventId)}>
                         <div className="event-left112">
                           <div className="event-left-left112">
                             <div className="event-image-container112">
@@ -267,7 +277,7 @@ function ViewProfile() {
                       </div>
                     ))}
                     {owned && eventsOwned112.slice(currentEventPage*3,currentEventPage*3+3).map((event) => (
-                      <div className="event112">
+                      <div className="event112" onClick={()=>ViewEventHandler(event.eventId)}>
                       <div className="event-left112">
                         <div className="event-left-left112">
                           <div className="event-image-container112">
@@ -329,17 +339,13 @@ function ViewProfile() {
               
                 <div className="groupsjoinedlist112">
                   {groupsJoined112.slice(currentJoinedPage*2,currentJoinedPage*2+2).map((group) => (
-                    <div className="group-box112">
+                    <div className="group-box112" onClick={()=>ViewGroupHandler(group.groupId)}>
                       <div className="group-box-left112">
                         <div className="grouptitle112">{group.groupname}</div>
                         <div className="groupmembers112">{group.groupmembers.length} members</div>
                         <div className="group-creator112">Created by {group.groupOwner}</div>
                       </div>
                       <div className="group-box-right112">
-                        {/* add a leave group button */}
-                        <button className="leave-group112" type="submit">
-                          Leave Group
-                        </button>
                       </div>
                     </div>
                   ))}
@@ -365,7 +371,7 @@ function ViewProfile() {
               </button>
                   <div className="groupsjoinedlist112">
                     {groupsOwned112.slice(currentOwnedPage * 2, currentOwnedPage * 2 + 2).map((group) => (
-                    <div className="group-box112" key={group.groupid}>
+                    <div className="group-box112" onClick={()=>ViewGroupHandler(group.groupId)}>
                       <div className="group-box-left112">
                         <div className="grouptitle112">{group.groupname}</div>
                         <div className="groupmembers112">{group.groupmembers.length} members</div>
