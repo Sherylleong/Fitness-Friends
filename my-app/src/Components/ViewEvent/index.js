@@ -79,7 +79,7 @@ function ViewEvent() {
           setEvent(doc.data());
         });
         //for image
-        const imageRef = ref(storage, eventRef.eventImage); // create a reference to the image in Firebase Storage
+        const imageRef = ref(storage, doc.data().eventImage); // create a reference to the image in Firebase Storage
         getDownloadURL(imageRef)
           .then((url) => {
             setImageUrl(url); // set the imageUrl state to the download URL of the image
