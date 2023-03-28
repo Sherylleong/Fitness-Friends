@@ -65,41 +65,82 @@ function ViewGroup() {
 
       const groupRef = doc(collection(firestore, "group"), groupId);
 
+      //   if (groupRef) {
+      //     const unsubscribe = onSnapshot(groupRef, (doc) => {
+      //       setGroup(doc.data());
+      //     });
+      //   } else {
+      //     console.log("no mathcing documnets");
+      //   }
+
+      //   //for image
+
+      //   const imageRef = ref(storage, group.groupImageURL); // create a reference to the image in Firebase Storage
+      //   // const imageRef = ref(storage.child(groupRef.groupImageURL));
+
+      //   getDownloadURL(imageRef)
+      //     .then((url) => {
+      //       setImageUrl(url); // set the imageUrl state to the download URL of the image
+      //     })
+      //     .catch((error) => {
+      //       console.log("Error getting image URL: ", error);
+      //     });
+
+      //   // data fetching for eventid that has groupid inside
+      //   console.log("getting grp events");
+
+      //   const eventsRef = collection(firestore, "events");
+      //   const q = query(eventsRef, where("groupId", "==", groupId));
+      //   const querySnapshot = await getDocs(q).catch((error) => {
+      //     console.log("Error getting documents: ", error);
+      //   });
+
+      //   if (querySnapshot.empty) {
+      //     console.log("No matching documents.");
+      //   } else {
+      //     console.log("found documents");
+      //     const fetchedEvents = querySnapshot.docs.map((doc) => ({
+      //       id: doc.id,
+      //       ...doc.data(),
+      //     }));
+      //     setGroupEvents(fetchedEvents);
+      //   }
+      // };
+
       if (groupRef) {
         const unsubscribe = onSnapshot(groupRef, (doc) => {
           setGroup(doc.data());
+
+          // create a reference to the image in Firebase Storage
+          const imageRef = ref(storage, doc.data().groupImageURL);
+
+          getDownloadURL(imageRef)
+            .then((url) => {
+              setImageUrl(url); // set the imageUrl state to the download URL of the image
+            })
+            .catch((error) => {
+              console.log("Error getting image URL: ", error);
+            });
         });
-
-        // console.log(groupData);
-        // setGroup(groupData); // set the group state to the retrieved data
-        //for image
-
-        const imageRef = ref(storage, groupRef.groupImageURL); // create a reference to the image in Firebase Storage
-        getDownloadURL(imageRef)
-          .then((url) => {
-            setImageUrl(url); // set the imageUrl state to the download URL of the image
-          })
-          .catch((error) => {
-            console.log("Error getting image URL: ", error);
-          });
-
-        // data fetching for eventid that has groupid inside
-        const eventsRef = collection(firestore, "events");
-        const q = query(eventsRef, where("groupId", "==", groupId));
-        const querySnapshot = await getDocs(q).catch((error) => {
-          console.log("Error getting documents: ", error);
-        });
-        if (querySnapshot.empty) {
-          console.log("No matching documents.");
-        } else {
-          const fetchedEvents = querySnapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-          setGroupEvents(fetchedEvents);
-        }
       } else {
+        console.log("no matching documents");
+      }
+
+      const eventsRef = collection(firestore, "events");
+      const q = query(eventsRef, where("groupId", "==", groupId));
+      const querySnapshot = await getDocs(q).catch((error) => {
+        console.log("Error getting documents: ", error);
+      });
+
+      if (querySnapshot.empty) {
         console.log("No matching documents.");
+      } else {
+        console.log("found documents");
+        const fetchedEvents = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setGroupEvents(fetchedEvents);
       }
     };
 
@@ -107,47 +148,6 @@ function ViewGroup() {
   }, [groupId, storage]); // re-fetch the group whenever the groupId changes
 
   // for joining  grp -- it works yay!
-
-  /* reference
-
-  const joinEvent = async () => {
-    console.log("joining event===");
-    console.log(userId);
-    console.log(eventId);
-
-    if (!userId) {
-      //ok this part works
-      navigate("/Login");
-      return;
-    }
-
-    const eventRef = doc(collection(firestore, "events"), eventId);
-
-    console.log("======++++");
-    //this doesnt like check again if it includes or not, like after doing it once, it doesnt update anymore the includes or not..
-    console.log(userId);
-    console.log(event.eventAttendees.includes(userId));
-    if (event.eventAttendees.includes(userId)) {
-      await updateDoc(eventRef, {
-        eventAttendees: arrayRemove(userId),
-      });
-      console.log("successfully left");
-    } else {
-      await updateDoc(eventRef, {
-        eventAttendees: arrayUnion(userId),
-      });
-      console.log("successfully joined");
-    }
-    // setIsJoined(!isJoined);
-
-    // await updateDoc(groupRef, {
-    //   groupmembers: arrayUnion(userId), // Add the userId to the groupmembers array
-    // });
-  };
-
-
-  
-  */
 
   const joinGroup = async () => {
     console.log("joining grp===");
@@ -188,7 +188,9 @@ function ViewGroup() {
 
   const handleViewEvent = (eventId) => {
     // history.push(`/Events/ViewEvent/${eventId}`);
-    window.location.replace(`/Events/ViewEvent/` + eventId);
+    // window.location.replace(`/Events/ViewEvent/` + eventId);
+
+    navigate("/Events/ViewEvent/" + eventId);
   };
 
   if (!group) {
@@ -198,6 +200,7 @@ function ViewGroup() {
     navigate("/ViewMembersGroup/" + groupId);
   };
   console.log({ group });
+  console.log("groupevents : ===");
   console.log({ groupEvents });
   console.log(groupId);
 
