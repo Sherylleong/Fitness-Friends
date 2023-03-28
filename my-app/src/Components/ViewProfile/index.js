@@ -155,7 +155,12 @@ function ViewProfile() {
     console.log(groupId);
     navigate(`/EditGroup/` + groupId);
   }
-
+  const CreateEventHandler = () => {
+    navigate(`/CreateEvent`);
+  }
+  const CreateGroupHandler = () => {
+    navigate(`/CreateGroup`);
+  }
   console.log(eventsOwned112);
   console.log(eventsJoined112);
   console.log(groupsJoined112);
@@ -224,7 +229,7 @@ function ViewProfile() {
                   </div>
                   {owned && (
                       <div className="manage-events112">
-                        <button className="manage-events-button112" type="submit">
+                        <button className="manage-events-button112" type="submit" onClick={CreateEventHandler}>
                           Create Event
                         </button>
                       </div>
@@ -355,7 +360,7 @@ function ViewProfile() {
               <div className="right-bottom112">
               <div className="groupsjoined112">
                 <div className="groupsjoinedtext112">Groups Owned</div>
-                <button className="create-group112" type="submit">
+                <button className="create-group112" type="submit" onClick={CreateGroupHandler}>
                 Create Group
               </button>
                   <div className="groupsjoinedlist112">
