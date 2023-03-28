@@ -57,7 +57,9 @@ function ViewMembersEvent() {
         navigate(-1);
     };
     const handleViewMemberProfile = (memberId) => {
-        navigate("ViewMemberProfile/" + memberId);
+        console.log("hi");
+        console.log(memberId);  
+        // navigate("ViewMemberProfile/" + memberId);
     };
     return (
         <div className="ViewMembersFull">
@@ -65,7 +67,7 @@ function ViewMembersEvent() {
             <div className="ViewMembersTitle">Members</div>
             {/*eventAttendeesData is an array of arrays, display each entry's profilePic and displayName*/}
             {eventAttendeesData.map((eventAttendeeData) => (
-                <div className="ViewMemberCard">
+                <div className="ViewMemberCard" onClick={()=>handleViewMemberProfile(eventAttendeeData)}>
                     <div className="ViewMemberPFPContainer"><img className="ViewMemberCardProfilePic" src={eventAttendeeData.profilePic} alt="Profile Pic" /></div>
                     <div className="ViewMemberDisplayNameContainer"><div className="ViewMemberCardDisplayName">{eventAttendeeData.displayName}</div></div>
                 </div>
