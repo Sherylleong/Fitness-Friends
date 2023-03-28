@@ -12,6 +12,10 @@
     min-width: 340px;
 
 }
+.events-map-list-div{
+    max-height: 950px;
+    overflow-y: scroll;
+}
 .event-map-card {
     margin:0px;
     display: flex; 
@@ -19,6 +23,7 @@
     justify-content:space-between;
     align-items: center;
     border-bottom: 2px solid;
+    padding-right: 10px;
 
 }
 
@@ -31,11 +36,12 @@
     border-bottom: 2px solid;
 }
 #mapview, #listview {
-    margin: 5px;
+
     font-size: 25px;
     border: none;
     background-color: white;
 }
+
 
 .event-map-card .event-map-left {
     padding-right: 40px;
@@ -67,7 +73,7 @@
     margin: 5px;
 }
 
-.join-event-find{
+.view-event-find{
     height:45px;
     width: 150%;
     border-radius: 15px;
@@ -77,6 +83,16 @@
     background-color: #ee6b6e;
     font-size: 20px;
 
+}
+.view-event-find-map{
+    height:45px;
+    width: 80%;
+    border-radius: 15px;
+    cursor: pointer;
+    border-color: white;
+    color: white;
+    background-color: #ee6b6e;
+    font-size: 20px;
 }
 #locationsearch{
     width: 250px;

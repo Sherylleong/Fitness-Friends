@@ -1,38 +1,32 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { useStoreState } from "../../App"
 import "../Create.css";
 
 import { firestore, storage } from "../FirebaseDb/Firebase";
-import { collection ,getDocs, query, limit, addDoc, where } from "firebase/firestore";
+import { collection,doc, updateDoc ,getDocs, getDoc, query, limit, addDoc, where } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 
 import { GoogleMap, useLoadScript, Marker, MarkerClusterer, MarkerF } from "@react-google-maps/api";
-import { useMemo } from "react";
-import { render } from "@testing-library/react";
 
-export default function CreateEvent() {
-    const navigate = useNavigate();
-    const userId = useStoreState("userId");
+export default function EditEvent() {
+    // const userId = useStoreState("userId");
+    const userId = "ha"
 	const [documentId, setDocumentId] = useState("");
 
-	const [pic, setPic] = useState("https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/defaultPFP.png?alt=media&token=93a30cef-5994-4701-9fab-9ad9fdec913c");
+	const [pic, setPic] = useState("");
 	const [title, setTitle] = useState("");
-
-    // Calculate Date and Time
     var today = new Date()
     var month = today.getMonth() < 10 ? "0" + today.getMonth() : today.getMonth()
+	const [eventDate, setEventDate] = useState("");
     var hour = today.getHours() < 10 ? "0" + today.getHours()  : today.getHours()
     var minutes = today.getMinutes() < 10 ? "0" + today.getMinutes()  : today.getMinutes()
-
-    const [eventDate, setEventDate] = useState(today.getFullYear() + "-" + month + "-" + today.getDate());
-    const [eventTime, setEventTime] = useState(hour + ":" + minutes);
+    const [eventTime, setEventTime] = useState("");
 	const [bio, setBio] = useState("");
-    const [difficulty, setDifficulty] = useState("Beginner");
-    const [eventActivity, setActivity] = useState("Walking");
-    const [eventGroup, setEventGroup] = useState("None");
-    const [groupsOwned, setGroupsOwned] = useState([]);
+    const [difficulty, setDifficulty] = useState("")
+    const [eventActivity, setActivity] = useState("")
 
     const difficultyChoices = ["Beginner", "Intermediate", "Advanced"]
     const activityChoices = ["Walking", "Jogging", "Running", "Climbing","Biking","Sports","Others"]
@@ -54,17 +48,46 @@ export default function CreateEvent() {
     }]);
     const [groupSelected, setGroupSelected] = useState("");
 
-    const [showMissingTitle, setShowMissingTitle] = useState(false);
-    const [showMissingDesc, setShowMissingDesc] = useState(false);
-    const [showMissingLocation, setShowMissingLocation] = useState(false);
-    const [incorrectEventForm, setIncorrectEventForm] = useState(false);
-    
+    const { eventId: urlEventId } = useParams();
+
+
+    const getEventDetails = async () => {
+        const docRef = doc(firestore, "events", urlEventId);
+        try {
+            const docu = await getDoc(docRef);
+            var d = docu.data();
+            setPic(d.eventImage);
+            setTitle(d.eventTitle);
+            setEventDate(d.date);
+            setEventTime(d.time);
+            setBio(d.eventDescription);
+            setDifficulty(d.eventDifficulty);
+            setActivity(d.eventCategory);
+            setSelected({
+                name: d.eventLocation,
+                position: d.eventPosition
+            });
+            const getGroupDocId = query(collection(firestore, "group"), where("groupId","==", d.groupId));
+            try {
+                const groupDocId = await getDocs(getGroupDocId);
+                groupDocId.forEach((doc) => {
+                    setGroupSelected(doc.id);
+                });
+            }catch(error) {
+                console.log(error)
+            }
+        } catch(error) {
+            console.log(error)
+        }
+    }
+
     const getUserGroup = async() => {
         const docRef = query(collection(firestore, "group"), where("groupOwner", "==", userId));
         const docu = await getDocs(docRef);
         var fetchGroup = [];
         docu.forEach((doc)=> {
             fetchGroup = [...fetchGroup, {
+                // id: doc.data().groupId,
                 id: doc.id,
                 name: doc.data().groupname
             }]
@@ -72,8 +95,9 @@ export default function CreateEvent() {
         setGroupList([...groupList, ...fetchGroup]);
     }
 
+
     const getMarkerLoc = async () => {
-        const docRef = query(collection(firestore, "locations"));
+        const docRef = query(collection(firestore, "locations"), limit(15));
 		const docu = await getDocs(docRef);
         var mapArr = [];
 		docu.forEach((doc) => {
@@ -84,9 +108,9 @@ export default function CreateEvent() {
                     lng: doc.data().y
                 }
             });
+            setMapData(mapArr);
+            setFilterMapData(mapArr);
 		});
-        setMapData(mapArr);
-        setFilterMapData(mapArr);
     }
 
     const changeFilter = (e) => {
@@ -111,34 +135,30 @@ export default function CreateEvent() {
 	};
 
 	const uploadFile = async() => {
-        if (userFile != null) {
-            const imageRef = ref(storage, eventId+"-eventpic");
+        if(userFile != null)  {
+            const imageRef = ref(storage, urlEventId+"-eventpic");
             await uploadBytes(imageRef, userFile);
 
             getDownloadURL(imageRef).then((url)=> {
-                addEvent(url);
+                updateEvent(url);
             });
         }else {
-            addEvent(pic);
+            updateEvent(pic);
         }
-        
-
-
     }
 
-    const addEvent = (url) => {
+    const updateEvent = (url) => {
         var eventType = "individual";
         if (groupSelected != "") {
             eventType = "group";
         }
-        addDoc(collection(firestore, 'events'), {
+        updateDoc(collection(firestore, 'events',urlEventId), {
             creatorID: userId,
             date: eventDate,
             time: eventTime,
             eventDifficulty: difficulty,
             eventCategory: eventActivity,
             eventLocation: selected.name,
-            eventAttendees:[],
             eventPosition: {
                 lat: selected.position.lat,
                 lng: selected.position.lng
@@ -148,7 +168,7 @@ export default function CreateEvent() {
             eventType: eventType,
             groupId: groupSelected,
             eventImage: url
-        }).then((docRef)=>{navigate("/Events/ViewEvent/"+docRef.id)})
+        });
     }
 
     const removeImage = () => {
@@ -157,25 +177,12 @@ export default function CreateEvent() {
 	}
 
     function createEventClick() {
-        setShowMissingTitle(false);
-        setShowMissingDesc(false);
-        setShowMissingLocation(false);
-        setIncorrectEventForm(false);
-        if (!title) {
-            setShowMissingTitle(true);
-            setIncorrectEventForm(true);}
-        if (!bio) {
-            setShowMissingDesc(true);  
-            setIncorrectEventForm(true);}
-        if (!(selected.name)) {
-            setShowMissingLocation(true);  
-            setIncorrectEventForm(true);
-        }
-        if (!incorrectEventForm) {uploadFile(); alert("Event successfully created!")}
+        uploadFile();
     }
 
 
     useEffect(() => {
+        getEventDetails();
 		getMarkerLoc();
         getUserGroup();
 	  }, []);
@@ -183,7 +190,7 @@ export default function CreateEvent() {
     return (
         <div className="createDiv">
             <div className ="header">
-                <h1>Create Event</h1>
+                <h1>Edit Event</h1>
                 <p><b></b></p>
             </div>
             <div className="body">
@@ -199,8 +206,6 @@ export default function CreateEvent() {
                         <form>
                             <b>Title</b>
                             <input lassName="default-input" type="text" value={title} onChange={(e)=>setTitle(e.target.value)}></input>
-                            <div style={{display: showMissingTitle ? 'block' : 'none'}} id="missing-title" className="account-form-incorrect">Event title is required.</div>
-
                             <div className="user-inputs">
                                 <div>
                                 <b>Date of Event </b>
@@ -233,28 +238,26 @@ export default function CreateEvent() {
                             </div>
                             <b>Event Description</b>
                             <textarea className="bio-input" value={bio} onChange={(e)=>setBio(e.target.value)}></textarea>
-                            <div style={{display: showMissingDesc ? 'block' : 'none'}} id="missing-desc" className="account-form-incorrect">Event description is required.</div>
                         </form>
                     </div>
                 </div>
                 <div className="right-div">
                     <div className="map-select">
                         <b>Selected Location</b>
-                        <p className="dropdown-select">{selected.name ? selected.name : "None"}</p>
-                        <div style={{display: showMissingLocation ? 'block' : 'none'}} id="missing-location" className="account-form-incorrect">Location selection is required.</div>
+                        <p>{selected.name}</p>
                         <div className="map-contain">
                             <MapContainer state={selected} setState={setSelected} mapData={mapData}/>
                             <div className="search-location">
-                                <input className="create-searchbar" type="text" value={filterValue} placeholder="Search Location..." onChange={(e)=>changeFilter(e)}></input>
+                                <input type="text" value={filterValue} onChange={(e)=>changeFilter(e)}></input>
                                 <div className="location-list">
-                                    {filterMapData.map(data=> <div className="location-item" onClick={()=>setSelected(data)}>{data.name}</div>)}
+                                    {filterMapData.map(data=> <div onClick={()=>setSelected(data)}>{data.name}</div>)}
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div className="button-align-from-left">
-                        <button onClick={()=>createEventClick()}>Create Event</button>
-                        <button className="dull-button" onClick={()=>{navigate("/ViewProfile")}}>Cancel</button>
+                        <button onClick={()=>createEventClick()}>Save Changes</button>
+                        <button className="dull-button" onClick={()=>{}}>Cancel</button>
                     </div>
                 </div>
             </div>
@@ -296,3 +299,4 @@ function EventMap({state, setState, mapData}) {
         </>
       );
 }
+

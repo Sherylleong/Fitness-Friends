@@ -105,38 +105,23 @@ export default function EditProfile() {
 	};
 
 	const uploadFile = async() => {
-		const imageRef = ref(storage, userId+"-profilepic");
-		await uploadBytes(imageRef, testFile);
+		if (testFile != null) { 
+			const imageRef = ref(storage, userId+"-profilepic");
+			await uploadBytes(imageRef, testFile);
 
-		const imageURL = await getDownloadURL(imageRef);
-		setProfilePic(imageURL);
+			const imageURL = await getDownloadURL(imageRef);
+			setProfilePic(imageURL);
 
-		const updateQuery = doc(firestore, 'users', documentId);
-		updateDoc(updateQuery, {
-			profilePic: imageURL
-		}).then(() => {
+			const updateQuery = doc(firestore, 'users', documentId);
+			updateDoc(updateQuery, {
+				profilePic: imageURL
+			}).then(() => {
+				updateDetails();
+			});
+		}else {
 			updateDetails();
-		});
+		}
 	}
-
-	// const acceptFile = event => {
-	// 	var fileUploaded = event.target.files[0];
-	// 	uploadFile(fileUploaded);
-	// };
-
-	// const uploadFile = async(file) => {
-
-	// 	const imageRef = ref(storage, userId+"-profilepic");
-	// 	await uploadBytes(imageRef, file);
-
-	// 	const imageURL = await getDownloadURL(imageRef);
-	// 	setProfilePic(imageURL);
-
-	// 	const updateQuery = doc(firestore, 'users', documentId);
-	// 	updateDoc(updateQuery, {
-	// 		profilePic: imageURL
-	// 	});
-	// }
 
 	const updateDetails = async() => {
 		const updateQuery = doc(firestore, 'users', documentId);
@@ -158,11 +143,12 @@ export default function EditProfile() {
 	}
 
 	const removeImage = () => {
+		setTest(null);
 		setProfilePic("https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/defaultPFP.png?alt=media&token=93a30cef-5994-4701-9fab-9ad9fdec913c");
-		const updateQuery = doc(firestore, 'users', documentId);
-		updateDoc(updateQuery, {
-			profilePic: profilePic
-		});
+		// const updateQuery = doc(firestore, 'users', documentId);
+		// updateDoc(updateQuery, {
+		// 	profilePic: profilePic
+		// });
 	}
 
 	const returnToProfilePage = () => {

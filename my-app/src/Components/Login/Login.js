@@ -14,7 +14,6 @@ export default function Login() {
 	const [showMissingUsername, setMissingUsername] = useState(false);
 	const [showMissingPassword, setMissingPassword] = useState(false);
 	const [showIncorrectLogin, setIncorrectLogin] = useState(false);
-	
 	var currUid = "";
 	const navigate = useNavigate();
 
@@ -29,11 +28,12 @@ export default function Login() {
 					getProfile();
 				}
 			}).catch((error) => {
-				if (error.code == "auth/wrong-password" || error == "auth/user-not-found") {
+				if (error.code == "auth/wrong-password" || error.code == "auth/invalid-email" || error.code == "auth/user-not-found") {
 					setIncorrectLogin(true);
 				}else if (error.code == "auth/user-not-found") {
 					//If needed to seperate
 				}
+				else console.log(error);
 			});
 		}
 	}
@@ -42,7 +42,7 @@ export default function Login() {
 		const queryDb = query(collection(firestore, 'users'), where("userId", "==", currUid));
 		onSnapshot(queryDb, (querySnapshot) => {
 			querySnapshot.forEach((doc) => {
-				if (doc.data.DisplayName == null) {
+				if (doc.data().displayName == null) {
 					navigate("/EditProfile");
 				}else {
 					navigate("/Events")

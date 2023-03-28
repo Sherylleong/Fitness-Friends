@@ -1,0 +1,112 @@
+.createDiv {
+    display: grid;
+    margin-left: 5vw;
+}
+
+.createDiv .body {
+  width: 100%;
+  display: flex;
+}
+
+.createDiv button {
+    color: white;
+    font-weight: bold;
+}
+
+.createDiv .form-items .bio-input {
+  height: 15vh;
+}
+
+.createDiv .input-ignore-width {
+  width: fit-content;
+  min-width: 10.4rem;
+}
+
+.map-select { 
+  display: flex;
+}
+.event-map {
+  width: 28vw;
+  height: 60vh;
+}
+
+.createDiv .right-div {
+    display:flex;
+    flex-direction: column;
+}
+.createDiv .map-select {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.createDiv .map-select .map-contain {
+  display: flex;
+}
+
+.createDiv .location-list {
+  max-height: 60vh;
+  overflow: auto;
+}
+
+.createDiv .map-select .search-location {
+  display: flex;
+  flex-direction: column;
+}
+.createDiv .user-inputs {
+  display: flex;
+  margin-bottom:1rem;
+}
+
+.createDiv .user-inputs div{
+  display: flex;
+  flex-direction: column;
+  margin-right: 2vw;
+}
+
+.search-location {
+  padding-left: 15px;
+}
+
+.create-searchbar {
+  background: url("https://assets.stickpng.com/images/585e4ae1cb11b227491c3393.png") top left no-repeat;
+  width: 250px;
+  font-size: 25px;
+  margin-bottom: 10px;
+  background-color: transparent;
+  border:none;
+  border-bottom: 2px solid #acacac;
+
+}
+
+.location-item {
+  padding: 6px;
+  cursor: pointer;
+
+}
+
+.location-item:hover {
+  background-color: rgb(238, 238, 238);
+  
+}
+
+/*kit ye added styles */
+.right-div {
+  padding: 10px;
+  padding-left: 25px;
+}
+
+.button-align-from-left {
+  padding-top: 10px;
+}
+.location-list {
+  height: 480px;
+  overflow-y: auto;
+}
+
+.editprofile-img {
+
+  max-width: 280px;
+  max-height: 280px;
+
+}
