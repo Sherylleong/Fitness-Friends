@@ -157,7 +157,7 @@ function ViewEvent() {
   }
 
   const handleViewMember = () => {
-    navigate("/ViewMembersEvent/"+eventId);
+    navigate("/ViewMembersEvent/" + eventId);
   };
 
   console.log("Events");
@@ -177,7 +177,7 @@ function ViewEvent() {
 
             <div className="joineventbtn">
               <button className="joinevent" onClick={joinEvent}>
-                {event.eventAttendees.includes(userId) ? "Leave" : "Join"} this
+                {event.eventAttendees.includes(userId) ? "Leave " : "Join "}
                 Event
                 {/* Join Event */}
               </button>

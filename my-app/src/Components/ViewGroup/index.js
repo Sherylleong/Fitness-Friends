@@ -15,6 +15,7 @@ import { dispatch, useStoreState } from "../../App";
 import { useNavigate } from "react-router-dom";
 import { arrayUnion, arrayRemove } from "firebase/firestore";
 import calender from "../Resources/calender.png";
+import { onSnapshot } from "firebase/firestore";
 
 function ViewGroup() {
   //for user id
@@ -59,13 +60,21 @@ function ViewGroup() {
   //for data fetching (image and groupdata includigng grpevents)
   useEffect(() => {
     const fetchGroup = async () => {
-      const groupDocId = groupId; // use groupId as the document ID to fetch data for
-      const groupData = await getByDocID("group", groupDocId); // call the getByDocID function to retrieve data for the specified document ID
-      if (groupData) {
-        console.log(groupData);
-        setGroup(groupData); // set the group state to the retrieved data
+      // const groupDocId = groupId; // use groupId as the document ID to fetch data for
+      // const groupData = await getByDocID("group", groupDocId); // call the getByDocID function to retrieve data for the specified document ID
+
+      const groupRef = doc(collection(firestore, "group"), groupId);
+
+      if (groupRef) {
+        const unsubscribe = onSnapshot(groupRef, (doc) => {
+          setGroup(doc.data());
+        });
+
+        // console.log(groupData);
+        // setGroup(groupData); // set the group state to the retrieved data
         //for image
-        const imageRef = ref(storage, groupData.groupImageURL); // create a reference to the image in Firebase Storage
+
+        const imageRef = ref(storage, groupRef.groupImageURL); // create a reference to the image in Firebase Storage
         getDownloadURL(imageRef)
           .then((url) => {
             setImageUrl(url); // set the imageUrl state to the download URL of the image
@@ -99,6 +108,47 @@ function ViewGroup() {
 
   // for joining  grp -- it works yay!
 
+  /* reference
+
+  const joinEvent = async () => {
+    console.log("joining event===");
+    console.log(userId);
+    console.log(eventId);
+
+    if (!userId) {
+      //ok this part works
+      navigate("/Login");
+      return;
+    }
+
+    const eventRef = doc(collection(firestore, "events"), eventId);
+
+    console.log("======++++");
+    //this doesnt like check again if it includes or not, like after doing it once, it doesnt update anymore the includes or not..
+    console.log(userId);
+    console.log(event.eventAttendees.includes(userId));
+    if (event.eventAttendees.includes(userId)) {
+      await updateDoc(eventRef, {
+        eventAttendees: arrayRemove(userId),
+      });
+      console.log("successfully left");
+    } else {
+      await updateDoc(eventRef, {
+        eventAttendees: arrayUnion(userId),
+      });
+      console.log("successfully joined");
+    }
+    // setIsJoined(!isJoined);
+
+    // await updateDoc(groupRef, {
+    //   groupmembers: arrayUnion(userId), // Add the userId to the groupmembers array
+    // });
+  };
+
+
+  
+  */
+
   const joinGroup = async () => {
     console.log("joining grp===");
     console.log(userId);
@@ -112,9 +162,21 @@ function ViewGroup() {
 
     const groupRef = doc(collection(firestore, "group"), groupId);
 
-    await updateDoc(groupRef, {
-      groupmembers: arrayUnion(userId),
-    });
+    if (group.groupmembers.includes(userId)) {
+      await updateDoc(groupRef, {
+        groupmembers: arrayRemove(userId),
+      });
+      console.log("successfully left");
+    } else {
+      await updateDoc(groupRef, {
+        groupmembers: arrayUnion(userId),
+      });
+      console.log("successfully joined");
+    }
+
+    // await updateDoc(groupRef, {
+    //   groupmembers: arrayUnion(userId),
+    // });
 
     // await updateDoc(groupRef, {
     //   groupmembers: arrayUnion(userId), // Add the userId to the groupmembers array
@@ -133,7 +195,7 @@ function ViewGroup() {
     return <div clasName="loading">Loading...</div>; // show a loading message if the group state is null
   }
   const handleViewMember = () => {
-    navigate("/ViewMembersGroup/"+groupId);
+    navigate("/ViewMembersGroup/" + groupId);
   };
   console.log({ group });
   console.log({ groupEvents });
@@ -176,8 +238,9 @@ function ViewGroup() {
             <div className="group-title">{group.groupname}</div>
 
             <div className="join-group-btn">
-              <button className="join-grp" onClick={joinGroup}>
-                Join this Group
+              <button className="joinevent" onClick={joinGroup}>
+                {group.groupmembers.includes(userId) ? "Leave " : "Join "}
+                Group
               </button>
             </div>
           </div>
