@@ -52,6 +52,7 @@
 .createDiv .map-select .search-location {
   display: flex;
   flex-direction: column;
+  background-color: rgb(238, 238, 238);
 }
 .createDiv .user-inputs {
   display: flex;
@@ -76,6 +77,7 @@
   background-color: transparent;
   border:none;
   border-bottom: 2px solid #acacac;
+  padding-top: 5px;
 
 }
 
@@ -84,9 +86,11 @@
   cursor: pointer;
 
 }
-
+input:focus{
+  outline: none;
+}
 .location-item:hover {
-  background-color: rgb(238, 238, 238);
+  background-color: rgb(221, 221, 221);
   
 }
 
@@ -102,6 +106,7 @@
 .location-list {
   height: 480px;
   overflow-y: auto;
+
 }
 
 .editprofile-img {
