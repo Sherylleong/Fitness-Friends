@@ -22,11 +22,14 @@ export default function CreateEvent() {
 
     // Calculate Date and Time
     var today = new Date()
-    var month = today.getMonth() < 10 ? "0" + today.getMonth() : today.getMonth()
+
+    var month = (today.getMonth()+1) < 10 ? "0" + (today.getMonth()+1) : (today.getMonth()+1)
     var hour = today.getHours() < 10 ? "0" + today.getHours()  : today.getHours()
     var minutes = today.getMinutes() < 10 ? "0" + today.getMinutes()  : today.getMinutes()
 
     const [eventDate, setEventDate] = useState(today.getFullYear() + "-" + month + "-" + today.getDate());
+
+console.log(eventDate );
     const [eventTime, setEventTime] = useState(hour + ":" + minutes);
 	const [bio, setBio] = useState("");
     const [difficulty, setDifficulty] = useState("Beginner");
@@ -57,7 +60,7 @@ export default function CreateEvent() {
     const [showMissingTitle, setShowMissingTitle] = useState(false);
     const [showMissingDesc, setShowMissingDesc] = useState(false);
     const [showMissingLocation, setShowMissingLocation] = useState(false);
-    const [incorrectEventForm, setIncorrectEventForm] = useState(false);
+  
     
     const getUserGroup = async() => {
         const docRef = query(collection(firestore, "group"), where("groupOwner", "==", userId));
@@ -157,21 +160,31 @@ export default function CreateEvent() {
 	}
 
     function createEventClick() {
+        let incorrect = false;
         setShowMissingTitle(false);
         setShowMissingDesc(false);
         setShowMissingLocation(false);
-        setIncorrectEventForm(false);
         if (!title) {
             setShowMissingTitle(true);
-            setIncorrectEventForm(true);}
+            incorrect = true;
+        }
         if (!bio) {
             setShowMissingDesc(true);  
-            setIncorrectEventForm(true);}
+            incorrect = true;}
         if (!(selected.name)) {
             setShowMissingLocation(true);  
-            setIncorrectEventForm(true);
+            incorrect = true;
         }
-        if (!incorrectEventForm) {uploadFile(); alert("Event successfully created!")}
+        if (!(eventDate)) {
+            setShowMissingLocation(true);  
+            incorrect = true;
+        }
+        if (!(eventTime)) {
+            setShowMissingLocation(true);  
+            incorrect = true;
+        }
+
+        if (!incorrect) {uploadFile(); alert("Event successfully created!")}
     }
 
 
@@ -205,10 +218,12 @@ export default function CreateEvent() {
                                 <div>
                                 <b>Date of Event </b>
                                 <input className="input-ignore-width" type="date" value={eventDate} onChange={(e)=>setEventDate(e.target.value)}></input>
+                                <div style={{display: eventDate ? 'none' : 'block'}} id="missing-date" className="account-form-incorrect">Event date is required.</div>
                                 </div>
                                 <div>
                                 <b>Time of Event </b>
                                 <input className="input-ignore-width" type="time" value={eventTime} onChange={(e)=>setEventTime(e.target.value)}></input>
+                                <div style={{display: eventTime ? 'none' : 'block'}} id="missing-time" className="account-form-incorrect">Event time is required.</div>
                                 </div>
                             </div>
                             <div className="user-inputs">
