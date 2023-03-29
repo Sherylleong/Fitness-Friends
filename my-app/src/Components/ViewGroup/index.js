@@ -199,6 +199,10 @@ function ViewGroup() {
   const handleViewMember = () => {
     navigate("/ViewMembersGroup/" + groupId);
   };
+  const handleViewCreator = () => {
+    navigate("/ViewMemberProfile/" + group.groupOwner);
+  };
+
   console.log({ group });
   console.log("groupevents : ===");
   console.log({ groupEvents });
@@ -250,8 +254,8 @@ function ViewGroup() {
 
           <div className="middle">
             <div className="creator-member1">
-              <div className="creator-event">
-                <div className="attendee3">
+              <div className="creator-event" onClick={handleViewCreator}>
+                <div className="attendee3" >
                   <img src={attendee1}></img>
                 </div>
                 <div> View Creator </div>

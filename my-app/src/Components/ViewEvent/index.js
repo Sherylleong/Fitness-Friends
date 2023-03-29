@@ -159,7 +159,9 @@ function ViewEvent() {
   const handleViewMember = () => {
     navigate("/ViewMembersEvent/" + eventId);
   };
-
+  const handleViewCreator = () => {
+    navigate("/ViewMemberProfile/" + event.creatorID);
+  };
   console.log("Events");
   console.log({ event });
   console.log(eventId);
@@ -219,8 +221,8 @@ function ViewEvent() {
             {/* add the creaor n members*/}
 
             <div className="creator-member">
-              <div className="creator-event">
-                <div className="attendee3">
+              <div className="creator-event" onClick={handleViewCreator}>
+                <div className="attendee3" >
                   <img src={attendee1}></img>
                 </div>
                 <div> View Creator </div>

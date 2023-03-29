@@ -151,7 +151,7 @@ console.log(eventDate );
             eventType: eventType,
             groupId: groupSelected,
             eventImage: url
-        }).then((docRef)=>{navigate("/Events/ViewEvent/"+docRef.id)})
+        }).then((docRef)=>{navigate("/ViewEvent/"+docRef.id)})
     }
 
     const removeImage = () => {

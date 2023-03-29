@@ -277,8 +277,8 @@ function ViewProfile() {
                       </div>
                     ))}
                     {owned && eventsOwned112.slice(currentEventPage*3,currentEventPage*3+3).map((event) => (
-                      <div className="event112" onClick={()=>ViewEventHandler(event.eventId)}>
-                      <div className="event-left112">
+                      <div className="event112" >
+                      <div className="event-left112"onClick={()=>ViewEventHandler(event.eventId)}>
                         <div className="event-left-left112">
                           <div className="event-image-container112">
                             <img
@@ -300,12 +300,10 @@ function ViewProfile() {
                         </div>
                       </div>
                       <div className="event-right112">
-                        <div className="tags-container112">
-                          <div className="tag112">{event.eventCategory}</div>
+                          <div className="tags-container112" onClick={()=>ViewEventHandler(event.eventId)}>
+                            <div className="tag112">{event.eventCategory}</div>
                             <div className="tag112">{event.eventDifficulty}</div>
-                            
                           </div>
-                          {/* add a button that uses the EditEventHandler and pass the event docid into it */}
                           <button className="edit-event-button112" type="submit" onClick={() => EditEventHandler(event.eventId)}>
                             Edit Event
                           </button>
@@ -371,8 +369,8 @@ function ViewProfile() {
               </button>
                   <div className="groupsjoinedlist112">
                     {groupsOwned112.slice(currentOwnedPage * 2, currentOwnedPage * 2 + 2).map((group) => (
-                    <div className="group-box112" onClick={()=>ViewGroupHandler(group.groupId)}>
-                      <div className="group-box-left112">
+                    <div className="group-box112" >
+                      <div className="group-box-left112"onClick={()=>ViewGroupHandler(group.groupId)}>
                         <div className="grouptitle112">{group.groupname}</div>
                         <div className="groupmembers112">{group.groupmembers.length} members</div>
                         <div className="group-creator112">Created by {group.groupOwner}</div>

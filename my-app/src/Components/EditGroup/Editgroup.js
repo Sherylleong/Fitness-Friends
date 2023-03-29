@@ -69,6 +69,7 @@ function EditGroup() {
         groupcategory: groupActivity,
         groupImageURL: url
       });
+      navigate("/ViewProfile");
   }
 
   const removeImage = () => {
@@ -121,7 +122,7 @@ function EditGroup() {
       <div className="right-div">
         <div className="button-align-from-left">
             <button onClick={()=>uploadImage()}>Update Group</button>
-            <button className="dull-button" onClick={()=>{}}>Cancel</button>
+            <button className="dull-button" onClick={()=>{navigate("/ViewProfile");}}>Cancel</button>
         </div>
       </div>
   </div>
