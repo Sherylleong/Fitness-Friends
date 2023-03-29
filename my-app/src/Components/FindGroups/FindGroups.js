@@ -14,7 +14,7 @@ function GroupsListCard(group) {
   const navigate = useNavigate();
 
   const handleViewGroup = () => {
-    navigate("ViewGroup/" + groupId);
+    navigate("/ViewGroup/" + groupId);
   };
 
   return (

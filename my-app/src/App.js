@@ -89,9 +89,9 @@ function App() {
         <Route path="/Events" element={<FindEventsMap />} />
         <Route path="/Groups" element={<FindGroups />} />
         <Route path="/CRUD" element={<CRUD />} />
-        <Route path="Groups/ViewGroup/:groupId" element={<ViewGroup />} />
+        <Route path="/ViewGroup/:groupId" element={<ViewGroup />} />
         <Route path="/ViewMembersGroup/:groupId/" element={<ViewMembersGroup />} />
-        <Route path="/Events/ViewEvent/:eventId" element={<ViewEvent />} />
+        <Route path="/ViewEvent/:eventId" element={<ViewEvent />} />
         <Route path="/EditEvent/:eventId" element={<EditEvent />} />
         <Route path="/EditGroup/:groupId" element={<EditGroup />} />
         <Route path="/ViewMembersEvent/:eventId" element={<ViewMembersEvent />} />

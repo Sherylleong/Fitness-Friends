@@ -14,7 +14,7 @@ function EventsMapCard(event, navigate) {
 
 
   const handleView = () => {
-    navigate("ViewEvent/" + eventId);
+    navigate("/ViewEvent/" + eventId);
   };
 
   return (
@@ -45,7 +45,7 @@ function EventsListCard(event, navigate) {
   console.log(event.id);
   const eventId = event.id;
   const handleView = () => {
-    navigate("ViewEvent/" + eventId);
+    navigate("/ViewEvent/" + eventId);
   };
   return (
     <div className="event-list-card">
