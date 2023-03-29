@@ -159,6 +159,7 @@ export default function FindEventsMap() {
   const location = useLocation();
   const [events, setEvents] = useState([]);
   const [groups, setGroups] = useState([]); // user's joined groups
+  const [groupsOwned, setGroupsOwned]= useState([]);
   const userId = useStoreState("userId");
   
 
@@ -180,6 +181,27 @@ export default function FindEventsMap() {
         setEvents(fetchedEvents);
       }
     };
+    let temp = [];
+
+    
+    const getGroupsOwned = async () => {
+      const docRef = query(
+        collection(firestore, "group"),
+        where("groupOwner", "==", userId)
+      );
+      const docu = await getDocs(docRef);
+      const updatedDocs = docu.docs.map(async (doc) => {
+        return { id: doc.id, groupname: doc.data()["groupname"] };
+      });
+      const fetchedGroups = await Promise.all(updatedDocs); // jank, has to be an easier way :(
+      let updatedGroups = {};
+      fetchedGroups.forEach((group) => {
+        updatedGroups[group.id] = group.groupname;
+      });
+      temp = updatedGroups;
+      console.log(updatedGroups)
+    };
+
     const getGroupsJoined = async () => {
       const docRef = query(
         collection(firestore, "group"),
@@ -194,11 +216,15 @@ export default function FindEventsMap() {
       fetchedGroups.forEach((group) => {
         updatedGroups[group.id] = group.groupname;
       });
-      setGroups(updatedGroups);
+
+      setGroups({...temp, ...updatedGroups});
     };
 
+
           fetchEvents();
+          getGroupsOwned();
           getGroupsJoined();
+
       }, []); // re-fetch the events whenever anything changes
 
     //const [events, setEvents] = useState(eventsdb);
