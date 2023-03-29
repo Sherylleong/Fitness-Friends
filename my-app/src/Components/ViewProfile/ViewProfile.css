@@ -46,7 +46,6 @@
     align-items: center;
     width: 300px;
     height: 300px;
-    font-family: "Roboto";
     font-style: normal;
     font-weight: 700;
     font-size: 20px;
@@ -228,7 +227,7 @@
 .event112 {
     display: flex;
     height: 100px;
-    width: 900px;
+    width: 980px;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
@@ -240,9 +239,10 @@
 .event-left112 {
     display: flex;
     height: 100px;
-    width: 400px;
+    width: 700px;
     flex-direction: row;
     justify-content: flex-start;
+
     align-items: left;
 }
 
@@ -258,7 +258,7 @@
 .event-left-right112 {
     display: flex;
     height: 100px;
-    width: 200px;
+    width: 700px;
     flex-direction: column;
     justify-content: flex-start;
     align-items: left;
@@ -289,10 +289,10 @@
 .event-right112 {
     display: flex;
     height: 100px;
-    width: 400px;
+    width: 200px;
     flex-direction: column;
     justify-content: flex-start;
-    align-items: right;
+    align-items: left;
 }
 
 .tags-container112 {
