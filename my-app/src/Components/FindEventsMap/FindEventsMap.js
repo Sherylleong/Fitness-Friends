@@ -8,8 +8,7 @@ import { getDoc } from "firebase/firestore";
 import { dispatch, useStoreState } from "../../App";
 import { useNavigate, useLocation } from "react-router-dom";
 
-function EventsMapCard(event, navigate) {
-  const userId = useStoreState("userId");
+function EventsMapCard(event, navigate,userId) {
   const eventId = event.id;
   let joined = (event.eventAttendees.includes(userId))
 
@@ -43,8 +42,8 @@ function EventsMapCard(event, navigate) {
   );
 }
 
-function EventsListCard(event, navigate) {
-  const userId = useStoreState("userId");
+function EventsListCard(event, navigate,userId) {
+  
   const eventId = event.id;
   let joined = (event.eventAttendees.includes(userId))
   console.log("event:");
@@ -128,7 +127,7 @@ function EventMapHeader({ eventsView, setEventsView }) {
     </div>
   );
 }
-function EventsMapList({ filters, events, handleFilters, navigate }) {
+function EventsMapList({ filters, events, handleFilters, navigate,userId }) {
   return (
     <div className="events-map-list">
       <div>
@@ -139,18 +138,18 @@ function EventsMapList({ filters, events, handleFilters, navigate }) {
       />
       </div>
       <div className="events-map-list-div">
-        {events.map((event) => EventsMapCard(event,navigate))}
+        {events.map((event) => EventsMapCard(event,navigate,userId))}
       </div>
     </div>
   );
 }
-function EventsListList({ filters, events, handleFilters,navigate }) {
+function EventsListList({ filters, events, handleFilters,navigate,userId}) {
   return (
     <div className="events-list-list">
       <div style={{ position: "relative", left: "-350px" }}>
         <Searchbar filters={filters} handleFilters={handleFilters} searchText="Search Event..." />
       </div>
-      {events.map((event) => EventsListCard(event, navigate))}
+      {events.map((event) => EventsListCard(event, navigate, userId))}
     </div>
   );
 }
@@ -158,9 +157,10 @@ function EventsListList({ filters, events, handleFilters,navigate }) {
 export default function FindEventsMap() {
   const navigate = useNavigate();
   const location = useLocation();
-  const userId = useStoreState("userId");
   const [events, setEvents] = useState([]);
   const [groups, setGroups] = useState([]); // user's joined groups
+  const userId = useStoreState("userId");
+  
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -241,6 +241,7 @@ export default function FindEventsMap() {
 
   function filterEvents(events, filters, eventsView) {
     let filteredEvents = events.filter((event) => {
+      let eventDate = new Date(event.date);
       if (
         filters.difficulty.length !== 0 &&
         !filters.difficulty.includes(event.eventDifficulty)
@@ -256,17 +257,27 @@ export default function FindEventsMap() {
         !filters.groups.includes(event.groupId)
       )
         return false;
-      let eventDate = new Date(event.eventDate);
+
 
       if (filters.startDate !== "") {
+
+        console.log(event.date);
+        console.log(filters.startDate);
+
         let filterStartDate = new Date(filters.startDate);
-        console.log(filterStartDate);
-        console.log(44444);
-        if (eventDate < filterStartDate) return false;
+
+        if (eventDate.getTime() < filterStartDate.getTime()) {
+          console.log('REEEE')
+          return false;
+
+        }
+
       }
       if (filters.endDate !== "") {
+        return true;
+
         let filterEndDate = new Date(filters.endDate);
-        if (eventDate > filterEndDate) return false;
+        if (eventDate.getTime() > filterEndDate.getTime()) return false;
       }
   
       if (eventsView === "mapview")
@@ -292,28 +303,28 @@ export default function FindEventsMap() {
         <div className="find-events-page" >{/*col*/}
             <EventMapHeader eventsView={eventsView} setEventsView={setEventsView} />{/*row*/}
             {eventsView==="mapview" ?
-            (<EventMapInfo navigate={navigate} groups={groups} filters={filters} setFilters={setFilters} handleFilters={handleFilters} events={filteredEvents} eventsView={eventsView} setEventsView={setEventsView} />)
-        : (<EventListInfo navigate={navigate} groups={groups} filters={filters} handleFilters={handleFilters} events={filteredEvents} eventsView={eventsView} setEventsView={setEventsView} />)}
+            (<EventMapInfo navigate={navigate} groups={groups} filters={filters} setFilters={setFilters} handleFilters={handleFilters} events={filteredEvents} eventsView={eventsView} setEventsView={setEventsView} userId={userId} />)
+        : (<EventListInfo navigate={navigate} groups={groups} filters={filters} handleFilters={handleFilters} events={filteredEvents} eventsView={eventsView} setEventsView={setEventsView} userId={userId} />)}
         </div>
 
     )
 }
 
-function EventMapInfo({groups, navigate, filters, setFilters, handleFilters, events, eventsView, setEventsView}){
+function EventMapInfo({groups, navigate, filters, setFilters, handleFilters, events, eventsView, setEventsView,userId}){
     return (
       <div className="event-map-info">
         <EventFilters groups={groups} filters={filters} handleFilters={handleFilters}/>
         <MapContainer events={events} setFilters={setFilters}/>
-        <EventsMapList filters={filters} navigate={navigate} events={events} eventsView={eventsView} setEventsView={setEventsView} handleFilters={handleFilters}/>    
+        <EventsMapList filters={filters} navigate={navigate} events={events}  handleFilters={handleFilters}/>    
       </div>
   );
 }
 
-function EventListInfo({groups, navigate, filters, handleFilters, events, eventsView, setEventsView}){
+function EventListInfo({groups, navigate, filters, handleFilters, events, eventsView, setEventsView,userId}){
     return (
         <div className="event-list-info">
         <EventFilters groups={groups} filters={filters} handleFilters={handleFilters}/>
-        <EventsListList filters={filters} navigate={navigate} events={events} eventsView={eventsView} setEventsView={setEventsView} handleFilters={handleFilters}/>    
+        <EventsListList filters={filters} navigate={navigate} events={events} handleFilters={handleFilters}/>    
     </div>
   );
 }
