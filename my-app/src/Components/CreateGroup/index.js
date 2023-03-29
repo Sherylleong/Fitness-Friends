@@ -11,6 +11,7 @@ import "../Create.css"
 import { v4 as uuidv4 } from "uuid";
 
 function CreateGroup() {
+  const userId = useStoreState("userId");
   const [groupname, setGroupname] = useState("");
   const [groupdesc, setGroupdesc] = useState("");
   const [difficulty, setDifficulty] = useState("Beginner")
@@ -45,6 +46,7 @@ function CreateGroup() {
 
   const createGroup = (url) => {
       addDoc(collection(firestore, "group"), {
+        groupOwner: userId,
         groupname: groupname,
         groupdesc: groupdesc,
         groupdifficulty: difficulty,
@@ -54,6 +56,7 @@ function CreateGroup() {
         groupId: groupId,
         groupImageURL: url
       });
+      navigate("/ViewProfile");
   }
 
   const removeImage = () => {
@@ -61,6 +64,9 @@ function CreateGroup() {
 		setPic("https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/defaultPFP.png?alt=media&token=93a30cef-5994-4701-9fab-9ad9fdec913c");
 	}
 
+  const cancelCreation = () => {
+      navigate("/ViewProfile");
+  }
   return (
 <div className="createDiv">
   <div className ="header">
@@ -102,7 +108,7 @@ function CreateGroup() {
       <div className="right-div">
         <div className="button-align-from-left">
             <button onClick={()=>uploadImage()}>Create Group</button>
-            <button className="dull-button" onClick={()=>{}}>Cancel</button>
+            <button className="dull-button" onClick={()=>cancelCreation()}>Cancel</button>
         </div>
       </div>
   </div>

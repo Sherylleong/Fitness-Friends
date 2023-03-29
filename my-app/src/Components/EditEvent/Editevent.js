@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useStoreState } from "../../App"
 import "../Create.css";
 
 import { firestore, storage } from "../FirebaseDb/Firebase";
@@ -27,6 +26,8 @@ export default function EditEvent() {
 	const [bio, setBio] = useState("");
     const [difficulty, setDifficulty] = useState("")
     const [eventActivity, setActivity] = useState("")
+
+    const navigate = useNavigate();
 
     const difficultyChoices = ["Beginner", "Intermediate", "Advanced"]
     const activityChoices = ["Walking", "Jogging", "Running", "Climbing","Biking","Sports","Others"]
@@ -169,6 +170,7 @@ export default function EditEvent() {
             groupId: groupSelected,
             eventImage: url
         });
+        navigate("/ViewProfile");
     }
 
     const removeImage = () => {
@@ -257,7 +259,7 @@ export default function EditEvent() {
                     </div>
                     <div className="button-align-from-left">
                         <button onClick={()=>createEventClick()}>Save Changes</button>
-                        <button className="dull-button" onClick={()=>{}}>Cancel</button>
+                        <button className="dull-button" onClick={()=>{navigate("/ViewProfile");}}>Cancel</button>
                     </div>
                 </div>
             </div>
