@@ -217,7 +217,7 @@ console.log(eventDate );
                             <div className="user-inputs">
                                 <div>
                                 <b>Date of Event </b>
-                                <input className="input-ignore-width" type="date" value={eventDate} onChange={(e)=>setEventDate(e.target.value)}></input>
+                                <input className="input-ignore-width" type="date" min={today.getFullYear() + "-" + month + "-" + today.getDate()} value={eventDate} onChange={(e)=>setEventDate(e.target.value)}></input>
                                 <div style={{display: eventDate ? 'none' : 'block'}} id="missing-date" className="account-form-incorrect">Event date is required.</div>
                                 </div>
                                 <div>
