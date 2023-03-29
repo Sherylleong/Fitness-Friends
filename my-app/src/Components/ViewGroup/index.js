@@ -190,7 +190,7 @@ function ViewGroup() {
     // history.push(`/Events/ViewEvent/${eventId}`);
     // window.location.replace(`/Events/ViewEvent/` + eventId);
 
-    navigate("/Events/ViewEvent/" + eventId);
+    navigate("/ViewEvent/" + eventId);
   };
 
   if (!group) {
@@ -251,22 +251,17 @@ function ViewGroup() {
           <div className="middle">
             <div className="creator-member1">
               <div className="creator-event">
-                <div className="creatortitle">
-                  <div className="attendee3">
-                    <img src={attendee1}></img>
-                  </div>
-                  <div> Creator: </div>
+                <div className="attendee3">
+                  <img src={attendee1}></img>
                 </div>
-
-                <div className="creatorname"> </div>
+                <div> View Creator </div>
               </div>
+
               <div className="creator-event" onClick={handleViewMember}>
-                <div className="creatortitle">
-                  <div className="attendee3">
-                    <img src={attendee1}></img>
-                  </div>
-                  <div> Members: </div>
+                <div className="attendee3">
+                  <img src={attendee1}></img>
                 </div>
+                <div> View Members </div>
 
                 <div className="creatorname"> </div>
               </div>
@@ -284,12 +279,7 @@ function ViewGroup() {
               <div className="about-group">{group.groupdesc}</div>
             </div>
 
-            {/* <div className="containerhehe">
-              <div className="about"> About our group:</div>
-              <div className="grp-desc">"{group.groupdesc}""</div>
-
-              <div className="creator">Created by {group.groupOwner}</div>
-            </div> */}
+         
 
             <div className="middle-right">
               <div className="difficulty ">

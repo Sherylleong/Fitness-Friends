@@ -220,24 +220,17 @@ function ViewEvent() {
 
             <div className="creator-member">
               <div className="creator-event">
-                <div className="creatortitle">
-                  <div className="attendee3">
-                    <img src={attendee1}></img>
-                  </div>
-                  <div> Creator: </div>
+                <div className="attendee3">
+                  <img src={attendee1}></img>
                 </div>
-
-                <div className="creatorname"> {event.creatorID}</div>
+                <div> View Creator </div>
               </div>
-              <div className="creator-event" onClick={handleViewMember}>
-                <div className="creatortitle">
-                  <div className="attendee3">
-                    <img src={attendee1}></img>
-                  </div>
-                  <div> Members: </div>
-                </div>
 
-                <div className="creatorname"> {event.creatorID}</div>
+              <div className="creator-event" onClick={handleViewMember}>
+                <div className="attendee3">
+                  <img src={attendee1}></img>
+                </div>
+                <div> View members </div>
               </div>
             </div>
 
