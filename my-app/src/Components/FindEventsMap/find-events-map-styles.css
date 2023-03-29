@@ -22,11 +22,21 @@
     flex-direction: row;
     justify-content:space-between;
     align-items: center;
-    border-bottom: 2px solid;
     padding-right: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 12px;
+    border-bottom: 2px solid;
+    border-top: 2px solid;
+    border-radius: 10px;
+
 
 }
+.card-wrapper {
+    border-bottom: 2px solid;
+    border-top: 2px solid;
+    border-radius: 10px;
 
+}
 .event-list-card {
     margin:0px;
     display: flex; 
@@ -157,7 +167,7 @@
 
 .event-list-card {
     border-radius: 20px;
-    box-shadow: 5px 8px #acacac;
+    box-shadow: 5px 8px #6e6e6e;
     border: none;
     padding: 10px;
     padding-left: 40px;

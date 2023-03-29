@@ -12,13 +12,15 @@ function GroupsListCard(group) {
   console.log(group.id);
   const groupId = group.id;
   const navigate = useNavigate();
-
+  const userId = useStoreState("userId");
+  const eventId = group.id;
+  let joined = (group.groupmembers.includes(userId))
   const handleViewGroup = () => {
     navigate("ViewGroup/" + groupId);
   };
 
   return (
-    <div className="group-list-card">
+    <div className="group-list-card" style={{backgroundColor:joined ? "#C0C0C0" : "white", opacity:joined ? "0.5" : "1", paddingLeft:"15px"}}>
       <div className="group-list-img">
         <div className="crop">
           <img src={group.groupImageURL} />

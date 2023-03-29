@@ -9,16 +9,18 @@ import { dispatch, useStoreState } from "../../App";
 import { useNavigate, useLocation } from "react-router-dom";
 
 function EventsMapCard(event, navigate) {
-
+  const userId = useStoreState("userId");
   const eventId = event.id;
-
+  let joined = (event.eventAttendees.includes(userId))
 
   const handleView = () => {
     navigate("ViewEvent/" + eventId);
   };
 
   return (
-    <div className="event-map-card">
+
+    <div className="event-map-card" style={{backgroundColor:joined ? "#A8A8A8" : "white", opacity:joined ? "0.5" : "1", paddingLeft:"15px"}}>
+      
       <div className="event-map-left">
         <p className="event-map-name">{event.eventTitle}</p>
         <p className="event-map-time">
@@ -37,18 +39,21 @@ function EventsMapCard(event, navigate) {
         </button>
       </div>
     </div>
+
   );
 }
 
 function EventsListCard(event, navigate) {
+  const userId = useStoreState("userId");
+  const eventId = event.id;
+  let joined = (event.eventAttendees.includes(userId))
   console.log("event:");
   console.log(event.id);
-  const eventId = event.id;
   const handleView = () => {
     navigate("ViewEvent/" + eventId);
   };
   return (
-    <div className="event-list-card">
+    <div className="event-list-card" style={{backgroundColor:joined ? "#C0C0C0" : "white", opacity:joined ? "0.5" : "1", paddingLeft:"15px"}}>
       <div className="event-list-img">
         <div className="crop">
           <img src={event.eventImage} />
@@ -252,20 +257,25 @@ export default function FindEventsMap() {
       )
         return false;
       let eventDate = new Date(event.eventDate);
+
       if (filters.startDate !== "") {
         let filterStartDate = new Date(filters.startDate);
+        console.log(filterStartDate);
+        console.log(44444);
         if (eventDate < filterStartDate) return false;
       }
       if (filters.endDate !== "") {
         let filterEndDate = new Date(filters.endDate);
         if (eventDate > filterEndDate) return false;
       }
+  
       if (eventsView === "mapview")
         return (
           event.eventLocation
             .toLowerCase()
             .indexOf(filters.search.toLowerCase()) !== -1
         );
+
       return (
         event.eventTitle.toLowerCase().indexOf(filters.search.toLowerCase()) !==
         -1
