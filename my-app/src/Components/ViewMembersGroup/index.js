@@ -56,14 +56,18 @@ function ViewMembersGroup() {
     const navigate = useNavigate();
     const handleViewMemberReturn = () => {
         navigate(-1);
-      };
+    };
+    const handleViewMemberProfile = (memberId) => {
+        console.log(memberId);  
+        navigate("/ViewMemberProfile/" + memberId);
+    };
     return (
         <div className="ViewMembersFull">
             <button className="ViewMembersBackButton" onClick={handleViewMemberReturn}>&lt; Back</button>
             <div className="ViewMembersTitle">Members</div>
             {/*groupMembersData is an array of arrays, display each entry's profilePic and displayName*/}
             {groupMembersData.map((groupMembersData) => (
-                <div className="ViewMemberCard" key={groupMembersData.userId}>
+                <div className="ViewMemberCard" onClick={()=>handleViewMemberProfile(groupMembersData.userId)}>
                     
                     <div className="ViewMemberPFPContainer">
                         <img className="ViewMemberCardProfilePic" src={groupMembersData.profilePic} alt="Profile Pic" />

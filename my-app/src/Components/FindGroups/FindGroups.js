@@ -16,7 +16,7 @@ function GroupsListCard(group) {
   const eventId = group.id;
   let joined = (group.groupmembers.includes(userId))
   const handleViewGroup = () => {
-    navigate("ViewGroup/" + groupId);
+    navigate("/ViewGroup/" + groupId);
   };
 
   return (

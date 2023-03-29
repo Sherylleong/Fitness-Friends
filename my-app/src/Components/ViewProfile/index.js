@@ -67,6 +67,8 @@ function ViewProfile() {
   const getGroupsOwned = async () => {
     const docRef = query(collection(firestore, "group"), where("groupOwner", "==", userId));
     const docu = await getDocs(docRef);
+    console.log("docu");
+    console.log(docu);
     const updatedDocs = docu.docs.map(async (doc) => {
       const updatedGroup = { ...doc.data() };
       const groupOwner = await getGroupOwnerName(updatedGroup.groupOwner);
@@ -144,6 +146,31 @@ function ViewProfile() {
     getEventsOwned();
     getNumEvents112();
   }, []);
+
+  const EditEventHandler = (eventId) => {
+    console.log(eventId);
+    navigate(`/EditEvent/` + eventId);
+  }
+  const EditGroupHandler = (groupId) => {
+    console.log(groupId);
+    navigate(`/EditGroup/` + groupId);
+  }
+  const CreateEventHandler = () => {
+    navigate(`/CreateEvent`);
+  }
+  const CreateGroupHandler = () => {
+    navigate(`/CreateGroup`);
+  }
+  const ViewEventHandler = (eventId) => {
+    console.log(eventId);
+    navigate(`/ViewEvent/` + eventId);
+  }
+
+  const ViewGroupHandler = (groupId) => {
+    console.log(groupId);
+    navigate(`/ViewGroup/` + groupId);
+  }
+
   console.log(eventsOwned112);
   console.log(eventsJoined112);
   console.log(groupsJoined112);
@@ -212,14 +239,14 @@ function ViewProfile() {
                   </div>
                   {owned && (
                       <div className="manage-events112">
-                        <button className="manage-events-button112" type="submit">
-                          Manage Events
+                        <button className="manage-events-button112" type="submit" onClick={CreateEventHandler}>
+                          Create Event
                         </button>
                       </div>
                   )}
                   <div className="events-list112">
                     {attending && eventsJoined112.slice(currentEventPage*3,currentEventPage*3+3).map((event) => (
-                      <div className="event112" key={event.eventId}>
+                      <div className="event112" onClick={()=>ViewEventHandler(event.eventId)}>
                         <div className="event-left112">
                           <div className="event-left-left112">
                             <div className="event-image-container112">
@@ -250,7 +277,7 @@ function ViewProfile() {
                       </div>
                     ))}
                     {owned && eventsOwned112.slice(currentEventPage*3,currentEventPage*3+3).map((event) => (
-                      <div className="event112" key={event.eventid}>
+                      <div className="event112" onClick={()=>ViewEventHandler(event.eventId)}>
                       <div className="event-left112">
                         <div className="event-left-left112">
                           <div className="event-image-container112">
@@ -275,8 +302,13 @@ function ViewProfile() {
                       <div className="event-right112">
                         <div className="tags-container112">
                           <div className="tag112">{event.eventCategory}</div>
-                          <div className="tag112">{event.eventDifficulty}</div>
-                        </div>
+                            <div className="tag112">{event.eventDifficulty}</div>
+                            
+                          </div>
+                          {/* add a button that uses the EditEventHandler and pass the event docid into it */}
+                          <button className="edit-event-button112" type="submit" onClick={() => EditEventHandler(event.eventId)}>
+                            Edit Event
+                          </button>
                       </div>
                     </div>
                   ))}
@@ -303,21 +335,17 @@ function ViewProfile() {
             <div className="right112">
               <div className="right-top112"></div>
               <div className="groupsjoined112">
-                <div className="groupsjoinedtext112">Groups Joined</div>
-                
+              <div className="groupsjoinedtext112">Groups Joined</div>
+              
                 <div className="groupsjoinedlist112">
                   {groupsJoined112.slice(currentJoinedPage*2,currentJoinedPage*2+2).map((group) => (
-                    <div className="group-box112" key={group.groupid}>
+                    <div className="group-box112" onClick={()=>ViewGroupHandler(group.groupId)}>
                       <div className="group-box-left112">
                         <div className="grouptitle112">{group.groupname}</div>
                         <div className="groupmembers112">{group.groupmembers.length} members</div>
                         <div className="group-creator112">Created by {group.groupOwner}</div>
                       </div>
                       <div className="group-box-right112">
-                        {/* add a leave group button */}
-                        <button className="leave-group112" type="submit">
-                          Leave Group
-                        </button>
                       </div>
                     </div>
                   ))}
@@ -337,18 +365,21 @@ function ViewProfile() {
               </div>
               <div className="right-bottom112">
               <div className="groupsjoined112">
-                  <div className="groupsjoinedtext112">Groups Owned</div>
+                <div className="groupsjoinedtext112">Groups Owned</div>
+                <button className="create-group112" type="submit" onClick={CreateGroupHandler}>
+                Create Group
+              </button>
                   <div className="groupsjoinedlist112">
                     {groupsOwned112.slice(currentOwnedPage * 2, currentOwnedPage * 2 + 2).map((group) => (
-                    <div className="group-box112" key={group.groupid}>
+                    <div className="group-box112" onClick={()=>ViewGroupHandler(group.groupId)}>
                       <div className="group-box-left112">
                         <div className="grouptitle112">{group.groupname}</div>
                         <div className="groupmembers112">{group.groupmembers.length} members</div>
                         <div className="group-creator112">Created by {group.groupOwner}</div>
                       </div>
                       <div className="group-box-right112">
-                        <button className="manage-group112" type="submit">
-                          Manage Group
+                        <button className="manage-group112" type="submit" onClick={()=>EditGroupHandler(group.groupId)}>
+                          Edit Group
                         </button>
                       </div>
                     </div>
@@ -370,7 +401,6 @@ function ViewProfile() {
               </div>
             </div>
           </div>
-        ))
       </div>
     </>
   );

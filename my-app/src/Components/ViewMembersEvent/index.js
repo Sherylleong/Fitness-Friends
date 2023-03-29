@@ -4,7 +4,8 @@ import { firestore } from "../FirebaseDb/Firebase";
 import 'firebase/firestore';
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import"./ViewMembers.css";
+import "./ViewMembers.css";
+
 function ViewMembersEvent() {
     const getByDocID = async (collectionName, docID) => {
         const docRef = doc(firestore, collectionName, docID);
@@ -56,8 +57,11 @@ function ViewMembersEvent() {
     const handleViewMemberReturn = () => {
         navigate(-1);
     };
+    
+
     const handleViewMemberProfile = (memberId) => {
-        navigate("ViewMemberProfile/" + memberId);
+        console.log(memberId);  
+        navigate("/ViewMemberProfile/" + memberId);
     };
     return (
         <div className="ViewMembersFull">
@@ -65,7 +69,7 @@ function ViewMembersEvent() {
             <div className="ViewMembersTitle">Members</div>
             {/*eventAttendeesData is an array of arrays, display each entry's profilePic and displayName*/}
             {eventAttendeesData.map((eventAttendeeData) => (
-                <div className="ViewMemberCard">
+                <div className="ViewMemberCard" onClick={()=>handleViewMemberProfile(eventAttendeeData.userId)}>
                     <div className="ViewMemberPFPContainer"><img className="ViewMemberCardProfilePic" src={eventAttendeeData.profilePic} alt="Profile Pic" /></div>
                     <div className="ViewMemberDisplayNameContainer"><div className="ViewMemberCardDisplayName">{eventAttendeeData.displayName}</div></div>
                 </div>

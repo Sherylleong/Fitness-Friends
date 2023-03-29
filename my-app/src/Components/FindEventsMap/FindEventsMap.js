@@ -14,7 +14,7 @@ function EventsMapCard(event, navigate) {
   let joined = (event.eventAttendees.includes(userId))
 
   const handleView = () => {
-    navigate("ViewEvent/" + eventId);
+    navigate("/ViewEvent/" + eventId);
   };
 
   return (
@@ -50,7 +50,7 @@ function EventsListCard(event, navigate) {
   console.log("event:");
   console.log(event.id);
   const handleView = () => {
-    navigate("ViewEvent/" + eventId);
+    navigate("/ViewEvent/" + eventId);
   };
   return (
     <div className="event-list-card" style={{backgroundColor:joined ? "#C0C0C0" : "white", opacity:joined ? "0.5" : "1", paddingLeft:"15px"}}>
