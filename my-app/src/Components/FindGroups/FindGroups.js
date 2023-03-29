@@ -7,12 +7,12 @@ import { getDoc } from "firebase/firestore";
 import { dispatch, useStoreState } from "../../App";
 import { useNavigate } from "react-router-dom";
 
-function GroupsListCard(group) {
+function GroupsListCard(group, userId,navigate) {
   console.log("group:");
   console.log(group.id);
   const groupId = group.id;
-  const navigate = useNavigate();
-  const userId = useStoreState("userId");
+
+
   const eventId = group.id;
   let joined = (group.groupmembers.includes(userId))
   const handleViewGroup = () => {
@@ -85,44 +85,20 @@ function GroupsHeader() {
   );
 }
 
-function GroupsListList({ groups, handleFilters }) {
+function GroupsListList({ groups, handleFilters, userId,navigate}) {
   return (
     <div className="groups-list-list">
       <div style={{ position: "relative", left: "-350px" }}>
         <Searchbar handleFilters={handleFilters} searchText="Search group..." />
       </div>
-      {groups.map((group) => GroupsListCard(group))}
+      {groups.map((group) => GroupsListCard(group,userId,navigate))}
     </div>
   );
 }
 
 export default function FindGroups() {
-  let groupsdb = [
-    {
-      name: "tekong bois",
-      dateFormed: "2023-01-05",
-      category: "Jogging",
-      difficulty: "Intermediate",
-      description: "wgt wadio ord loh",
-      members: 10,
-    },
-    {
-      name: "naruto bois",
-      dateFormed: "2022-01-05",
-      category: "Running",
-      difficulty: "Intermediate",
-      description: "waaaaa",
-      members: 5,
-    },
-    {
-      name: "bois",
-      dateFormed: "2022-01-05",
-      category: "Other",
-      difficulty: "Beginner",
-      description: "test",
-      members: 50,
-    },
-  ];
+  const navigate = useNavigate();
+  const userId = useStoreState("userId");
 
   //const [groups, setgroups] = useState(groupsdb);
 
@@ -213,16 +189,16 @@ export default function FindGroups() {
       {/*col*/}
       <GroupsHeader />
       {/*row*/}
-      <GroupListInfo groups={filteredGroups} handleFilters={handleFilters} />
+      <GroupListInfo groups={filteredGroups} handleFilters={handleFilters} userId={userId} navigate={navigate}/>
     </div>
   );
 }
 
-function GroupListInfo({ groups, handleFilters }) {
+function GroupListInfo({ groups, handleFilters, userId,navigate}) {
   return (
     <div className="group-list-info">
       <GroupFilters groups={groups} handleFilters={handleFilters} />
-      <GroupsListList groups={groups} handleFilters={handleFilters} />
+      <GroupsListList groups={groups} handleFilters={handleFilters} userId={userId} navigate={navigate} />
     </div>
   );
 }
