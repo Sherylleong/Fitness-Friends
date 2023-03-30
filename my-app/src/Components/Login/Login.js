@@ -5,7 +5,7 @@ import "./Login.css";
 import { dispatch } from "../../App"
 import { Link, redirect, useNavigate } from "react-router-dom";
 import { firestore, auth } from "../FirebaseDb/Firebase";
-import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, updateDoc,doc } from 'firebase/firestore';
 
 
 export default function Login() {
@@ -41,8 +41,15 @@ export default function Login() {
 	const getProfile = () => {
 		const queryDb = query(collection(firestore, 'users'), where("userId", "==", currUid));
 		onSnapshot(queryDb, (querySnapshot) => {
-			querySnapshot.forEach((doc) => {
-				if (doc.data().displayName == null) {
+			querySnapshot.forEach((result) => {
+				console.log("1");
+				if (result.data().displayName == null) {
+					//Running twice for some reason
+					// var	emailName = username.split("@")[0];
+					// const updateQuery = doc(firestore, 'users', result.id);
+					// updateDoc(updateQuery, {
+					// 	displayName: emailName
+					// });
 					navigate("/EditProfile");
 				}else {
 					navigate("/Events")
