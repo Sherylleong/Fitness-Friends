@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import "./ViewProfile.css";
+import "../ViewProfile/ViewProfile.css";
 import ReactPaginate from "react-paginate";
 import { firestore } from "../FirebaseDb/Firebase";
 import 'firebase/firestore';

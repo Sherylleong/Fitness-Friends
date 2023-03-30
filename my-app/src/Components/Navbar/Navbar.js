@@ -29,10 +29,7 @@ export default function Navbar() {
 			<img className="site-icon" src={require("../../images/site-icon.png")}></img>
 			<ul>
 				<li>
-					<Link to="/Home">Home</Link>
-				</li>
-				<li>
-					<Link to="/CRUD">CRUD</Link>
+					<Link to="/">Home</Link>
 				</li>
 				<li>
 					<Link to="/Events">Events</Link>
