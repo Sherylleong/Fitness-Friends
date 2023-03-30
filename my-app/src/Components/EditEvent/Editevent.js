@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "../Create.css";
-
+import { useStoreState } from "../../App"
 import { firestore, storage } from "../FirebaseDb/Firebase";
 import { collection,doc, updateDoc ,getDocs, getDoc, query, limit, addDoc, where } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -11,15 +11,15 @@ import { v4 as uuidv4 } from "uuid";
 import { GoogleMap, useLoadScript, Marker, MarkerClusterer, MarkerF } from "@react-google-maps/api";
 
 export default function EditEvent() {
-    // const userId = useStoreState("userId");
-    const userId = "ha"
+    const userId = useStoreState("userId");
+
 	const [documentId, setDocumentId] = useState("");
 
 	const [pic, setPic] = useState("");
 	const [title, setTitle] = useState("");
     var today = new Date()
-    var month = today.getMonth() < 10 ? "0" + today.getMonth() : today.getMonth()
-	const [eventDate, setEventDate] = useState("");
+    var month = (today.getMonth()+1) < 10 ? "0" + (today.getMonth()+1) : (today.getMonth()+1)
+	const [eventDate, setEventDate] = useState(today.getFullYear() + "-" + month + "-" + today.getDate());
     var hour = today.getHours() < 10 ? "0" + today.getHours()  : today.getHours()
     var minutes = today.getMinutes() < 10 ? "0" + today.getMinutes()  : today.getMinutes()
     const [eventTime, setEventTime] = useState("");
@@ -48,10 +48,14 @@ export default function EditEvent() {
         name:"None"
     }]);
     const [groupSelected, setGroupSelected] = useState("");
-
+    const [showMissingTitle, setShowMissingTitle] = useState(false);
+    const [showMissingDesc, setShowMissingDesc] = useState(false);
+    const [showMissingLocation, setShowMissingLocation] = useState(false);
     const { eventId: urlEventId } = useParams();
 
-
+    console.log(eventId);
+    console.log(urlEventId);
+    console.log(9990);
     const getEventDetails = async () => {
         const docRef = doc(firestore, "events", urlEventId);
         try {
@@ -153,7 +157,7 @@ export default function EditEvent() {
         if (groupSelected != "") {
             eventType = "group";
         }
-        updateDoc(collection(firestore, 'events',urlEventId), {
+        updateDoc(doc(firestore, 'events',urlEventId), {
             creatorID: userId,
             date: eventDate,
             time: eventTime,
@@ -169,8 +173,9 @@ export default function EditEvent() {
             eventType: eventType,
             groupId: groupSelected,
             eventImage: url
-        });
-        navigate("/ViewProfile");
+        }).then(navigate("/ViewProfile"))
+
+ 
     }
 
     const removeImage = () => {
@@ -179,7 +184,29 @@ export default function EditEvent() {
 	}
 
     function createEventClick() {
-        uploadFile();
+        let incorrect = false;
+        setShowMissingTitle(false);
+        setShowMissingDesc(false);
+        setShowMissingLocation(false);
+        if (!title) {
+            setShowMissingTitle(true);
+            incorrect = true;
+        }
+        if (!bio) {
+            setShowMissingDesc(true);  
+            incorrect = true;}
+        if (!(selected.name)) {
+            setShowMissingLocation(true);  
+            incorrect = true;
+        }
+        if (!(eventDate)) {
+            incorrect = true;
+        }
+        if (!(eventTime)) {
+            incorrect = true;
+        }
+
+        if (!incorrect) {uploadFile(); alert("Event successfully edited!")}
     }
 
 
@@ -208,14 +235,17 @@ export default function EditEvent() {
                         <form>
                             <b>Title</b>
                             <input lassName="default-input" type="text" value={title} onChange={(e)=>setTitle(e.target.value)}></input>
+                            <div style={{display: showMissingTitle ? 'block' : 'none'}} id="missing-title" className="account-form-incorrect">Event title is required.</div>
                             <div className="user-inputs">
                                 <div>
                                 <b>Date of Event </b>
-                                <input className="input-ignore-width" type="date" value={eventDate} onChange={(e)=>setEventDate(e.target.value)}></input>
+                                <input className="input-ignore-width" type="date" min={today.getFullYear() + "-" + month + "-" + today.getDate()} value={eventDate} onChange={(e)=>setEventDate(e.target.value)}></input>
+                                <div style={{display: eventDate ? 'none' : 'block'}} id="missing-date" className="account-form-incorrect">Event date is required.</div>
                                 </div>
                                 <div>
                                 <b>Time of Event </b>
                                 <input className="input-ignore-width" type="time" value={eventTime} onChange={(e)=>setEventTime(e.target.value)}></input>
+                                <div style={{display: eventTime ? 'none' : 'block'}} id="missing-time" className="account-form-incorrect">Event time is required.</div>
                                 </div>
                             </div>
                             <div className="user-inputs">
@@ -240,6 +270,7 @@ export default function EditEvent() {
                             </div>
                             <b>Event Description</b>
                             <textarea className="bio-input" value={bio} onChange={(e)=>setBio(e.target.value)}></textarea>
+                            <div style={{display: showMissingDesc ? 'block' : 'none'}} id="missing-desc" className="account-form-incorrect">Event description is required.</div>
                         </form>
                     </div>
                 </div>
@@ -247,12 +278,13 @@ export default function EditEvent() {
                     <div className="map-select">
                         <b>Selected Location</b>
                         <p>{selected.name}</p>
+                        <div style={{display: showMissingLocation ? 'block' : 'none'}} id="missing-location" className="account-form-incorrect">Location selection is required.</div>
                         <div className="map-contain">
                             <MapContainer state={selected} setState={setSelected} mapData={mapData}/>
                             <div className="search-location">
-                                <input type="text" value={filterValue} onChange={(e)=>changeFilter(e)}></input>
+                            <input className="create-searchbar" type="text" value={filterValue} placeholder="Search Location..." onChange={(e)=>changeFilter(e)}></input>
                                 <div className="location-list">
-                                    {filterMapData.map(data=> <div onClick={()=>setSelected(data)}>{data.name}</div>)}
+                                {filterMapData.map(data=> <div className="location-item" onClick={()=>setSelected(data)}>{data.name}</div>)}
                                 </div>
                             </div>
                         </div>

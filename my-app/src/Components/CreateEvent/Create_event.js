@@ -124,7 +124,6 @@ console.log(eventDate );
         }else {
             addEvent(pic);
         }
-        
 
 
     }
@@ -151,7 +150,7 @@ console.log(eventDate );
             eventType: eventType,
             groupId: groupSelected,
             eventImage: url
-        }).then((docRef)=>{navigate("/ViewEvent/"+docRef.id)})
+        }).then((docRef)=>{navigate("/ViewProfile")})
     }
 
     const removeImage = () => {
@@ -176,11 +175,9 @@ console.log(eventDate );
             incorrect = true;
         }
         if (!(eventDate)) {
-            setShowMissingLocation(true);  
             incorrect = true;
         }
         if (!(eventTime)) {
-            setShowMissingLocation(true);  
             incorrect = true;
         }
 

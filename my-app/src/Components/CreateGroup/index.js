@@ -18,6 +18,9 @@ function CreateGroup() {
   const [groupActivity, setActivity] = useState("Walking")
   const [pic, setPic] = useState("https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/defaultPFP.png?alt=media&token=93a30cef-5994-4701-9fab-9ad9fdec913c");
 
+  const [showMissingName, setShowMissingName] = useState(false);
+  const [showMissingDesc, setShowMissingDesc] = useState(false);
+
   const navigate = useNavigate();
   const storage = getStorage();
   const groupId = uuidv4();
@@ -59,6 +62,21 @@ function CreateGroup() {
       navigate("/ViewProfile");
   }
 
+    function validateGroupForm() {
+      let incorrect = false;
+      setShowMissingName(false);
+      setShowMissingDesc(false);
+      if (!groupname) {
+          setShowMissingName(true);
+          incorrect = true;
+      }
+      if (!groupdesc) {
+          setShowMissingDesc(true);  
+          incorrect = true;}
+      if (!incorrect) {uploadImage(); alert("Group successfully created!")}
+
+    }
+
   const removeImage = () => {
     setUserFile(null);
 		setPic("https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/defaultPFP.png?alt=media&token=93a30cef-5994-4701-9fab-9ad9fdec913c");
@@ -86,6 +104,7 @@ function CreateGroup() {
             <form>
               <b>Group Name</b>
               <input lassName="default-input" type="text" value={groupname} onChange={(e)=>setGroupname(e.target.value)}></input>
+              <div style={{display: showMissingName ? 'block' : 'none'}} id="missing-title" className="account-form-incorrect">Group name is required.</div>
               <div className="user-inputs">
                   <div>
                     <b>Select Group Difficulty</b>
@@ -102,12 +121,13 @@ function CreateGroup() {
               </div>
               <b>Group Description</b>
               <textarea className="bio-input" value={groupdesc} onChange={(e)=>setGroupdesc(e.target.value)}></textarea>
+              <div style={{display: showMissingDesc ? 'block' : 'none'}} id="missing-desc" className="account-form-incorrect">Group description is required.</div>
             </form>
         </div>
       </div>
       <div className="right-div">
         <div className="button-align-from-left">
-            <button onClick={()=>uploadImage()}>Create Group</button>
+            <button onClick={()=>validateGroupForm()}>Create Group</button>
             <button className="dull-button" onClick={()=>cancelCreation()}>Cancel</button>
         </div>
       </div>

@@ -24,6 +24,10 @@ function EditGroup() {
   const difficultyChoices = ["Beginner", "Intermediate", "Advanced"]
   const activityChoices = ["Walking", "Jogging", "Running", "Climbing","Biking","Sports","Others"]
 
+  const [showMissingName, setShowMissingName] = useState(false);
+  const [showMissingDesc, setShowMissingDesc] = useState(false);
+
+
   const { groupId: urlGroupId } = useParams();
 
   const getEventDetails = async () => {
@@ -72,6 +76,21 @@ function EditGroup() {
       navigate("/ViewProfile");
   }
 
+  function validateGroupForm() {
+    let incorrect = false;
+    setShowMissingName(false);
+    setShowMissingDesc(false);
+    if (!groupname) {
+        setShowMissingName(true);
+        incorrect = true;
+    }
+    if (!groupdesc) {
+        setShowMissingDesc(true);  
+        incorrect = true;}
+    if (!incorrect) {uploadImage(); alert("Group successfully edited!")}
+
+  }
+
   const removeImage = () => {
     setUserFile(null);
 		setPic("https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/defaultPFP.png?alt=media&token=93a30cef-5994-4701-9fab-9ad9fdec913c");
@@ -100,6 +119,7 @@ function EditGroup() {
             <form>
               <b>Group Name</b>
               <input lassName="default-input" type="text" value={groupname} onChange={(e)=>setGroupname(e.target.value)}></input>
+              <div style={{display: showMissingName ? 'block' : 'none'}} id="missing-title" className="account-form-incorrect">Group name is required.</div>
               <div className="user-inputs">
                   <div>
                     <b>Select Group Difficulty</b>
@@ -116,12 +136,13 @@ function EditGroup() {
               </div>
               <b>Group Description</b>
               <textarea className="bio-input" value={groupdesc} onChange={(e)=>setGroupdesc(e.target.value)}></textarea>
+              <div style={{display: showMissingDesc ? 'block' : 'none'}} id="missing-desc" className="account-form-incorrect">Group description is required.</div>
             </form>
         </div>
       </div>
       <div className="right-div">
         <div className="button-align-from-left">
-            <button onClick={()=>uploadImage()}>Update Group</button>
+            <button onClick={()=>validateGroupForm()}>Update Group</button>
             <button className="dull-button" onClick={()=>{navigate("/ViewProfile");}}>Cancel</button>
         </div>
       </div>

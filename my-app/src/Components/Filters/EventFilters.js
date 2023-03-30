@@ -13,6 +13,10 @@ function GroupForm({handleFilters, groups}){
 }
 export default function EventFilters({filters, handleFilters, groups}){
     let groupIds = Object.keys(groups)
+    var today = new Date();
+    var month = (today.getMonth()+1) < 10 ? "0" + (today.getMonth()+1) : (today.getMonth()+1)
+    var hour = today.getHours() < 10 ? "0" + today.getHours()  : today.getHours()
+    var minutes = today.getMinutes() < 10 ? "0" + today.getMinutes()  : today.getMinutes()
 
 	return (
 		<form className="events-form">
@@ -34,10 +38,10 @@ export default function EventFilters({filters, handleFilters, groups}){
                 <legend>Date</legend>
                 <div className="filter-item">
                 <label>Start Date<br></br>
-                <input type="date" name="startDate" onChange={(e) => {handleFilters(e);}}/>
+                <input type="date" name="startDate" min={today.getFullYear() + "-" + month + "-" + today.getDate()} onChange={(e) => {handleFilters(e);}}/>
                 </label>
                 <label>End Date<br></br>
-                <input type="date" name="endDate" onChange={(e) => {handleFilters(e);}}/>
+                <input type="date" name="endDate" min={today.getFullYear() + "-" + month + "-" + today.getDate()} onChange={(e) => {handleFilters(e);}}/>
                 </label>
                 </div>
             </fieldset>

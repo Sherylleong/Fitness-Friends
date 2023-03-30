@@ -11,7 +11,6 @@ function HomePage() {
                         Get Fit<br/>Together
                     </div>
                     <button className="home-page-button">Find Events</button>
-                    <Link to="/CreateEvent">(JUST FOR TESTING) go to create event</Link>
                 </div>
                 <div className="home-page-top-right">
                     <img className="home-page-img" src="https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/home-page-image.jpg?alt=media&token=b955c904-02d6-452e-8e47-6f1f0897bb1a"/>

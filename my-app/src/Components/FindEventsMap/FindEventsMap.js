@@ -8,7 +8,7 @@ import { getDoc } from "firebase/firestore";
 import { dispatch, useStoreState } from "../../App";
 import { useNavigate, useLocation } from "react-router-dom";
 
-function EventsMapCard(event, navigate,userId) {
+function EventsMapCard(event, navigate, userId) {
   const eventId = event.id;
   let joined = (event.eventAttendees.includes(userId))
 
@@ -18,18 +18,18 @@ function EventsMapCard(event, navigate,userId) {
 
   return (
 
-    <div className="event-map-card" style={{backgroundColor:joined ? "#A8A8A8" : "white", opacity:joined ? "0.5" : "1", paddingLeft:"15px"}}>
-      
+  <div className="event-map-card" style={{backgroundColor: joined ? "#A8A8A8" : "white", opacity:joined ? "0.5" : "1", paddingLeft:"15px"}}>
+    <p className="event-map-name">{event.eventTitle}</p>
+    <div className="event-map-card-content"  style={{display: "flex", flexDirection: "row", justifyContent:"space-between"}}>
       <div className="event-map-left">
-        <p className="event-map-name">{event.eventTitle}</p>
         <p className="event-map-time">
-          {event.date},{event.time}
+        {event.date},{event.time}
         </p>
         <p className="event-map-location">{event.eventLocation}</p>
         <p className="event-map-category">{event.eventCategory}</p>
         <p className="event-map-difficulty">{event.eventDifficulty}</p>
       </div>
-      <div className="event-map-right">
+        <div className="event-map-right">
         <p className="event-map-attendees">
           {event.eventAttendees.length + 1} attendee(s) 
         </p>
@@ -38,6 +38,7 @@ function EventsMapCard(event, navigate,userId) {
         </button>
       </div>
     </div>
+  </div>
 
   );
 }
@@ -46,11 +47,14 @@ function EventsListCard(event, navigate,userId) {
   
   const eventId = event.id;
   let joined = (event.eventAttendees.includes(userId))
+  console.log(joined);
+  console.log(333)
   console.log("event:");
   console.log(event.id);
   const handleView = () => {
     navigate("/ViewEvent/" + eventId);
   };
+  //#C0C0C0
   return (
     <div className="event-list-card" style={{backgroundColor:joined ? "#C0C0C0" : "white", opacity:joined ? "0.5" : "1", paddingLeft:"15px"}}>
       <div className="event-list-img">
@@ -161,7 +165,8 @@ export default function FindEventsMap() {
   const [groups, setGroups] = useState([]); // user's joined groups
   const [groupsOwned, setGroupsOwned]= useState([]);
   const userId = useStoreState("userId");
-  
+  let today = new Date();
+
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -293,18 +298,16 @@ export default function FindEventsMap() {
         let filterStartDate = new Date(filters.startDate);
 
         if (eventDate.getTime() < filterStartDate.getTime()) {
-          console.log('REEEE')
           return false;
-
         }
 
       }
       if (filters.endDate !== "") {
-        return true;
-
         let filterEndDate = new Date(filters.endDate);
         if (eventDate.getTime() > filterEndDate.getTime()) return false;
       }
+
+      if (eventDate.getTime() < today.getTime()) return false; 
   
       if (eventsView === "mapview")
         return (
@@ -341,7 +344,7 @@ function EventMapInfo({groups, navigate, filters, setFilters, handleFilters, eve
       <div className="event-map-info">
         <EventFilters groups={groups} filters={filters} handleFilters={handleFilters}/>
         <MapContainer events={events} setFilters={setFilters}/>
-        <EventsMapList filters={filters} navigate={navigate} events={events}  handleFilters={handleFilters}/>    
+        <EventsMapList filters={filters} navigate={navigate} events={events}  handleFilters={handleFilters} userId={userId}/>    
       </div>
   );
 }
@@ -350,7 +353,7 @@ function EventListInfo({groups, navigate, filters, handleFilters, events, events
     return (
         <div className="event-list-info">
         <EventFilters groups={groups} filters={filters} handleFilters={handleFilters}/>
-        <EventsListList filters={filters} navigate={navigate} events={events} handleFilters={handleFilters}/>    
+        <EventsListList filters={filters} navigate={navigate} events={events} handleFilters={handleFilters} userId={userId}/>    
     </div>
   );
 }

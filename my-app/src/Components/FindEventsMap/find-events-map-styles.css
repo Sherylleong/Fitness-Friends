@@ -19,15 +19,16 @@
 .event-map-card {
     margin:0px;
     display: flex; 
-    flex-direction: row;
-    justify-content:space-between;
-    align-items: center;
+
     padding-right: 10px;
     padding-bottom: 10px;
     margin-bottom: 12px;
     border-bottom: 2px solid;
     border-top: 2px solid;
-    border-radius: 10px;
+    border-radius: 8px;
+    margin-right: 10px;
+    display: flex;
+    flex-direction: column;
 
 
 }
@@ -175,7 +176,6 @@
     margin: 10px;
     margin-left: 40px;
     margin-right: 40px;
-    background-color: white;
     width: 1335px;
     height: 200px;
 }
