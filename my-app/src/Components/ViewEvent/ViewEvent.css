@@ -77,8 +77,8 @@
   border-radius: 20px;
 }
 .group-title1 {
-  font-family: "Roboto";
-  font-style: normal;
+  /* font-family: "Roboto"; */
+  /* font-style: normal; */
   font-weight: 700;
   font-size: 48px;
   line-height: 56px;
@@ -231,7 +231,7 @@
   height: 250px;
   background-color: #ecf2ff;
 
-  font-family: "Roboto";
+  /* font-family: "Roboto"; */
   font-style: normal;
   font-weight: 700;
   font-size: 20px;
@@ -254,7 +254,7 @@
 }
 
 .creator1 {
-  font-family: "Roboto";
+  /* font-family: "Roboto"; */
   font-style: normal;
   font-weight: 700;
   font-size: 20px;
@@ -273,7 +273,7 @@
 
 .tag-title1 {
   padding-bottom: 20px;
-  font-family: "Roboto";
+  /* font-family: "Roboto"; */
   font-style: normal;
   font-weight: 700;
   font-size: 30px;
@@ -331,14 +331,14 @@
 
 .event-title {
   margin-bottom: 20px;
-  font-family: "Roboto";
+  /* font-family: "Roboto"; */
   font-style: normal;
   font-weight: 700;
   font-size: 20px;
 }
 .event-desc {
   margin-bottom: 20px;
-  font-family: "Roboto";
+
   font-style: normal;
   font-weight: 500;
   font-size: 20px;
