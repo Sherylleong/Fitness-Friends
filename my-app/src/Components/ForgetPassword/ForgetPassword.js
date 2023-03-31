@@ -9,6 +9,7 @@ export default function ForgetPassword() {
 	const [showMissingEmail, setMissingEmail] = useState(false);
 	const [showInvalidEmail, setInvalidEmail] = useState(false);
 	const [showEmailSent, setEmailSent] = useState(false);
+	const [noEmailFound, setNoEmailFound] = useState(false);
 
 
 	const resetPassword = async (e) => {
@@ -16,6 +17,7 @@ export default function ForgetPassword() {
 		setInvalidEmail(false);
 		setEmailSent(false);
 		setMissingEmail(false);
+		setNoEmailFound(false);
 
 		// await 
 		await sendPasswordResetEmail(auth, username).then((reply) => {
@@ -27,6 +29,9 @@ export default function ForgetPassword() {
 				setInvalidEmail(true);
 			}else if(error.code == "auth/missing-email") {
 				setMissingEmail(true);
+			}
+			else if (error.code == "auth/user-not-found"){
+				setNoEmailFound(true);
 			}
 		});
 		// console.log("Reset Password Email Sent");
@@ -41,6 +46,7 @@ export default function ForgetPassword() {
 				<input type="username" placeholder="Enter your email" onChange={(e) => setUsername(e.target.value)}/>
 				<div style={{display: showMissingEmail ? 'block' : 'none'}} className="account-form-incorrect">Email field is required.</div>
 				<div style={{display: showInvalidEmail ? 'block' : 'none'}} className="account-form-incorrect">Invalid email.</div>
+				<div style={{display: noEmailFound ? 'block' : 'none'}} className="account-form-incorrect">Email does not exist in database.</div>
 				<div style={{display: showEmailSent ? 'block' : 'none'}}  className="account-form-correct">Password reset email sent.</div>
 				<button type="submit">Submit Email</button>
 				<Link style={{"text-align":"left"}} to="/Login"> Return to login </Link>

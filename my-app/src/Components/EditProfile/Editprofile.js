@@ -22,7 +22,8 @@ export default function EditProfile() {
 	const [eventAttended, setEventAttended] = useState(false);
 	
 	const [newPassword, setNewPassword] = useState("");
-
+	const [showChangePasswordError, setShowChangePasswordError] = useState(false);
+	const [showNameError, setShowNameError] = useState(false);
 	const navigate = useNavigate();
 
 	/*
@@ -78,13 +79,22 @@ export default function EditProfile() {
 			// Handle Password Change First
 			changePassword();
 		}else {
-			uploadFile();
+			if (!displayName) {
+				setShowNameError(true);
+			}
+			else {
+				setShowNameError(false);
+				alert("Profile details changed!")
+				uploadFile();
+			}
+			
 		}
 	}
 
 	function changePassword() {
 		console.log(auth);
 		if (newPassword != "") {
+			setShowChangePasswordError(false);
 			updatePassword(auth.currentUser, newPassword).then(()=> {
 				console.log("Password update Success");
 				uploadFile();
@@ -93,6 +103,7 @@ export default function EditProfile() {
 			});
 		}else {
 			//Display new password empty
+			setShowChangePasswordError(true);
 		}
 	}
 
@@ -103,6 +114,8 @@ export default function EditProfile() {
 		setProfilePic(URL.createObjectURL(fileUploaded));
 		// uploadFile(fileUploaded);
 	};
+
+
 
 	const uploadFile = async() => {
 		if (testFile != null) { 
@@ -163,7 +176,7 @@ export default function EditProfile() {
 		<div className="editprofile">
 			<div className ="header">
 				<h1>Edit Profile</h1>
-				<p><b>This information displayed on your profile.</b></p>
+				<p><b>This information will be displayed on your profile.</b></p>
 			</div>
 			<div className="body">
 				<div className="left-div">
@@ -178,6 +191,7 @@ export default function EditProfile() {
 						<form>
 							<b>Name (Required)</b>
 							<input lassName="default-input" type="text" value={displayName} onChange={(e)=>setDisplayName(e.target.value)}></input>
+							<div style={{display: showNameError ? 'block' : 'none'}} id="missing-name" className="account-form-incorrect">Display name is required.</div>
 							<b>Your Location</b>
 							<select value={location} onChange={(e)=>setLocation(e.target.value)}>
 								{sgTowns.map(towns=> <option value={towns}>{towns}</option>)}
@@ -219,10 +233,11 @@ export default function EditProfile() {
 						</label>
 					</div>
 					<div className="form-items">
-						<h1>Enter current password</h1>
+						<h1>Change password</h1>
 						<form>
 							<b>Enter new password</b>
 							<input type="password" onChange={(e)=>setNewPassword(e.target.value)}></input>
+							<div style={{display: showChangePasswordError ? 'block' : 'none'}} id="missing-pwd" className="account-form-incorrect">Non-empty password is required.</div>
 						</form>
 					</div>
 					<div className="button-align-from-left">
