@@ -165,6 +165,9 @@ function ViewEvent() {
   console.log("Events");
   console.log({ event });
   console.log(eventId);
+  console.log("creator?");
+  const isCreator = userId === event.creatorID;
+  console.log(isCreator);
 
   return (
     <>
@@ -178,11 +181,12 @@ function ViewEvent() {
             <div className="group-title1">{event.eventTitle}</div>
 
             <div className="joineventbtn">
-              <button className="joinevent" onClick={joinEvent}>
-                {event.eventAttendees.includes(userId) ? "Leave " : "Join "}
-                Event
-                {/* Join Event */}
-              </button>
+              {!isCreator && (
+                <button className="joinevent" onClick={joinEvent}>
+                  {event.eventAttendees.includes(userId) ? "Leave " : "Join "}
+                  Event
+                </button>
+              )}
             </div>
           </div>
 
@@ -222,7 +226,7 @@ function ViewEvent() {
 
             <div className="creator-member">
               <div className="creator-event" onClick={handleViewCreator}>
-                <div className="attendee3" >
+                <div className="attendee3">
                   <img src={attendee1}></img>
                 </div>
                 <div> View Creator </div>
