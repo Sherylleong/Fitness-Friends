@@ -92,7 +92,7 @@ export default function SignUp() {
 					<div style={{display: showPasswordRequirement ? 'block' : 'none'}} className="account-form-incorrect">Password has to be at least 6 characters.</div>
 					<div style={{display: showEmailUsed ? 'block' : 'none'}} className="account-form-incorrect">Email already in use.</div>
 					<button type="submit">Sign Up</button>
-					<Link style={{"text-align":"left"}} to="/Home">Return to home</Link>
+					<Link style={{"text-align":"left"}} to="/">Return to home</Link>
 				</form>
 			</div>
 		</div>
