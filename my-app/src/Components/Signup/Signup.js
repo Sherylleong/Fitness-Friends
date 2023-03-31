@@ -82,8 +82,8 @@ export default function SignUp() {
 				<h2>Fitness Friends</h2>
 				<h1>Sign Up</h1>
 				<form className="login-form" onSubmit={createAcc}>
-					<label>Username</label>
-					<input type="username" placeholder="Enter your username" onChange={(e) => setUsername(e.target.value)}/>
+					<label>Email</label>
+					<input type="username" placeholder="Enter your email" onChange={(e) => setUsername(e.target.value)}/>
 					<label>Password</label>
 					<input type="password" placeholder="Enter your password" onChange={(e) => setPassword(e.target.value)}/>
 					<div style={{display: showMissingUsername ? 'block' : 'none'}} className="account-form-incorrect">Email field is required.</div>
