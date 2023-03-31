@@ -13,20 +13,31 @@ function ViewProfile() {
   const userId = useStoreState("userId");
   const [attending, setAttending] = useState(true);
   const [owned, setOwned] = useState(false);
+  const [attended, setAttended] = useState(false);
   const attendinghandler = () => {
     setAttending(true);
     setOwned(false);
+    setAttended(false);
   };
   const ownedhandler = () => {
     setAttending(false);
     setOwned(true);
+    setAttended(false);
   };
+  const attendedhandler = () => {
+    setAttending(false);
+    setOwned(false);
+    setAttended(true);
+  }
   const navigate = useNavigate();
 
   const [currentEventPage, setcurrentEventPage] = useState(0);
   const [currentJoinedPage, setCurrentJoinedPage] = useState(0);
   const [currentOwnedPage, setCurrentOwnedPage] = useState(0);
+  const [currentCompletedPage, setCompletedPage] = useState(0);
   const [numEvents112, setNumEvents112] = useState(0);
+
+  var today = new Date();
 
   const handleEventPageChange = (selectedEventPage) => {
     setcurrentEventPage(selectedEventPage);
@@ -67,8 +78,8 @@ function ViewProfile() {
   const getGroupsOwned = async () => {
     const docRef = query(collection(firestore, "group"), where("groupOwner", "==", userId));
     const docu = await getDocs(docRef);
-    console.log("docu");
-    console.log(docu);
+    // console.log("docu");
+    // console.log(docu);
     const updatedDocs = docu.docs.map(async (doc) => {
       const updatedGroup = { ...doc.data() };
       const groupOwner = await getGroupOwnerName(updatedGroup.groupOwner);
@@ -86,34 +97,89 @@ function ViewProfile() {
   };
 
   const [eventsJoined112, setEventsJoined112] = useState([]);
+  const [eventsCompleted112, setEventsCompleted] = useState([]);
   const getEventsJoined = async () => {
-    const docRef = query(collection(firestore, "events"), where("eventAttendees", "array-contains", userId));
+    // , where("date", ">", "2023-03-31")
+    const docRef = query(collection(firestore, "events"),where("eventAttendees", "array-contains", userId));
     const docu = await getDocs(docRef);
-    
-    const updatedDocs = docu.docs.map(async (doc) => {
-      const updatedEvent = { ...doc.data() };
-      if (updatedEvent) {
-        updatedEvent.eventId = doc.id;
-      }
-      return updatedEvent;
+
+    // const updatedDocs = docu.docs.map(async (doc) => {
+    //   const updatedEvent = { ...doc.data() };
+    //   if (updatedEvent) {
+    //     updatedEvent.eventId = doc.id;
+    //   }
+    //   return updatedEvent;
+    // });
+
+    // const updatedDocs = docu.docs.map(async (doc) => {
+    //   console.log("mapping")
+    //   console.log(doc)
+    //   if (new Date(doc.data().date) < today) {
+    //       setCompletedPage([...currentCompletedPage, doc.data()]);
+    //       console.log("adding");
+    //       return {};
+    //   }else {
+    //     const updatedEvent = { ...doc.data() };
+    //     if (updatedEvent) {
+    //       updatedEvent.eventId = doc.id;
+    //     }
+    //     return updatedEvent;
+    //   }
+    // });
+  
+    // const updatedEvents = await Promise.all(updatedDocs);
+    // console.log(updatedEvents);
+    // console.log(currentCompletedPage);
+
+    var updatedEvent = [];
+    var completedEvents = [];
+    docu.forEach((doc)=> {
+        if(new Date(doc.data().date) < today) {
+            console.log("adding??");
+            completedEvents = [...completedEvents, doc.data()]
+        }else {
+          updatedEvent = [...updatedEvent, doc.data()]
+        }
     });
-    const updatedEvents = await Promise.all(updatedDocs);
-    setEventsJoined112(updatedEvents);
+    // completedEvents = completedEvents.concat(eventsCompleted112);
+    setEventsCompleted(completedEvents);
+    // setEventsCompleted(completedEvents);
+    setEventsJoined112(updatedEvent);
+    // setEventsJoined112(completedEvents);
+    // setCompletedPage([...currentCompletedPage, completedEvents]);
+    console.log(eventsCompleted112);
+    console.log(completedEvents);
   };
   const [eventsOwned112, setEventsOwned112] = useState([]);
+  const [eventsCompleted113, setEventsCompleted2] = useState([]);
   const getEventsOwned = async () => {
     const docRef = query(collection(firestore, "events"), where("creatorID", "==", userId));
     const docu = await getDocs(docRef);
      // add the doc id into the array as a new field called eventId
-    const updatedDocs = docu.docs.map(async (doc) => {
-      const updatedEvent = { ...doc.data() };
-      if (updatedEvent) {
-        updatedEvent.eventId = doc.id;
-      }
-      return updatedEvent;
-    });
-    const updatedEvents = await Promise.all(updatedDocs);
-    setEventsOwned112(updatedEvents);
+    // const updatedDocs = docu.docs.map(async (doc) => {
+    //   const updatedEvent = { ...doc.data() };
+    //   if (updatedEvent) {
+    //     updatedEvent.eventId = doc.id;
+    //   }
+    //   return updatedEvent;
+    // });
+    // const updatedEvents = await Promise.all(updatedDocs);
+    var updatedEvent = [];
+    var completedEvents = [];
+    docu.forEach((doc)=> {
+        if(new Date(doc.data().date) < today) {
+          // console.log("adding??");
+            completedEvents = [...completedEvents, doc.data()]
+        }else {
+          updatedEvent = [...updatedEvent, doc.data()]
+        }
+    })
+    console.log(eventsCompleted112);
+    
+    setEventsCompleted2(completedEvents);
+    // setEventsCompleted([...eventsCompleted112, ...completedEvents]);
+    // setEventsCompleted(completedEvents);
+    setEventsOwned112(updatedEvent);
   };
   //get number of events owned and joined
 
@@ -148,11 +214,11 @@ function ViewProfile() {
   }, []);
 
   const EditEventHandler = (eventId) => {
-    console.log(eventId);
+    // console.log(eventId);
     navigate(`/EditEvent/` + eventId);
   }
   const EditGroupHandler = (groupId) => {
-    console.log(groupId);
+    // console.log(groupId);
     navigate(`/EditGroup/` + groupId);
   }
   const CreateEventHandler = () => {
@@ -162,21 +228,21 @@ function ViewProfile() {
     navigate(`/CreateGroup`);
   }
   const ViewEventHandler = (eventId) => {
-    console.log(eventId);
+    // console.log(eventId);
     navigate(`/ViewEvent/` + eventId);
   }
 
   const ViewGroupHandler = (groupId) => {
-    console.log(groupId);
+    // console.log(groupId);
     navigate(`/ViewGroup/` + groupId);
   }
 
-  console.log(eventsOwned112);
-  console.log(eventsJoined112);
-  console.log(groupsJoined112);
-  console.log(groupsOwned112);
-  console.log({profile2});
-  console.log(userId);
+  // console.log(eventsOwned112);
+  // console.log(eventsJoined112);
+  // console.log(groupsJoined112);
+  // console.log(groupsOwned112);
+  // console.log({profile2});
+  // console.log(userId);
 
 
   return (
@@ -234,6 +300,15 @@ function ViewProfile() {
                         onClick={ownedhandler}
                       >
                         Events Owned
+                      </button>
+                    </div>
+                    <div className="events-selector-righ112t">
+                      <button
+                        className="events-selector-owned112"
+                        type="submit"
+                        onClick={attendedhandler}
+                      >
+                        Events Attended
                       </button>
                     </div>
                   </div>
@@ -310,15 +385,47 @@ function ViewProfile() {
                       </div>
                     </div>
                   ))}
+                  {attended && (eventsCompleted112.concat(eventsCompleted113)).slice(currentCompletedPage*3,currentCompletedPage*3+3).map((event) => (
+                      <div className="event112" onClick={()=>ViewEventHandler(event.eventId)}>
+                        <div className="event-left112">
+                          <div className="event-left-left112">
+                            <div className="event-image-container112">
+                              <img
+                                className="event-image112"
+                                src={event.eventImage}
+                              ></img>
+                            </div>
+                          </div>
+                          <div className="event-left-right112">
+                            <div className="event-title112">
+                              {event.eventTitle}
+                            </div>
+                            <div className="event-location112">
+                              Location: {event.eventLocation}
+                            </div>
+                            <div className="event-date112">
+                              {event.date}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="event-right112">
+                          <div className="tags-container112">
+                            <div className="tag112">{event.eventCategory}</div>
+                            <div className="tag112">{event.eventDifficulty}</div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                   <div className="event-pagination112">
                   {eventsJoined112.length > 3 ||
-                    eventsOwned112.length > 3 ? (
+                    eventsOwned112.length > 3 ||
+                    (eventsCompleted112.length+eventsCompleted113.length) > 3 ? (
                       <ReactPaginate
                         previousLabel={'<'}
                         nextLabel={'>'}
                         breakLabel={'...'}
-                        pageCount={Math.ceil((attending ? eventsJoined112.length : eventsOwned112.length) / 3)}
+                        pageCount={Math.ceil(attended ? (eventsCompleted112.length+eventsCompleted113.length) /3: (attending ? eventsJoined112.length : eventsOwned112.length) / 3)}
                         marginPagesDisplayed={2}
                         pageRangeDisplayed={3}
                         onPageChange={(selectedEventPage) => handleEventPageChange(selectedEventPage.selected)}
