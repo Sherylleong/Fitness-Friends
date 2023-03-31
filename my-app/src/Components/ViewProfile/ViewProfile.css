@@ -409,9 +409,10 @@
 }
 
 .groupsjoinedtext112 {
+    width: 90%;
     font-weight: bold;
     font-size: 30px;
-    margin-right: 200px;
+    /* margin-right: 200px; */
 }
 .groupsjoinedlist112 {
     margin-top: 10px;
@@ -531,14 +532,21 @@
 }
 .create-group112 {
     height: 30px;
-    width: 30%;
+    /* width: 30%; */
     border-radius: 15px;
     cursor: pointer;
     border-color: lightgray;
     color: white;
     background-color: teal;
     font-size: 15px;
-    margin-right: 275px;
+    /* margin-right: 275px; */
+}
+
+.display-button112 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
 }
 
 .edit-event-button112{

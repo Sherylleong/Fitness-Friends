@@ -42,17 +42,10 @@ export default function Login() {
 		const queryDb = query(collection(firestore, 'users'), where("userId", "==", currUid));
 		onSnapshot(queryDb, (querySnapshot) => {
 			querySnapshot.forEach((result) => {
-				console.log("1");
 				if (result.data().displayName == null) {
-					//Running twice for some reason
-					// var	emailName = username.split("@")[0];
-					// const updateQuery = doc(firestore, 'users', result.id);
-					// updateDoc(updateQuery, {
-					// 	displayName: emailName
-					// });
 					navigate("/EditProfile");
 				}else {
-					navigate("/Events")
+					navigate("/ViewProfile")
 				}
 			});
 			});

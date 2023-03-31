@@ -36,10 +36,11 @@ export default function SignUp() {
 			const today = new Date();
 			const formattedDate = today.getDate() + "/" + (today.getMonth() + 1) + "/" + today.getFullYear();
 
+			var displayName = username.split("@")[0];
             addDoc(collection(firestore, 'users'), {
                 userId: reply.user.uid,
                 profilePic: "https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/defaultPFP.png?alt=media&token=93a30cef-5994-4701-9fab-9ad9fdec913c",
-				displayName: null,
+				displayName: displayName,
 				JoinedDate: formattedDate,
 				Location: null,
 				Bio: null,

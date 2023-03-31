@@ -68,7 +68,7 @@ function ViewProfile() {
   };
   
   async function getGroupOwnerName(groupOwnerId) {
-    const docRef = query(collection(firestore, "users"), where("userId", "==", groupOwnerId));
+    const docRef = query(collection(firestore, "users"), where("userId", "==", groupOwnerId), where);
     const docu = await getDocs(docRef);
     const owner = docu.docs[0].data();
     return owner.displayName;
@@ -470,10 +470,15 @@ function ViewProfile() {
               </div>
               <div className="right-bottom112">
               <div className="groupsjoined112">
-                <div className="groupsjoinedtext112">Groups Owned</div>
+                <div className="groupsjoinedtext112 display-button112">Groups Owned
+                
                 <button className="create-group112" type="submit" onClick={CreateGroupHandler}>
+                  Create Group
+                </button>
+                </div>
+                {/* <button className="create-group112" type="submit" onClick={CreateGroupHandler}>
                 Create Group
-              </button>
+              </button> */}
                   <div className="groupsjoinedlist112">
                     {groupsOwned112.slice(currentOwnedPage * 2, currentOwnedPage * 2 + 2).map((group) => (
                     <div className="group-box112" >
