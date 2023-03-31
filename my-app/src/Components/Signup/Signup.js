@@ -52,12 +52,17 @@ export default function SignUp() {
             navigate("/Login"); //Navigate to login to do login demo
 		}).catch((error) => {
 			let code = error.code;
+
 			switch (code) {
+				
 				case "auth/email-already-in-use":
 					setEmailUsed(true);	
 					break;
+				case "auth/missing-email":
+					setMissingUsername(true)
+					break;
 				case "auth/invalid-email":
-					if (username == "") {
+					if (!username) {
 						setMissingUsername(true);
 					}else {
 						setInvalidUsername(true);
@@ -71,6 +76,7 @@ export default function SignUp() {
 						setMissingPassword(true);
 					}
 					break;
+					
 				default:
 					break;
 			}
