@@ -25,6 +25,14 @@
 .map-select { 
   display: flex;
 }
+
+.map-select p{ 
+  font-size: 25px;
+  display:contents;
+  margin-top:3px;
+  /* font-weight: bold; */
+}
+
 .event-map {
   width: 28vw;
   height: 60vh;

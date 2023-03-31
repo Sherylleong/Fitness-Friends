@@ -76,7 +76,8 @@ button {
 }
 
 /* Input Text Styling */
-form input[type=password], form input[type=text] {
+form input[type="password"],
+form input[type="text"] {
   margin: 0.5rem 0;
   padding: 1rem;
   border: none;
@@ -88,15 +89,14 @@ form input[type=password], form input[type=text] {
 
 /* TextArea Styling */
 form textarea {
-    margin: 0.5rem 0;
-    padding: 1rem;
-    border: none;
-    width: 98%;
-    background-color: #e5e5e5e5;
-    border-radius: 5px;
-    font-size: 1.5vh;
+  margin: 0.5rem 0;
+  padding: 1rem;
+  border: none;
+  width: 98%;
+  background-color: #e5e5e5e5;
+  border-radius: 5px;
+  font-size: 1.5vh;
 }
-
 
 /* File Upload Button */
 .button-upload-file {
@@ -115,7 +115,7 @@ form textarea {
 }
 
 .button-upload-file input {
-  display:none;
+  display: none;
 }
 
 /* Toggle Switch Code */
@@ -146,8 +146,8 @@ form textarea {
   right: 0;
   bottom: 0;
   background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 .slider:before {
@@ -160,16 +160,16 @@ form textarea {
   left: 6px;
   bottom: 4px;
   background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 input:checked + .slider {
-  background-color: #00D722;
+  background-color: #00d722;
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #00D722;
+  box-shadow: 0 0 1px #00d722;
 }
 
 input:checked + .slider:before {
@@ -189,4 +189,3 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
-

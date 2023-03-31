@@ -15,6 +15,7 @@ export default function EditProfile() {
 
 	const [profilePic, setProfilePic] = useState("");
 	const [displayName, setDisplayName] = useState("");
+	const [noName, setNoName] = useState(false);
 	const [location, setLocation] = useState("");
 	const [bio, setBio] = useState("");
 	const [groupJoined, setGroupJoined] = useState(false);
@@ -57,6 +58,7 @@ export default function EditProfile() {
 		}
 	}
 
+	
 	const getProfile = async () => {
 		const docRef = query(collection(firestore, "users"), where("userId", "==", userId));
 		const docu = await getDocs(docRef);
@@ -72,6 +74,10 @@ export default function EditProfile() {
 			setEventAttending(settings.eventAttending == true);
 			setEventAttended(settings.eventAttended == true);
 		});
+
+		if (displayName == null || displayName == "") {
+			setNoName(true);
+		}
 	};
 
 	const saveProfile = () => {
@@ -92,7 +98,6 @@ export default function EditProfile() {
 	}
 
 	function changePassword() {
-		console.log(auth);
 		if (newPassword != "") {
 			setShowChangePasswordError(false);
 			updatePassword(auth.currentUser, newPassword).then(()=> {
@@ -119,15 +124,17 @@ export default function EditProfile() {
 
 	const uploadFile = async() => {
 		if (testFile != null) { 
+			if (testFile != true) {
 			const imageRef = ref(storage, userId+"-profilepic");
 			await uploadBytes(imageRef, testFile);
 
 			const imageURL = await getDownloadURL(imageRef);
 			setProfilePic(imageURL);
 
+			}
 			const updateQuery = doc(firestore, 'users', documentId);
 			updateDoc(updateQuery, {
-				profilePic: imageURL
+				profilePic: profilePic
 			}).then(() => {
 				updateDetails();
 			});
@@ -156,7 +163,7 @@ export default function EditProfile() {
 	}
 
 	const removeImage = () => {
-		setTest(null);
+		setTest(true);
 		setProfilePic("https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/defaultPFP.png?alt=media&token=93a30cef-5994-4701-9fab-9ad9fdec913c");
 		// const updateQuery = doc(firestore, 'users', documentId);
 		// updateDoc(updateQuery, {
