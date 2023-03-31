@@ -83,8 +83,8 @@ export default function SignUp() {
 				<h2>Fitness Friends</h2>
 				<h1>Sign Up</h1>
 				<form className="login-form" onSubmit={createAcc}>
-					<label>Username</label>
-					<input type="username" placeholder="Enter your username" onChange={(e) => setUsername(e.target.value)}/>
+					<label>Email</label>
+					<input type="username" placeholder="Enter your email" onChange={(e) => setUsername(e.target.value)}/>
 					<label>Password</label>
 					<input type="password" placeholder="Enter your password" onChange={(e) => setPassword(e.target.value)}/>
 					<div style={{display: showMissingUsername ? 'block' : 'none'}} className="account-form-incorrect">Email field is required.</div>
@@ -93,7 +93,7 @@ export default function SignUp() {
 					<div style={{display: showPasswordRequirement ? 'block' : 'none'}} className="account-form-incorrect">Password has to be at least 6 characters.</div>
 					<div style={{display: showEmailUsed ? 'block' : 'none'}} className="account-form-incorrect">Email already in use.</div>
 					<button type="submit">Sign Up</button>
-					<Link style={{"text-align":"left"}} to="/Home">Return to home</Link>
+					<Link style={{"text-align":"left"}} to="/">Return to home</Link>
 				</form>
 			</div>
 		</div>

@@ -23,6 +23,7 @@ import { createStore } from "react-hooks-global-state";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import ViewMemberProfile from "./Components/ViewMemberProfile";
 
+
 const setUserId = (state, action) => {
   return { ...state, userId: action.newId };
 };
@@ -34,6 +35,7 @@ export { dispatch, useStoreState };
 function App() {
   return (
     <>
+      {/* <GlobalStyle /> */}
       {![
         "/Login",
         "/CompleteRegistration",
@@ -47,12 +49,21 @@ function App() {
         <Route path="/Events" element={<FindEventsMap />} />
         <Route path="/Groups" element={<FindGroups />} />
         <Route path="/ViewGroup/:groupId" element={<ViewGroup />} />
-        <Route path="/ViewMembersGroup/:groupId/" element={<ViewMembersGroup />} />
+        <Route
+          path="/ViewMembersGroup/:groupId/"
+          element={<ViewMembersGroup />}
+        />
         <Route path="/ViewEvent/:eventId" element={<ViewEvent />} />
         <Route path="/EditEvent/:eventId" element={<EditEvent />} />
         <Route path="/EditGroup/:groupId" element={<EditGroup />} />
-        <Route path="/ViewMembersEvent/:eventId" element={<ViewMembersEvent />} />
-        <Route path="/ViewMemberProfile/:memberId" element={<ViewMemberProfile />} />
+        <Route
+          path="/ViewMembersEvent/:eventId"
+          element={<ViewMembersEvent />}
+        />
+        <Route
+          path="/ViewMemberProfile/:memberId"
+          element={<ViewMemberProfile />}
+        />
         <Route path="/ViewProfile" element={<ViewProfile />} />
         <Route path="/CreateGroup" element={<CreateGroup />} />
         <Route path="/CreateEvent" element={<CreateEvent />} />

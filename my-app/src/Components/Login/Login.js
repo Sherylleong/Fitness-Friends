@@ -73,14 +73,14 @@ export default function Login() {
 				<h2>Fitness Friends</h2>
 				<h1>Log In</h1>
 				<form className="login-form" onSubmit={signIn}>
-					<label>Username</label>
-					<input type="username" placeholder="Enter your username" onChange={(e) => setUsername(e.target.value)}/>
+					<label>Email</label>
+					<input type="username" placeholder="Enter your Email" onChange={(e) => setUsername(e.target.value)}/>
 					
 					<label>Password</label>
 					<input type="password" placeholder="Enter your password" onChange={(e) => setPassword(e.target.value)}/>
-					<div style={{display: showMissingUsername ? 'block' : 'none'}} id="missing-username" className="account-form-incorrect">Username field is required.</div>
+					<div style={{display: showMissingUsername ? 'block' : 'none'}} id="missing-username" className="account-form-incorrect">Email field is required.</div>
 					<div style={{display: showMissingPassword ? 'block' : 'none'}} id="missing-password" className="account-form-incorrect">Password field is required.</div>
-					<div style={{display: showIncorrectLogin ? 'block' : 'none'}} id="incorrect-login" className="account-form-incorrect">Incorrect Username or Password.</div>
+					<div style={{display: showIncorrectLogin ? 'block' : 'none'}} id="incorrect-login" className="account-form-incorrect">Incorrect Email or Password.</div>
 					<div className="account-form-options">
 						{/* <label className="checkbox-label">
 							<input type="Checkbox"/> Remember me
