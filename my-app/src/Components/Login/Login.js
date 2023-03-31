@@ -95,7 +95,7 @@ export default function Login() {
 						<Link to="/ForgetPassword">Forget password?</Link>
 					</div>
 					<button type="submit">Log In</button>
-					<Link style={{"text-align":"left"}} to="/Home">Return to home</Link>
+					<Link style={{"text-align":"left"}} to="/">Return to home</Link>
 				</form>
 			</div>
 		</div>
