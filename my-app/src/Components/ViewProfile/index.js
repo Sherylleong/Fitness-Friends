@@ -259,13 +259,6 @@ function ViewProfile() {
     navigate(`/ViewGroup/` + groupId);
   };
 
-  // console.log(eventsOwned112);
-  // console.log(eventsJoined112);
-  // console.log(groupsJoined112);
-  // console.log(groupsOwned112);
-  // console.log({profile2});
-  // console.log(userId);
-
   return (
     <>
       <div clasName="full-screen112">
@@ -332,6 +325,16 @@ function ViewProfile() {
                       Events Owned
                     </button>
                   </div>
+                  <div className="events-selector-righ112t">
+                      <button
+                        className={
+                          attended ? "events-selected" : "events-unselected"
+                        }
+                        type="submit"
+                        onClick={attendedhandler}>
+                        Events Attended
+                      </button>
+                    </div>
                 </div>
                 {owned && (
                   <div className="manage-events112">
@@ -433,115 +436,8 @@ function ViewProfile() {
                           </div>
                         </div>
                       ))}
-                </div>
-              </div>
 
-              <div className="left-bottom112">
-                <div className="events-box112">
-                  <div className="events-selector112">
-                    
-                    <div className="events-selector-left112">
-                      <button
-                        className="events-selector-attending112"
-                        type="submit"
-                        onClick={attendinghandler}
-                      >
-                        Events Attending
-                      </button>
-                    </div>
-                    <div className="events-selector-righ112t">
-                      <button
-                        className="events-selector-owned112"
-                        type="submit"
-                        onClick={ownedhandler}
-                      >
-                        Events Owned
-                      </button>
-                    </div>
-                    <div className="events-selector-righ112t">
-                      <button
-                        className="events-selector-owned112"
-                        type="submit"
-                        onClick={attendedhandler}
-                      >
-                        Events Attended
-                      </button>
-                    </div>
-                  </div>
-                  {owned && (
-                      <div className="manage-events112">
-                        <button className="manage-events-button112" type="submit" onClick={CreateEventHandler}>
-                          Create Event
-                        </button>
-                      </div>
-                  )}
-                  <div className="events-list112">
-                    {attending && eventsJoined112.slice(currentEventPage*3,currentEventPage*3+3).map((event) => (
-                      <div className="event112" onClick={()=>ViewEventHandler(event.eventId)}>
-                        <div className="event-left112">
-                          <div className="event-left-left112">
-                            <div className="event-image-container112">
-                              <img
-                                className="event-image112"
-                                src={event.eventImage}
-                              ></img>
-                            </div>
-                          </div>
-                          <div className="event-left-right112">
-                            <div className="event-title112">
-                              {event.eventTitle}
-                            </div>
-                            <div className="event-location112">
-                              Location: {event.eventLocation}
-                            </div>
-                            <div className="event-date112">
-                              {event.date}
-                            </div>
-                          </div>
-                        </div>
-                        <div className="event-right112">
-                          <div className="tags-container112">
-                            <div className="tag112">{event.eventCategory}</div>
-                            <div className="tag112">{event.eventDifficulty}</div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                    {owned && eventsOwned112.slice(currentEventPage*3,currentEventPage*3+3).map((event) => (
-                      <div className="event112" >
-                      <div className="event-left112"onClick={()=>ViewEventHandler(event.eventId)}>
-                        <div className="event-left-left112">
-                          <div className="event-image-container112">
-                            <img
-                              className="event-image112"
-                              src={event.eventImage}
-                            ></img>
-                          </div>
-                        </div>
-                        <div className="event-left-right112">
-                          <div className="event-title112">
-                            {event.eventTitle}
-                          </div>
-                          <div className="event-location112">
-                            Location: {event.eventLocation}
-                          </div>
-                          <div className="event-date112">
-                            {event.date}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="event-right112">
-                          <div className="tags-container112" onClick={()=>ViewEventHandler(event.eventId)}>
-                            <div className="tag112">{event.eventCategory}</div>
-                            <div className="tag112">{event.eventDifficulty}</div>
-                          </div>
-                          <button className="edit-event-button112" type="submit" onClick={() => EditEventHandler(event.eventId)}>
-                            Edit Event
-                          </button>
-                      </div>
-                    </div>
-                  ))}
-                  {attended && (eventsCompleted112.concat(eventsCompleted113)).slice(currentCompletedPage*3,currentCompletedPage*3+3).map((event) => (
+{attended && (eventsCompleted112.concat(eventsCompleted113)).slice(currentCompletedPage*3,currentCompletedPage*3+3).map((event) => (
                       <div className="event112" onClick={()=>ViewEventHandler(event.eventId)}>
                         <div className="event-left112">
                           <div className="event-left-left112">
@@ -589,69 +485,9 @@ function ViewProfile() {
                         activeClassName={'active'}
                       />
                     ) : null}
-                  </div>
                 </div>
-              </div>
-            </div>
-            <div className="right112">
-              <div className="right-top112"></div>
-              <div className="groupsjoined112">
-              <div className="groupsjoinedtext112">Groups Joined</div>
-              
-                <div className="groupsjoinedlist112">
-                  {groupsJoined112.slice(currentJoinedPage*2,currentJoinedPage*2+2).map((group) => (
-                    <div className="group-box112" onClick={()=>ViewGroupHandler(group.groupId)}>
-                      <div className="group-box-left112">
-                        <div className="grouptitle112">{group.groupname}</div>
-                        <div className="groupmembers112">{group.groupmembers.length} members</div>
-                        <div className="group-creator112">Created by {group.groupOwner}</div>
-                      </div>
-                      <div className="group-box-right112">
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                {groupsJoined112.length > 2 ? (
-                  <ReactPaginate
-                  previousLabel={'<'}
-                    nextLabel={'>'}
-                    breakLabel={'...'}
-                  pageCount={Math.ceil(groupsJoined112.length / 2)}
-                  marginPagesDisplayed={1}
-                  pageRangeDisplayed={2}
-                  onPageChange={(selectedJoinedPage) => handleJoinedPageChange(selectedJoinedPage.selected)}
-                  containerClassName={'paginationjoined'}
-                  activeClassName={'activejoined'}
-                  />):null}
-              </div>
-              <div className="right-bottom112">
-              <div className="groupsjoined112">
-                <div className="groupsjoinedtext112 display-button112">Groups Owned
-                
-                <button className="create-group112" type="submit" onClick={CreateGroupHandler}>
-                  Create Group
-                </button>
-                </div>
-                {/* <button className="create-group112" type="submit" onClick={CreateGroupHandler}>
-                Create Group
-              </button> */}
-                  <div className="groupsjoinedlist112">
-                    {groupsOwned112.slice(currentOwnedPage * 2, currentOwnedPage * 2 + 2).map((group) => (
-                    <div className="group-box112" >
-                      <div className="group-box-left112"onClick={()=>ViewGroupHandler(group.groupId)}>
-                        <div className="grouptitle112">{group.groupname}</div>
-                        <div className="groupmembers112">{group.groupmembers.length} members</div>
-                        <div className="group-creator112">Created by {group.groupOwner}</div>
-                      </div>
-                      <div className="group-box-right112">
-                        <button className="manage-group112" type="submit" onClick={()=>EditGroupHandler(group.groupId)}>
-                          Edit Group
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                  </div>
-                  {groupsOwned112.length > 2 ? (
+                <div className="event-pagination112">
+                  {eventsJoined112.length > 3 || eventsOwned112.length > 3 ? (
                     <ReactPaginate
                       previousLabel={"<"}
                       nextLabel={">"}
@@ -718,7 +554,8 @@ function ViewProfile() {
             </div>
             <div className="right-bottom112">
               <div className="groupsjoined112">
-                <div className="groupsjoinedtext112">Groups Owned</div>
+                <div className="groupsjoinedtext112 display-button112">Groups Owned
+                
                 <button
                   className="create-group112"
                   type="submit"
@@ -726,6 +563,7 @@ function ViewProfile() {
                 >
                   Create Group
                 </button>
+                </div>
                 <div className="groupsjoinedlist112">
                   {groupsOwned112
                     .slice(currentOwnedPage * 2, currentOwnedPage * 2 + 2)
