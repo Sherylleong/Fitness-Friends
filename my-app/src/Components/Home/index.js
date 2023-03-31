@@ -43,7 +43,7 @@ function HomePage() {
                         <img className="home-page-activity-card-img" src="https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/sports.png?alt=media&token=223e5fb3-830b-4cd1-8e0f-1401b7acf78e"/>
                         <div className="home-page-activity-card-text">Sports</div>
                     </div>
-                    <div className="home-page-activity-card" onClick={()=>navigate("/Events", {state:{category:"Others"}})}>
+                    <div className="home-page-activity-card" onClick={()=>navigate("/Events", {state:{category:"Other"}})}>
                         <img className="home-page-activity-card-img" src="https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/more-information.png?alt=media&token=2c3489ba-77f2-46c8-a19f-fdbb4cf31f56"/>
                         <div className="home-page-activity-card-text">Others</div>
                     </div>
