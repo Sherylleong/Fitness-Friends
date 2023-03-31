@@ -207,6 +207,8 @@ function ViewGroup() {
   console.log("groupevents : ===");
   console.log({ groupEvents });
   console.log(groupId);
+  const isCreator1 = userId === group.groupOwner;
+  console.log(isCreator1);
 
   //end data fetching
 
@@ -245,17 +247,19 @@ function ViewGroup() {
             <div className="group-title">{group.groupname}</div>
 
             <div className="join-group-btn">
-              <button className="joinevent" onClick={joinGroup}>
-                {group.groupmembers.includes(userId) ? "Leave " : "Join "}
-                Group
-              </button>
+              {!isCreator1 && (
+                <button className="joinevent" onClick={joinGroup}>
+                  {group.groupmembers.includes(userId) ? "Leave " : "Join "}
+                  Group
+                </button>
+              )}
             </div>
           </div>
 
           <div className="middle">
             <div className="creator-member1">
               <div className="creator-event" onClick={handleViewCreator}>
-                <div className="attendee3" >
+                <div className="attendee3">
                   <img src={attendee1}></img>
                 </div>
                 <div> View Creator </div>
@@ -282,8 +286,6 @@ function ViewGroup() {
 
               <div className="about-group">{group.groupdesc}</div>
             </div>
-
-         
 
             <div className="middle-right">
               <div className="difficulty ">
