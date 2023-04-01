@@ -202,6 +202,16 @@ function ViewMemberProfile() {
   console.log({profile2});
   console.log(userId);
 
+  const ViewEventHandler = (eventId) => {
+    console.log(eventId);
+    navigate(`/ViewEvent/` + eventId);
+  };
+
+  const ViewGroupHandler = (groupId) => {
+    // console.log(groupId);
+    navigate(`/ViewGroup/` + groupId);
+  };
+
   return (
     <>
       <div clasName="full-screen112">
@@ -264,7 +274,7 @@ function ViewMemberProfile() {
                   )}
                   <div className="events-list112">
                     {settingAttending && attending && eventsJoined112.slice(currentEventPage*3,currentEventPage*3+3).map((event) => (
-                      <div className="event112" key={event.eventId}>
+                      <div className="event112" onClick={() => ViewEventHandler(event.eventId)}>
                         <div className="event-left112">
                           <div className="event-left-left112">
                             <div className="event-image-container112">
@@ -287,7 +297,7 @@ function ViewMemberProfile() {
                           </div>
                         </div>
                         <div className="event-right112">
-                          <div className="tags-container112">
+                          <div className="tags-container112" onClick={() => ViewEventHandler(event.eventId)}>
                             <div className="tag112">{event.eventCategory}</div>
                             <div className="tag112">{event.eventDifficulty}</div>
                           </div>
@@ -295,7 +305,7 @@ function ViewMemberProfile() {
                       </div>
                     ))}
                     {owned && eventsOwned112.slice(currentEventPage*3,currentEventPage*3+3).map((event) => (
-                      <div className="event112" key={event.eventid}>
+                      <div className="event112" onClick={() => ViewEventHandler(event.eventId)}>
                       <div className="event-left112">
                         <div className="event-left-left112">
                           <div className="event-image-container112">
@@ -353,7 +363,7 @@ function ViewMemberProfile() {
                 
                 <div className="groupsjoinedlist112">
                   {settingGroups&&groupsJoined112.slice(currentJoinedPage*2,currentJoinedPage*2+2).map((group) => (
-                    <div className="group-box112" key={group.groupid}>
+                    <div className="group-box112" onClick={() => ViewGroupHandler(group.groupId)}>
                       <div className="group-box-left112">
                         <div className="grouptitle112">{group.groupname}</div>
                         <div className="groupmembers112">{group.groupmembers.length} members</div>
@@ -382,7 +392,7 @@ function ViewMemberProfile() {
                   <div className="groupsjoinedtext112">Groups Owned</div>
                   <div className="groupsjoinedlist112">
                     {groupsOwned112.slice(currentOwnedPage * 2, currentOwnedPage * 2 + 2).map((group) => (
-                    <div className="group-box112" key={group.groupid}>
+                    <div className="group-box112" onClick={() => ViewGroupHandler(group.groupId)}>
                       <div className="group-box-left112">
                         <div className="grouptitle112">{group.groupname}</div>
                         <div className="groupmembers112">{group.groupmembers.length} members</div>

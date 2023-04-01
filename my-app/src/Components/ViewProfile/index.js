@@ -433,7 +433,7 @@ function ViewProfile() {
                           </div>
                         </div>
                         <div className="event-right112">
-                          <div className="tags-container112">
+                          <div className="tags-container112" onClick={() => ViewEventHandler(event.id)}>
                             <div className="tag112">{event.eventCategory}</div>
                             <div className="tag112">{event.eventDifficulty}</div>
                           </div>
