@@ -32,11 +32,13 @@ function ViewMemberProfile() {
   const attendinghandler = () => {
     setAttending(true);
     setOwned(false);
+    setcurrentEventPage(0);
   };
 
   const ownedhandler = () => {
     setAttending(false);
     setOwned(true);
+    setcurrentEventPage(0);
   };
 
   const navigate = useNavigate();
@@ -337,6 +339,7 @@ function ViewMemberProfile() {
                         onPageChange={(selectedEventPage) => handleEventPageChange(selectedEventPage.selected)}
                         containerClassName={'pagination'}
                         activeClassName={'active'}
+                        forcePage={currentEventPage}
                       />
                     ) : null}
                   </div>
