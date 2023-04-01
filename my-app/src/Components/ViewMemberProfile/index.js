@@ -26,6 +26,9 @@ function ViewMemberProfile() {
   const [settingAttending, setSettingAttending] = useState(null);
   const [settingAttened, setSettingAttened] = useState(null);
   const [settingGroups, setSettingGroups] = useState(null);
+  var today = new Date();
+  today.setHours(0,0,0,0);
+  
   const attendinghandler = () => {
     setAttending(true);
     setOwned(false);
@@ -107,7 +110,17 @@ function ViewMemberProfile() {
         return updatedEvent;
       });
       const updatedEvents = await Promise.all(updatedDocs);
-      setEventsJoined112(updatedEvents);
+
+      var updatedEvent = [];
+    docu.forEach((doc)=> {
+      var data = Object.assign({}, doc.data() ,{
+          eventId: doc.id
+      });
+      if(new Date(doc.data().date) >= today) {
+        updatedEvent = [...updatedEvent, data]
+      }
+    });
+      setEventsJoined112(updatedEvent);
     
   };
 
@@ -115,15 +128,25 @@ function ViewMemberProfile() {
     const docRef = query(collection(firestore, "events"), where("creatorID", "==", userId));
     const docu = await getDocs(docRef);
      // add the doc id into the array as a new field called eventId
-    const updatedDocs = docu.docs.map(async (doc) => {
-      const updatedEvent = { ...doc.data() };
-      if (updatedEvent) {
-        updatedEvent.eventId = doc.id;
+    // const updatedDocs = docu.docs.map(async (doc) => {
+    //   const updatedEvent = { ...doc.data() };
+    //   if (updatedEvent) {
+    //     updatedEvent.eventId = doc.id;
+    //   }
+    //   return updatedEvent;
+    // });
+    // const updatedEvents = await Promise.all(updatedDocs);
+
+    var updatedEvent = [];
+    docu.forEach((doc)=> {
+      var data = Object.assign({}, doc.data() ,{
+          eventId: doc.id
+      });
+      if(new Date(doc.data().date) >= today) {
+        updatedEvent = [...updatedEvent, data]
       }
-      return updatedEvent;
     });
-    const updatedEvents = await Promise.all(updatedDocs);
-    setEventsOwned112(updatedEvents);
+    setEventsOwned112(updatedEvent);
   };
   //get number of events owned and joined
 
@@ -212,7 +235,9 @@ function ViewMemberProfile() {
                   <div className="events-selector112">
                     <div className="events-selector-left112">
                       <button
-                        className="events-selector-attending112"
+                        className={
+                        attending ? "events-selected" : "events-unselected"
+                      }
                         type="submit"
                         onClick={attendinghandler}
                       >
@@ -221,7 +246,9 @@ function ViewMemberProfile() {
                     </div>
                     <div className="events-selector-righ112t">
                       <button
-                        className="events-selector-owned112"
+                        className={
+                          owned ? "events-selected" : "events-unselected"
+                        }
                         type="submit"
                         onClick={ownedhandler}
                       >
