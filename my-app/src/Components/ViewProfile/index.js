@@ -389,7 +389,7 @@ function ViewProfile() {
                           <div className="event-right112">
                             <div
                               className="tags-container112"
-                              onClick={() => ViewEventHandler(event.eventId)}
+                              onClick={() => ViewEventHandler(event.id)}
                             >
                               <div className="tag112">
                                 {event.eventCategory}
@@ -401,7 +401,7 @@ function ViewProfile() {
                             <button
                               className="edit-event-button112"
                               type="submit"
-                              onClick={() => EditEventHandler(event.eventId)}
+                              onClick={() => EditEventHandler(event.id)}
                             >
                               Edit Event
                             </button>
