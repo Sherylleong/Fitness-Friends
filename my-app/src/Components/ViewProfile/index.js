@@ -308,7 +308,6 @@ function ViewProfile() {
                       </button>
                     </div>
                 </div>
-                {owned && (
                   <div className="manage-events112">
                     <button
                       className="manage-events-button112"
@@ -318,7 +317,6 @@ function ViewProfile() {
                       Create Event
                     </button>
                   </div>
-                )}
                 <div className="events-list112">
                   {attending &&
                     eventsJoined112
