@@ -9,6 +9,13 @@ import { dispatch, useStoreState } from "../../App";
 import { useNavigate, useLocation } from "react-router-dom";
 
 function EventsMapCard(event, navigate, userId) {
+  const longEnUSFormatter = new Intl.DateTimeFormat('en-US', {
+    weekday: "long",
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
+
   const eventId = event.id;
   let joined = (event.eventAttendees.includes(userId))
 
@@ -23,7 +30,9 @@ function EventsMapCard(event, navigate, userId) {
     <div className="event-map-card-content"  style={{display: "flex", flexDirection: "row", justifyContent:"space-between"}}>
       <div className="event-map-left">
         <p className="event-map-time">
-        {event.date},{event.time}
+        {longEnUSFormatter.format(new Date(event.date))}<br></br>{new Date('1970-01-01T' + event.time + 'Z').toLocaleTimeString('en-US',
+    {timeZone:'UTC',hour12:true,hour:'numeric',minute:'numeric'}
+  )}
         </p>
         <p className="event-map-location">{event.eventLocation}</p>
         <p className="event-map-category">{event.eventCategory}</p>
@@ -165,7 +174,9 @@ export default function FindEventsMap() {
   const [groups, setGroups] = useState([]); // user's joined groups
   const [groupsOwned, setGroupsOwned]= useState([]);
   const userId = useStoreState("userId");
-  let today = new Date();
+  var today = new Date()
+
+
 
 
   useEffect(() => {
