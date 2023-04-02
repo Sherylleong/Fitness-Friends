@@ -60,6 +60,7 @@ export default function CreateEvent() {
     const [showMissingTitle, setShowMissingTitle] = useState(false);
     const [showMissingDesc, setShowMissingDesc] = useState(false);
     const [showMissingLocation, setShowMissingLocation] = useState(false);
+    const [showInvalidDateTime, setShowInvalidDateTime] = useState(false);
   
     
     const getUserGroup = async() => {
@@ -163,6 +164,7 @@ export default function CreateEvent() {
         setShowMissingTitle(false);
         setShowMissingDesc(false);
         setShowMissingLocation(false);
+        setShowInvalidDateTime(false);
         if (!title) {
             setShowMissingTitle(true);
             incorrect = true;
@@ -180,7 +182,12 @@ export default function CreateEvent() {
         if (!(eventTime)) {
             incorrect = true;
         }
+        let chosenDate = new Date(eventDate + ' ' + eventTime);
 
+        if (chosenDate.getTime() < new Date().getTime()) {
+            setShowInvalidDateTime(true);
+            incorrect=true;
+        }
         if (!incorrect) {uploadFile(); alert("Event successfully created!")}
     }
 
@@ -216,12 +223,15 @@ export default function CreateEvent() {
                                 <b>Date of Event </b>
                                 <input className="input-ignore-width" type="date" min={min} value={eventDate} onChange={(e)=>setEventDate(e.target.value)}></input>
                                 <div style={{display: eventDate ? 'none' : 'block'}} id="missing-date" className="account-form-incorrect">Event date is required.</div>
+                                <div style={{display: showInvalidDateTime ? 'block' : 'none'}} id="invalid-time" className="account-form-incorrect">Valid date and time is required.</div>
                                 </div>
                                 <div>
                                 <b>Time of Event </b>
                                 <input className="input-ignore-width" type="time" value={eventTime} onChange={(e)=>setEventTime(e.target.value)}></input>
                                 <div style={{display: eventTime ? 'none' : 'block'}} id="missing-time" className="account-form-incorrect">Event time is required.</div>
+                                <div style={{display: showInvalidDateTime ? 'block' : 'none'}} id="invalid-time" className="account-form-incorrect">Valid date and time is required.</div>
                                 </div>
+                                
                             </div>
                             <div className="user-inputs">
                                 <div>

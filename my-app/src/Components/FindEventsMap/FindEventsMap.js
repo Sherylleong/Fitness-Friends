@@ -53,7 +53,12 @@ function EventsMapCard(event, navigate, userId) {
 }
 
 function EventsListCard(event, navigate,userId) {
-  
+  const longEnUSFormatter = new Intl.DateTimeFormat('en-US', {
+    weekday: "long",
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
   const eventId = event.id;
   let joined = (event.eventAttendees.includes(userId))
   console.log(joined);
@@ -74,7 +79,9 @@ function EventsListCard(event, navigate,userId) {
       <div className="list-card-desc">
         <h1 className="event-list-name">{event.eventTitle}</h1>
         <p className="event-list-time">
-          {event.date}, {event.time}
+        {longEnUSFormatter.format(new Date(event.date))} at {new Date('1970-01-01T' + event.time + 'Z').toLocaleTimeString('en-US',
+    {timeZone:'UTC',hour12:true,hour:'numeric',minute:'numeric'}
+  )}
         </p>
         <p className="event-list-location">{event.eventLocation}</p>
         <p className="event-list-attendees">

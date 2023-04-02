@@ -56,6 +56,7 @@ export default function EditEvent() {
     const [showMissingDesc, setShowMissingDesc] = useState(false);
     const [showMissingLocation, setShowMissingLocation] = useState(false);
     const { eventId: urlEventId } = useParams();
+    const [showInvalidDateTime, setShowInvalidDateTime] = useState(false);
 
     console.log(eventId);
     console.log(urlEventId);
@@ -209,7 +210,12 @@ export default function EditEvent() {
         if (!(eventTime)) {
             incorrect = true;
         }
+        let chosenDate = new Date(eventDate + ' ' + eventTime);
 
+        if (chosenDate.getTime() < new Date().getTime()) {
+            setShowInvalidDateTime(true);
+            incorrect=true;
+        }
         if (!incorrect) {uploadFile(); alert("Event successfully edited!")}
     }
 
@@ -245,11 +251,15 @@ export default function EditEvent() {
                                 <b>Date of Event </b>
                                 <input className="input-ignore-width" type="date" min={min} value={eventDate} onChange={(e)=>setEventDate(e.target.value)}></input>
                                 <div style={{display: eventDate ? 'none' : 'block'}} id="missing-date" className="account-form-incorrect">Event date is required.</div>
+                                <div style={{display: showInvalidDateTime ? 'block' : 'none'}} id="invalid-time" className="account-form-incorrect">Valid date and time is required.</div>
+
                                 </div>
                                 <div>
                                 <b>Time of Event </b>
                                 <input className="input-ignore-width" type="time" value={eventTime} onChange={(e)=>setEventTime(e.target.value)}></input>
                                 <div style={{display: eventTime ? 'none' : 'block'}} id="missing-time" className="account-form-incorrect">Event time is required.</div>
+                                <div style={{display: showInvalidDateTime ? 'block' : 'none'}} id="invalid-time" className="account-form-incorrect">Valid date and time is required.</div>
+
                                 </div>
                             </div>
                             <div className="user-inputs">
