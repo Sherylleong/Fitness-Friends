@@ -267,7 +267,7 @@ export default function EditEvent() {
                                 </div>
                                 <div>
                                 <b>Select Group</b>
-                                <select value={groupSelected} onChange={(e)=>setGroupSelected(e.target.value)}>
+                                <select disabled value={groupSelected} onChange={(e)=>setGroupSelected(e.target.value)}>
 								    {groupList.map(item=> <option value={item.id}>{item.name}</option>)}
 							    </select>
                                 </div>

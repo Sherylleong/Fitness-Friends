@@ -33,7 +33,7 @@ export default function EditProfile() {
 	}
 	*/
 	// Taken from wikipedia
-	const sgTowns =['Ang Mo Kio', 'Bedok', 'Bishan', 'Bukit Batok', 'Bukit Merah', 'Bukit Panjang', 'Choa Chu Kang', 'Clementi', 'Geylang', 'Hougang', 'Jurong East', 'Jurong West', 'Kallang', 'Pasir Ris', 'Punggol', 'Queenstown', 'Sembawang', 'Sengkang', 'Serangoon', 'Tampines', 'Tengah', 'Toa Payoh', 'Woodlands', 'Yishun'];
+	const sgTowns =['','Ang Mo Kio', 'Bedok', 'Bishan', 'Bukit Batok', 'Bukit Merah', 'Bukit Panjang', 'Choa Chu Kang', 'Clementi', 'Geylang', 'Hougang', 'Jurong East', 'Jurong West', 'Kallang', 'Pasir Ris', 'Punggol', 'Queenstown', 'Sembawang', 'Sengkang', 'Serangoon', 'Tampines', 'Tengah', 'Toa Payoh', 'Woodlands', 'Yishun'];
 	const townOptions = () => {
 		const options = sgTowns.map((town, index)=><option value={town}>{town}</option>)
 
@@ -124,17 +124,18 @@ export default function EditProfile() {
 
 	const uploadFile = async() => {
 		if (testFile != null) { 
+			var imageUrl = profilePic;
 			if (testFile != true) {
 			const imageRef = ref(storage, userId+"-profilepic");
 			await uploadBytes(imageRef, testFile);
 
 			const imageURL = await getDownloadURL(imageRef);
 			setProfilePic(imageURL);
-
+				imageUrl = imageURL;
 			}
 			const updateQuery = doc(firestore, 'users', documentId);
 			updateDoc(updateQuery, {
-				profilePic: profilePic
+				profilePic: imageUrl
 			}).then(() => {
 				updateDetails();
 			});

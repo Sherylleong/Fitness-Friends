@@ -65,7 +65,10 @@ function ViewEvent() {
 
   //for image fetching, converting from url to docs/file
   const [imageUrl, setImageUrl] = useState(null); // initialize the imageUrl state to null
+  const [eventOver, setEventOver] = useState(false); //Set true if event date has passed
   const storage = getStorage();
+  var today = new Date();
+  today.setHours(0,0,0,0);
 
   //for data fetching (image and groupdata includigng grpevents)
   useEffect(() => {
@@ -76,6 +79,9 @@ function ViewEvent() {
 
       if (eventRef) {
         const unsubscribe = onSnapshot(eventRef, (doc) => {
+          if (new Date(doc.data().date) < today) {
+              setEventOver(true);
+          }
           setEvent(doc.data());
         });
         //for image
@@ -181,7 +187,7 @@ function ViewEvent() {
             <div className="group-title1">{event.eventTitle}</div>
 
             <div className="joineventbtn">
-              {!isCreator && (
+              {!isCreator && !eventOver && (
                 <button className="joinevent" onClick={joinEvent}>
                   {event.eventAttendees.includes(userId) ? "Leave " : "Join "}
                   Event

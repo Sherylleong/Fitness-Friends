@@ -25,16 +25,19 @@ function ViewProfile() {
     setAttending(true);
     setOwned(false);
     setAttended(false);
+    setcurrentEventPage(0);
   };
   const ownedhandler = () => {
     setAttending(false);
     setOwned(true);
     setAttended(false);
+    setcurrentEventPage(0);
   };
   const attendedhandler = () => {
     setAttending(false);
     setOwned(false);
     setAttended(true);
+    setcurrentEventPage(0);
   }
   const navigate = useNavigate();
 
@@ -45,6 +48,7 @@ function ViewProfile() {
   const [numEvents112, setNumEvents112] = useState(0);
 
   var today = new Date();
+  today.setHours(0,0,0,0);
 
   const handleEventPageChange = (selectedEventPage) => {
     setcurrentEventPage(selectedEventPage);
@@ -91,8 +95,6 @@ function ViewProfile() {
       where("groupOwner", "==", userId)
     );
     const docu = await getDocs(docRef);
-    // console.log("docu");
-    // console.log(docu);
     const updatedDocs = docu.docs.map(async (doc) => {
       const updatedGroup = { ...doc.data() };
       const groupOwner = await getGroupOwnerName(updatedGroup.groupOwner);
@@ -114,52 +116,21 @@ function ViewProfile() {
     const docRef = query(collection(firestore, "events"),where("eventAttendees", "array-contains", userId));
     const docu = await getDocs(docRef);
 
-    // const updatedDocs = docu.docs.map(async (doc) => {
-    //   const updatedEvent = { ...doc.data() };
-    //   if (updatedEvent) {
-    //     updatedEvent.eventId = doc.id;
-    //   }
-    //   return updatedEvent;
-    // });
-
-    // const updatedDocs = docu.docs.map(async (doc) => {
-    //   console.log("mapping")
-    //   console.log(doc)
-    //   if (new Date(doc.data().date) < today) {
-    //       setCompletedPage([...currentCompletedPage, doc.data()]);
-    //       console.log("adding");
-    //       return {};
-    //   }else {
-    //     const updatedEvent = { ...doc.data() };
-    //     if (updatedEvent) {
-    //       updatedEvent.eventId = doc.id;
-    //     }
-    //     return updatedEvent;
-    //   }
-    // });
-  
-    // const updatedEvents = await Promise.all(updatedDocs);
-    // console.log(updatedEvents);
-    // console.log(currentCompletedPage);
-
     var updatedEvent = [];
     var completedEvents = [];
     docu.forEach((doc)=> {
+        var data = Object.assign({}, doc.data() ,{
+            id: doc.id
+        });
         if(new Date(doc.data().date) < today) {
-            console.log("adding??");
-            completedEvents = [...completedEvents, doc.data()]
+            completedEvents = [...completedEvents, data];
         }else {
-          updatedEvent = [...updatedEvent, doc.data()]
+          updatedEvent = [...updatedEvent, data]
         }
     });
-    // completedEvents = completedEvents.concat(eventsCompleted112);
     setEventsCompleted(completedEvents);
-    // setEventsCompleted(completedEvents);
-    setEventsJoined112(updatedEvent);
-    // setEventsJoined112(completedEvents);
-    // setCompletedPage([...currentCompletedPage, completedEvents]);
-    console.log(eventsCompleted112);
     console.log(completedEvents);
+    setEventsJoined112(updatedEvent);
   };
   const [eventsOwned112, setEventsOwned112] = useState([]);
   const [eventsCompleted113, setEventsCompleted2] = useState([]);
@@ -181,18 +152,19 @@ function ViewProfile() {
     var updatedEvent = [];
     var completedEvents = [];
     docu.forEach((doc)=> {
+        var data = Object.assign({}, doc.data() ,{
+            id: doc.id
+        });
+        console.log(data);
         if(new Date(doc.data().date) < today) {
-          // console.log("adding??");
-            completedEvents = [...completedEvents, doc.data()]
+            
+            completedEvents = [...completedEvents, data]
         }else {
-          updatedEvent = [...updatedEvent, doc.data()]
+          updatedEvent = [...updatedEvent, data]
         }
     })
-    console.log(eventsCompleted112);
     
     setEventsCompleted2(completedEvents);
-    // setEventsCompleted([...eventsCompleted112, ...completedEvents]);
-    // setEventsCompleted(completedEvents);
     setEventsOwned112(updatedEvent);
   };
   //get number of events owned and joined
@@ -250,7 +222,7 @@ function ViewProfile() {
     navigate(`/CreateGroup`);
   };
   const ViewEventHandler = (eventId) => {
-    // console.log(eventId);
+    console.log(eventId);
     navigate(`/ViewEvent/` + eventId);
   };
 
@@ -336,7 +308,6 @@ function ViewProfile() {
                       </button>
                     </div>
                 </div>
-                {owned && (
                   <div className="manage-events112">
                     <button
                       className="manage-events-button112"
@@ -346,7 +317,6 @@ function ViewProfile() {
                       Create Event
                     </button>
                   </div>
-                )}
                 <div className="events-list112">
                   {attending &&
                     eventsJoined112
@@ -354,7 +324,7 @@ function ViewProfile() {
                       .map((event) => (
                         <div
                           className="event112"
-                          onClick={() => ViewEventHandler(event.eventId)}
+                          onClick={() => ViewEventHandler(event.id)}
                         >
                           <div className="event-left112">
                             <div className="event-left-left112">
@@ -394,7 +364,7 @@ function ViewProfile() {
                         <div className="event112">
                           <div
                             className="event-left112"
-                            onClick={() => ViewEventHandler(event.eventId)}
+                            onClick={() => ViewEventHandler(event.id)}
                           >
                             <div className="event-left-left112">
                               <div className="event-image-container112">
@@ -417,7 +387,7 @@ function ViewProfile() {
                           <div className="event-right112">
                             <div
                               className="tags-container112"
-                              onClick={() => ViewEventHandler(event.eventId)}
+                              onClick={() => ViewEventHandler(event.id)}
                             >
                               <div className="tag112">
                                 {event.eventCategory}
@@ -429,7 +399,7 @@ function ViewProfile() {
                             <button
                               className="edit-event-button112"
                               type="submit"
-                              onClick={() => EditEventHandler(event.eventId)}
+                              onClick={() => EditEventHandler(event.id)}
                             >
                               Edit Event
                             </button>
@@ -437,8 +407,8 @@ function ViewProfile() {
                         </div>
                       ))}
 
-{attended && (eventsCompleted112.concat(eventsCompleted113)).slice(currentCompletedPage*3,currentCompletedPage*3+3).map((event) => (
-                      <div className="event112" onClick={()=>ViewEventHandler(event.eventId)}>
+                      {attended && (eventsCompleted112.concat(eventsCompleted113)).slice(currentEventPage*3,currentEventPage*3+3).map((event) => (
+                      <div className="event112" onClick={()=>ViewEventHandler(event.id)}>
                         <div className="event-left112">
                           <div className="event-left-left112">
                             <div className="event-image-container112">
@@ -461,7 +431,7 @@ function ViewProfile() {
                           </div>
                         </div>
                         <div className="event-right112">
-                          <div className="tags-container112">
+                          <div className="tags-container112" onClick={() => ViewEventHandler(event.id)}>
                             <div className="tag112">{event.eventCategory}</div>
                             <div className="tag112">{event.eventDifficulty}</div>
                           </div>
@@ -483,29 +453,9 @@ function ViewProfile() {
                         onPageChange={(selectedEventPage) => handleEventPageChange(selectedEventPage.selected)}
                         containerClassName={'pagination'}
                         activeClassName={'active'}
+                        forcePage={currentEventPage}
                       />
                     ) : null}
-                </div>
-                <div className="event-pagination112">
-                  {eventsJoined112.length > 3 || eventsOwned112.length > 3 ? (
-                    <ReactPaginate
-                      previousLabel={"<"}
-                      nextLabel={">"}
-                      breakLabel={"..."}
-                      pageCount={Math.ceil(
-                        (attending
-                          ? eventsJoined112.length
-                          : eventsOwned112.length) / 3
-                      )}
-                      marginPagesDisplayed={2}
-                      pageRangeDisplayed={3}
-                      onPageChange={(selectedEventPage) =>
-                        handleEventPageChange(selectedEventPage.selected)
-                      }
-                      containerClassName={"pagination"}
-                      activeClassName={"active"}
-                    />
-                  ) : null}
                 </div>
               </div>
             </div>
