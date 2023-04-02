@@ -204,7 +204,6 @@ export default function FindEventsMap() {
         updatedGroups[group.id] = group.groupname;
       });
       temp = updatedGroups;
-      console.log(updatedGroups)
     };
 
     const getGroupsJoined = async () => {

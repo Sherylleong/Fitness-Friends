@@ -25,17 +25,17 @@ export default function CreateEvent() {
 
     var month = (today.getMonth()+1) < 10 ? "0" + (today.getMonth()+1) : (today.getMonth()+1)
     var hour = today.getHours() < 10 ? "0" + today.getHours()  : today.getHours()
+    var day = today.getDate() < 10 ? "0" + (today.getDate()) : (today.getDate())
     var minutes = today.getMinutes() < 10 ? "0" + today.getMinutes()  : today.getMinutes()
+    var min = (today.getFullYear() + "-" + month + "-" + day);
 
-    const [eventDate, setEventDate] = useState(today.getFullYear() + "-" + month + "-" + today.getDate());
+    const [eventDate, setEventDate] = useState(min);
 
-console.log(eventDate );
     const [eventTime, setEventTime] = useState(hour + ":" + minutes);
 	const [bio, setBio] = useState("");
     const [difficulty, setDifficulty] = useState("Beginner");
     const [eventActivity, setActivity] = useState("Walking");
-    const [eventGroup, setEventGroup] = useState("None");
-    const [groupsOwned, setGroupsOwned] = useState([]);
+
 
     const difficultyChoices = ["Beginner", "Intermediate", "Advanced"]
     const activityChoices = ["Walking", "Jogging", "Running", "Climbing","Biking","Sports","Others"]
@@ -214,7 +214,7 @@ console.log(eventDate );
                             <div className="user-inputs">
                                 <div>
                                 <b>Date of Event </b>
-                                <input className="input-ignore-width" type="date" min={today.getFullYear() + "-" + month + "-" + today.getDate()} value={eventDate} onChange={(e)=>setEventDate(e.target.value)}></input>
+                                <input className="input-ignore-width" type="date" min={min} value={eventDate} onChange={(e)=>setEventDate(e.target.value)}></input>
                                 <div style={{display: eventDate ? 'none' : 'block'}} id="missing-date" className="account-form-incorrect">Event date is required.</div>
                                 </div>
                                 <div>

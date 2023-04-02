@@ -18,10 +18,14 @@ export default function EditEvent() {
 	const [pic, setPic] = useState("");
 	const [title, setTitle] = useState("");
     var today = new Date()
+
     var month = (today.getMonth()+1) < 10 ? "0" + (today.getMonth()+1) : (today.getMonth()+1)
-	const [eventDate, setEventDate] = useState(today.getFullYear() + "-" + month + "-" + today.getDate());
     var hour = today.getHours() < 10 ? "0" + today.getHours()  : today.getHours()
+    var day = today.getDate() < 10 ? "0" + (today.getDate()) : (today.getDate())
     var minutes = today.getMinutes() < 10 ? "0" + today.getMinutes()  : today.getMinutes()
+    var min = (today.getFullYear() + "-" + month + "-" + day);
+
+    const [eventDate, setEventDate] = useState(min);
     const [eventTime, setEventTime] = useState("");
 	const [bio, setBio] = useState("");
     const [difficulty, setDifficulty] = useState("")
@@ -239,7 +243,7 @@ export default function EditEvent() {
                             <div className="user-inputs">
                                 <div>
                                 <b>Date of Event </b>
-                                <input className="input-ignore-width" type="date" min={today.getFullYear() + "-" + month + "-" + today.getDate()} value={eventDate} onChange={(e)=>setEventDate(e.target.value)}></input>
+                                <input className="input-ignore-width" type="date" min={min} value={eventDate} onChange={(e)=>setEventDate(e.target.value)}></input>
                                 <div style={{display: eventDate ? 'none' : 'block'}} id="missing-date" className="account-form-incorrect">Event date is required.</div>
                                 </div>
                                 <div>
