@@ -68,7 +68,7 @@ function GroupsHeader() {
         justifyContent: "space-around",
       }}
     >
-      <h1 style={{ marginTop: "0px", position: "relative", right: "330px" }}>
+      <h1 style={{ marginTop: "0px", position: "relative", right: "270px" }}>
         Filters
       </h1>
       <h1
