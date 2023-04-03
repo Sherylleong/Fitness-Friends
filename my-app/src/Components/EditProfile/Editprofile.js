@@ -98,19 +98,37 @@ export default function EditProfile() {
 		}
 	}
 
+	const specialChars = `\`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`;
+	function checkSpecialLetter(input) { 
+		var split = input.split("");
+		var rtn = false;
+		split.forEach((char) => {
+			console.log(char);
+			console.log(specialChars.includes(char));
+			if (specialChars.includes(char)) {
+				rtn = true;
+			}
+		});
+		return rtn;
+	}
+
 	function changePassword() {
 		if (newPassword != "") {
 			setShowChangePasswordError(false);
 			setPasswordLengthError(false);
-			if (newPassword.length<6) {
-				setPasswordLengthError(true); return;
-			}
+			if (newPassword.length >= 8) {
+				if (checkSpecialLetter(newPassword)) {
 			updatePassword(auth.currentUser, newPassword).then(()=> {
 				alert("Password update Success");
 				uploadFile();
 			}).catch((error) => {
 				console.log(error);
 			});
+			return;
+				}
+			}
+			setPasswordLengthError(true); 
+			return;
 		}else {
 			//Display new password empty
 			setShowChangePasswordError(true);
@@ -251,7 +269,7 @@ export default function EditProfile() {
 							<b>Enter new password</b>
 							<input type="password" onChange={(e)=>setNewPassword(e.target.value)}></input>
 							<div style={{display: showChangePasswordError ? 'block' : 'none'}} id="missing-pwd" className="account-form-incorrect">Non-empty password is required.</div>
-							<div style={{display: showPasswordLengthError ? 'block' : 'none'}} id="missing-pwd" className="account-form-incorrect">Password must be at least 6 characters.</div>
+							<div style={{display: showPasswordLengthError ? 'block' : 'none'}} id="missing-pwd" className="account-form-incorrect">Password has to be at least 8 characters and contain a special letter.</div>
 						</form>
 					</div>
 					<div className="button-align-from-left">
