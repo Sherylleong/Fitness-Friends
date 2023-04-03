@@ -45,8 +45,6 @@ export default function SignUp() {
 			if (checkSpecialLetter(password)) {
 				createUserWithEmailAndPassword(auth, username, password).then((reply) => {
 					// Display Popup to tell user successful
-					// console.log(reply);
-					dispatch({newId: reply.user.uid});
 					alert("Account created successfully");
 					const today = new Date();
 					const formattedDate = today.getDate() + "/" + (today.getMonth() + 1) + "/" + today.getFullYear();

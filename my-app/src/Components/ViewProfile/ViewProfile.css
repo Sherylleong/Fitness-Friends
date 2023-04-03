@@ -158,8 +158,10 @@
   justify-content: flex-start;
   align-items: center;
   margin-top: 50px;
-  background-color: lightgray;
-  border-radius: 30px;
+
+  border-radius: 15px;
+  background-color: #f5eaea;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 .events-selector112 {
@@ -424,10 +426,10 @@
 }
 
 .groupsjoinedtext112 {
-    width: 90%;
-    font-weight: bold;
-    font-size: 30px;
-    /* margin-right: 200px; */
+  width: 90%;
+  font-weight: bold;
+  font-size: 30px;
+  /* margin-right: 200px; */
 }
 .groupsjoinedlist112 {
   margin-top: 10px;
@@ -437,8 +439,10 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  background-color: #ccc;
-  border-radius: 10px;
+  background-color: #f5eaea;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+
+  border-radius: 15px;
 }
 .group-box112 {
   display: flex;
@@ -546,22 +550,22 @@
   border-color: white;
 }
 .create-group112 {
-    height: 30px;
-    /* width: 30%; */
-    border-radius: 15px;
-    cursor: pointer;
-    border-color: lightgray;
-    color: white;
-    background-color: teal;
-    font-size: 15px;
-    /* margin-right: 275px; */
+  height: 30px;
+  /* width: 30%; */
+  border-radius: 15px;
+  cursor: pointer;
+  border-color: lightgray;
+  color: white;
+  background-color: teal;
+  font-size: 15px;
+  /* margin-right: 275px; */
 }
 
 .display-button112 {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 90%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
 }
 
 .edit-event-button112 {
