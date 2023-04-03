@@ -11,13 +11,63 @@ import others from "../Resources/othersimage.png";
 import "./Home.css";
 function HomePage() {
   const navigate = useNavigate();
+  const [textIndex, setTextIndex] = useState(0);
+  const [charIndex, setCharIndex] = useState(0);
+  const textOptions = ["Fit", "Sporty", "Healthy"];
+
+  useEffect(() => {
+    if (charIndex < textOptions[textIndex].length) {
+      const timeoutId = setTimeout(() => {
+        setCharIndex(charIndex + 1);
+      }, 100); // add a new character every 100 milliseconds
+
+      return () => {
+        clearTimeout(timeoutId);
+      };
+    }
+  }, [charIndex, textIndex, textOptions]);
+
+  useEffect(() => {
+    setCharIndex(0);
+  }, [textIndex]);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setTextIndex((textIndex + 1) % textOptions.length);
+    }, 3000); // change text every 3 seconds
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [textIndex, textOptions.length]);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setTextIndex((textIndex + 1) % textOptions.length);
+    }, 3000); // change text every 3 seconds
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [textIndex, textOptions.length]);
+
   return (
     <div className="home-page">
       <div className="home-page-top">
         <div className="home-page-top-left">
           <div className="home-page-text">
-            Get Fit
+            Get
             <br />
+            <div
+              className="changing"
+              style={{
+                backgroundImage: "linear-gradient(45deg, #ee6b6e, #77c9d4)",
+                backgroundClip: "text",
+                color: "white",
+              }}
+            >
+              {textOptions[textIndex]}
+            </div>
             Together
           </div>
           <button

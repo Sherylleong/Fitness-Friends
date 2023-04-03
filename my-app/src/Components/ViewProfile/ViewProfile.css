@@ -314,7 +314,7 @@
 
 .tags-container112 {
   display: flex;
-  height: 100px;
+  height: 50px;
   width: 300px;
   flex-direction: row;
   justify-content: flex-start;
@@ -343,14 +343,27 @@
 }
 
 .manage-events-button112 {
-  height: 30px;
+  /* height: 30px;
   width: 100%;
   border-radius: 15px;
   cursor: pointer;
   border-color: lightgray;
   color: white;
   background-color: teal;
-  font-size: 20px;
+  font-size: 20px; */
+
+  height: 40px;
+  width: 150px;
+  /* width: 30%; */
+  border-radius: 15px;
+  cursor: pointer;
+  /* border-color: lightgray; */
+  color: white;
+  background-color: #ee6b6e;
+  font-size: 15px;
+  margin-bottom: 10px;
+
+  
 }
 
 .event-pagination112 {
@@ -449,8 +462,8 @@
   height: 75px;
   width: 400px;
   flex-direction: row;
-  justify-content: flex-start;
-  align-items: left;
+  justify-content: space-between;
+  align-items: center;
   background-color: white;
   border-radius: 10px;
   margin-top: 10px;
@@ -497,15 +510,26 @@
   margin-left: 10px;
 }
 .manage-group112 {
-  height: 30px;
+  /* height: 30px;
   width: 100%;
   border-radius: 15px;
   cursor: pointer;
   border-color: lightgray;
   color: white;
   background-color: teal;
+  font-size: 15px; */
+  height: 40px;
+  width: 100px;
+  /* width: 30%; */
+  border-radius: 15px;
+  cursor: pointer;
+  /* border-color: lightgray; */
+  color: white;
+  background-color: #ee6b6e;
   font-size: 15px;
+  margin-bottom: 10px;
 }
+
 .paginationjoined {
   display: flex;
   justify-content: center;
@@ -550,15 +574,25 @@
   border-color: white;
 }
 .create-group112 {
-  height: 30px;
-  /* width: 30%; */
+  /* height: 30px;
+
   border-radius: 15px;
   cursor: pointer;
   border-color: lightgray;
   color: white;
   background-color: teal;
   font-size: 15px;
-  /* margin-right: 275px; */
+  margin-right: 275px; */
+  height: 40px;
+  width: 150px;
+  /* width: 30%; */
+  border-radius: 15px;
+  cursor: pointer;
+  /* border-color: lightgray; */
+  color: white;
+  background-color: #ee6b6e;
+  font-size: 15px;
+  padding: 10px;
 }
 
 .display-button112 {
@@ -569,7 +603,7 @@
 }
 
 .edit-event-button112 {
-  height: 30px;
+  /* height: 30px;
   width: 200px;
   margin-bottom: 10px;
   border-radius: 15px;
@@ -577,5 +611,15 @@
   border-color: lightgray;
   color: white;
   background-color: teal;
-  font-size: 20px;
+  font-size: 20px; */
+  height: 40px;
+  width: 100px;
+  /* width: 30%; */
+  border-radius: 15px;
+  cursor: pointer;
+  /* border-color: lightgray; */
+  color: white;
+  background-color: #ee6b6e;
+  font-size: 15px;
+  margin-bottom: 10px;
 }
