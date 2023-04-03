@@ -313,13 +313,14 @@ export default function FindEventsMap() {
         console.log(filters.startDate);
 
         let filterStartDate = new Date(filters.startDate);
-
-        if (eventDate.getTime() < filterStartDate.getTime()) {
+        let chosenYear = filters.startDate.substring(0,4);
+        if ((Number(chosenYear)< 2023) || eventDate.getTime() < filterStartDate.getTime()) {
           return false;
         }
 
       }
-      if (filters.endDate !== "") {
+      let chosenYear = filters.endDate.substring(0,4);
+      if ((Number(chosenYear)< 2023) || filters.endDate !== "") {
         let filterEndDate = new Date(filters.endDate);
         if (eventDate.getTime() > filterEndDate.getTime()) return false;
       }

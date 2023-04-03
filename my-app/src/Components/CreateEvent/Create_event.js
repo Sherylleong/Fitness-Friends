@@ -183,8 +183,9 @@ export default function CreateEvent() {
             incorrect = true;
         }
         let chosenDate = new Date(eventDate + ' ' + eventTime);
+        let chosenYear = eventDate.substring(0,4);
 
-        if (chosenDate.getTime() < new Date().getTime()) {
+        if ((Number(chosenYear)< 2023) || chosenDate.getTime() < new Date().getTime()) {
             setShowInvalidDateTime(true);
             incorrect=true;
         }

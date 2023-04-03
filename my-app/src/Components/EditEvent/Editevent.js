@@ -58,9 +58,6 @@ export default function EditEvent() {
     const { eventId: urlEventId } = useParams();
     const [showInvalidDateTime, setShowInvalidDateTime] = useState(false);
 
-    console.log(eventId);
-    console.log(urlEventId);
-    console.log(9990);
     const getEventDetails = async () => {
         const docRef = doc(firestore, "events", urlEventId);
         try {
@@ -210,13 +207,15 @@ export default function EditEvent() {
         if (!(eventTime)) {
             incorrect = true;
         }
-        let chosenDate = new Date(eventDate + ' ' + eventTime);
 
-        if (chosenDate.getTime() < new Date().getTime()) {
+        let chosenDate = new Date(eventDate + ' ' + eventTime);
+        let chosenYear = eventDate.substring(0,4);
+
+        if ((Number(chosenYear)< 2023) || chosenDate.getTime() < new Date().getTime()) {
             setShowInvalidDateTime(true);
             incorrect=true;
         }
-        if (!incorrect) {uploadFile(); alert("Event successfully edited!")}
+        if (!incorrect) {return;uploadFile(); alert("Event successfully edited!")}
     }
 
 
@@ -325,7 +324,7 @@ function MapContainer({state, setState, mapData}) {
 function EventMap({state, setState, mapData}) {
     const [zoom, setZoom] = useState(18)
     const onMarkerClick = (event) => {
-        console.log(event);
+
         setState(event);
         setZoom(14)
     }
