@@ -25,7 +25,7 @@ export default function Login() {
 				if (reply.operationType == "signIn") {
 					dispatch({newId: reply.user.uid});
 					currUid = reply.user.uid;
-					getProfile();
+					navigate("/ViewProfile");
 				}
 			}).catch((error) => {
 				if (error.code == "auth/wrong-password" || error.code == "auth/invalid-email" || error.code == "auth/user-not-found") {
@@ -37,19 +37,6 @@ export default function Login() {
 			});
 		}
 	}
-
-	const getProfile = () => {
-		const queryDb = query(collection(firestore, 'users'), where("userId", "==", currUid));
-		onSnapshot(queryDb, (querySnapshot) => {
-			querySnapshot.forEach((result) => {
-				if (result.data().displayName == null) {
-					navigate("/EditProfile");
-				}else {
-					navigate("/ViewProfile")
-				}
-			});
-			});
-	};
 
 	const verifyLoginData = (e) => {
 		setMissingPassword(false);

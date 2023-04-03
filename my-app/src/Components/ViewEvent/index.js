@@ -1,4 +1,3 @@
-import EventData from "./EventData";
 import iconpin from "../Resources/location.png";
 import calender from "../Resources/calender.png";
 import location from "../Resources/locationfinal.png";

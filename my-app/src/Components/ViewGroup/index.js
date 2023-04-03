@@ -20,7 +20,6 @@ import { onSnapshot } from "firebase/firestore";
 function ViewGroup() {
   //for user id
   const userId = useStoreState("userId");
-  console.log(userId);
   const navigate = useNavigate();
 
   //for pagination
@@ -207,7 +206,12 @@ function ViewGroup() {
   console.log("groupevents : ===");
   console.log({ groupEvents });
   console.log(groupId);
-  const isCreator1 = userId === group.groupOwner;
+  var isCreator1;
+  if (userId != "") {
+    isCreator1 = userId === group.groupOwner;
+  }else {
+    isCreator1 = true;
+  }
   console.log(isCreator1);
 
   //end data fetching
