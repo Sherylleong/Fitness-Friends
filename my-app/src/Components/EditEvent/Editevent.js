@@ -215,7 +215,7 @@ export default function EditEvent() {
             setShowInvalidDateTime(true);
             incorrect=true;
         }
-        if (!incorrect) {return;uploadFile(); alert("Event successfully edited!")}
+        if (!incorrect) {uploadFile(); alert("Event successfully edited!")}
     }
 
 
