@@ -29,6 +29,7 @@
     margin-right: 10px;
     display: flex;
     flex-direction: column;
+    
 
 
 }
@@ -66,6 +67,10 @@
 }
 .event-map-card .event-map-time {
     font-size: 18px;
+    font-weight: bold;
+    color: orangered;
+}
+.event-list-time {
     font-weight: bold;
     color: orangered;
 }

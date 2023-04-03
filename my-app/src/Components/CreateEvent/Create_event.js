@@ -25,17 +25,17 @@ export default function CreateEvent() {
 
     var month = (today.getMonth()+1) < 10 ? "0" + (today.getMonth()+1) : (today.getMonth()+1)
     var hour = today.getHours() < 10 ? "0" + today.getHours()  : today.getHours()
+    var day = today.getDate() < 10 ? "0" + (today.getDate()) : (today.getDate())
     var minutes = today.getMinutes() < 10 ? "0" + today.getMinutes()  : today.getMinutes()
+    var min = (today.getFullYear() + "-" + month + "-" + day);
 
-    const [eventDate, setEventDate] = useState(today.getFullYear() + "-" + month + "-" + today.getDate());
+    const [eventDate, setEventDate] = useState(min);
 
-console.log(eventDate );
     const [eventTime, setEventTime] = useState(hour + ":" + minutes);
 	const [bio, setBio] = useState("");
     const [difficulty, setDifficulty] = useState("Beginner");
     const [eventActivity, setActivity] = useState("Walking");
-    const [eventGroup, setEventGroup] = useState("None");
-    const [groupsOwned, setGroupsOwned] = useState([]);
+
 
     const difficultyChoices = ["Beginner", "Intermediate", "Advanced"]
     const activityChoices = ["Walking", "Jogging", "Running", "Climbing","Biking","Sports","Others"]
@@ -60,6 +60,7 @@ console.log(eventDate );
     const [showMissingTitle, setShowMissingTitle] = useState(false);
     const [showMissingDesc, setShowMissingDesc] = useState(false);
     const [showMissingLocation, setShowMissingLocation] = useState(false);
+    const [showInvalidDateTime, setShowInvalidDateTime] = useState(false);
   
     
     const getUserGroup = async() => {
@@ -163,6 +164,7 @@ console.log(eventDate );
         setShowMissingTitle(false);
         setShowMissingDesc(false);
         setShowMissingLocation(false);
+        setShowInvalidDateTime(false);
         if (!title) {
             setShowMissingTitle(true);
             incorrect = true;
@@ -180,7 +182,13 @@ console.log(eventDate );
         if (!(eventTime)) {
             incorrect = true;
         }
+        let chosenDate = new Date(eventDate + ' ' + eventTime);
+        let chosenYear = eventDate.substring(0,4);
 
+        if ((Number(chosenYear)< 2023) || chosenDate.getTime() < new Date().getTime()) {
+            setShowInvalidDateTime(true);
+            incorrect=true;
+        }
         if (!incorrect) {uploadFile(); alert("Event successfully created!")}
     }
 
@@ -214,14 +222,17 @@ console.log(eventDate );
                             <div className="user-inputs">
                                 <div>
                                 <b>Date of Event </b>
-                                <input className="input-ignore-width" type="date" min={today.getFullYear() + "-" + month + "-" + today.getDate()} value={eventDate} onChange={(e)=>setEventDate(e.target.value)}></input>
+                                <input className="input-ignore-width" type="date" min={min} value={eventDate} onChange={(e)=>setEventDate(e.target.value)}></input>
                                 <div style={{display: eventDate ? 'none' : 'block'}} id="missing-date" className="account-form-incorrect">Event date is required.</div>
+                                <div style={{display: showInvalidDateTime ? 'block' : 'none'}} id="invalid-time" className="account-form-incorrect">Valid date and time is required.</div>
                                 </div>
                                 <div>
                                 <b>Time of Event </b>
                                 <input className="input-ignore-width" type="time" value={eventTime} onChange={(e)=>setEventTime(e.target.value)}></input>
                                 <div style={{display: eventTime ? 'none' : 'block'}} id="missing-time" className="account-form-incorrect">Event time is required.</div>
+                                <div style={{display: showInvalidDateTime ? 'block' : 'none'}} id="invalid-time" className="account-form-incorrect">Valid date and time is required.</div>
                                 </div>
+                                
                             </div>
                             <div className="user-inputs">
                                 <div>

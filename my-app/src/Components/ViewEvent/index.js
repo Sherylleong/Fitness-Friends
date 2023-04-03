@@ -67,7 +67,7 @@ function ViewEvent() {
   const [eventOver, setEventOver] = useState(false); //Set true if event date has passed
   const storage = getStorage();
   var today = new Date();
-  today.setHours(0,0,0,0);
+  today.setHours(0, 0, 0, 0);
 
   //for data fetching (image and groupdata includigng grpevents)
   useEffect(() => {
@@ -79,7 +79,7 @@ function ViewEvent() {
       if (eventRef) {
         const unsubscribe = onSnapshot(eventRef, (doc) => {
           if (new Date(doc.data().date) < today) {
-              setEventOver(true);
+            setEventOver(true);
           }
           setEvent(doc.data());
         });
@@ -209,7 +209,7 @@ function ViewEvent() {
 
               <div className="event-date-time">
                 <div className="event-date"> Date: {event.date}</div>
-                <div className="event-time"> Time: {event.eventTime}</div>
+                <div className="event-time"> Time: {event.time}</div>
               </div>
             </div>
 

@@ -18,10 +18,14 @@ export default function EditEvent() {
 	const [pic, setPic] = useState("");
 	const [title, setTitle] = useState("");
     var today = new Date()
+
     var month = (today.getMonth()+1) < 10 ? "0" + (today.getMonth()+1) : (today.getMonth()+1)
-	const [eventDate, setEventDate] = useState(today.getFullYear() + "-" + month + "-" + today.getDate());
     var hour = today.getHours() < 10 ? "0" + today.getHours()  : today.getHours()
+    var day = today.getDate() < 10 ? "0" + (today.getDate()) : (today.getDate())
     var minutes = today.getMinutes() < 10 ? "0" + today.getMinutes()  : today.getMinutes()
+    var min = (today.getFullYear() + "-" + month + "-" + day);
+
+    const [eventDate, setEventDate] = useState(min);
     const [eventTime, setEventTime] = useState("");
 	const [bio, setBio] = useState("");
     const [difficulty, setDifficulty] = useState("")
@@ -52,10 +56,8 @@ export default function EditEvent() {
     const [showMissingDesc, setShowMissingDesc] = useState(false);
     const [showMissingLocation, setShowMissingLocation] = useState(false);
     const { eventId: urlEventId } = useParams();
+    const [showInvalidDateTime, setShowInvalidDateTime] = useState(false);
 
-    console.log(eventId);
-    console.log(urlEventId);
-    console.log(9990);
     const getEventDetails = async () => {
         const docRef = doc(firestore, "events", urlEventId);
         try {
@@ -206,7 +208,14 @@ export default function EditEvent() {
             incorrect = true;
         }
 
-        if (!incorrect) {uploadFile(); alert("Event successfully edited!")}
+        let chosenDate = new Date(eventDate + ' ' + eventTime);
+        let chosenYear = eventDate.substring(0,4);
+
+        if ((Number(chosenYear)< 2023) || chosenDate.getTime() < new Date().getTime()) {
+            setShowInvalidDateTime(true);
+            incorrect=true;
+        }
+        if (!incorrect) {return;uploadFile(); alert("Event successfully edited!")}
     }
 
 
@@ -239,13 +248,17 @@ export default function EditEvent() {
                             <div className="user-inputs">
                                 <div>
                                 <b>Date of Event </b>
-                                <input className="input-ignore-width" type="date" min={today.getFullYear() + "-" + month + "-" + today.getDate()} value={eventDate} onChange={(e)=>setEventDate(e.target.value)}></input>
+                                <input className="input-ignore-width" type="date" min={min} value={eventDate} onChange={(e)=>setEventDate(e.target.value)}></input>
                                 <div style={{display: eventDate ? 'none' : 'block'}} id="missing-date" className="account-form-incorrect">Event date is required.</div>
+                                <div style={{display: showInvalidDateTime ? 'block' : 'none'}} id="invalid-time" className="account-form-incorrect">Valid date and time is required.</div>
+
                                 </div>
                                 <div>
                                 <b>Time of Event </b>
                                 <input className="input-ignore-width" type="time" value={eventTime} onChange={(e)=>setEventTime(e.target.value)}></input>
                                 <div style={{display: eventTime ? 'none' : 'block'}} id="missing-time" className="account-form-incorrect">Event time is required.</div>
+                                <div style={{display: showInvalidDateTime ? 'block' : 'none'}} id="invalid-time" className="account-form-incorrect">Valid date and time is required.</div>
+
                                 </div>
                             </div>
                             <div className="user-inputs">
@@ -311,7 +324,7 @@ function MapContainer({state, setState, mapData}) {
 function EventMap({state, setState, mapData}) {
     const [zoom, setZoom] = useState(18)
     const onMarkerClick = (event) => {
-        console.log(event);
+
         setState(event);
         setZoom(14)
     }
