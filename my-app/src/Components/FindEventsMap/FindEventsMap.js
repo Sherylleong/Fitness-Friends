@@ -70,7 +70,7 @@ function EventsListCard(event, navigate,userId) {
   };
   //#C0C0C0
   return (
-    <div className="event-list-card" style={{backgroundColor:joined ? "#C0C0C0" : "white", opacity:joined ? "0.5" : "1", paddingLeft:"15px"}}>
+    <div className="event-list-card" style={{backgroundColor:joined ? "#C0C0C0" : "white", opacity:joined ? "0.5" : "1", paddingLeft:"15px", paddingRight:"70px"}}>
       <div className="event-list-img">
         <div className="crop">
           <img src={event.eventImage} />
