@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useStoreState } from "../../App"
 import "../Create.css";
-
+import Filter from 'bad-words';
 import { firestore, storage } from "../FirebaseDb/Firebase";
 import { collection ,getDocs, query, limit, addDoc, where } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -130,6 +130,7 @@ export default function CreateEvent() {
     }
 
     const addEvent = (url) => {
+        const badFilter = new Filter();
         var eventType = "individual";
         if (groupSelected != "") {
             eventType = "group";
@@ -146,8 +147,8 @@ export default function CreateEvent() {
                 lat: selected.position.lat,
                 lng: selected.position.lng
             },
-            eventTitle: title,
-            eventDescription: bio,
+            eventTitle: badFilter.clean(title),
+            eventDescription: badFilter.clean(bio),
             eventType: eventType,
             groupId: groupSelected,
             eventImage: url

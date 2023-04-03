@@ -7,7 +7,7 @@ import { collection,doc, updateDoc ,getDocs, getDoc, query, limit, addDoc, where
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-
+import Filter from 'bad-words';
 import { GoogleMap, useLoadScript, Marker, MarkerClusterer, MarkerF } from "@react-google-maps/api";
 
 export default function EditEvent() {
@@ -155,6 +155,7 @@ export default function EditEvent() {
     }
 
     const updateEvent = (url) => {
+        const badFilter = new Filter();
         var eventType = "individual";
         if (groupSelected != "") {
             eventType = "group";
@@ -170,8 +171,8 @@ export default function EditEvent() {
                 lat: selected.position.lat,
                 lng: selected.position.lng
             },
-            eventTitle: title,
-            eventDescription: bio,
+            eventTitle: badFilter.clean(title),
+            eventDescription: badFilter.clean(bio),
             eventType: eventType,
             groupId: groupSelected,
             eventImage: url

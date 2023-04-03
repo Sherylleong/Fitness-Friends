@@ -9,7 +9,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 // import "./CreateGroup.css";
 import "../Create.css"
 import { v4 as uuidv4 } from "uuid";
-
+import Filter from 'bad-words';
 function EditGroup() {
   const [groupname, setGroupname] = useState("");
   const [groupdesc, setGroupdesc] = useState("");
@@ -66,9 +66,10 @@ function EditGroup() {
   }
 
   const updateGroup = (url) => {
+    const badFilter = new Filter();
       updateDoc(doc(firestore, "group", urlGroupId), {
-        groupname: groupname,
-        groupdesc: groupdesc,
+        groupname: badFilter.clean(groupname),
+        groupdesc: badFilter.clean(groupdesc),
         groupdifficulty: difficulty,
         groupcategory: groupActivity,
         groupImageURL: url

@@ -9,6 +9,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 // import "./CreateGroup.css";
 import "../Create.css"
 import { v4 as uuidv4 } from "uuid";
+import Filter from 'bad-words';
 
 function CreateGroup() {
   const userId = useStoreState("userId");
@@ -48,10 +49,11 @@ function CreateGroup() {
   }
 
   const createGroup = (url) => {
+    const badFilter = new Filter();
       addDoc(collection(firestore, "group"), {
         groupOwner: userId,
-        groupname: groupname,
-        groupdesc: groupdesc,
+        groupname: badFilter.clean(groupname),
+        groupdesc: badFilter.clean(groupdesc),
         groupdifficulty: difficulty,
         groupcategory: groupActivity,
         groupmembers: [],

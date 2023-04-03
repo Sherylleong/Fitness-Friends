@@ -6,7 +6,7 @@ import {collection,doc, updateDoc ,getDocs, query, where } from "firebase/firest
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { updatePassword } from "firebase/auth"
 import { useNavigate } from "react-router-dom";
-
+import Filter from 'bad-words';
 
 
 export default function EditProfile() {
@@ -169,10 +169,13 @@ export default function EditProfile() {
 
 	const updateDetails = async() => {
 		const updateQuery = doc(firestore, 'users', documentId);
+		const badFilter = new Filter();
+
+
 		updateDoc(updateQuery, {
-			displayName: displayName,
+			displayName: badFilter.clean(displayName),
 			Location: location,
-			Bio: bio,
+			Bio: badFilter.clean(bio),
 			settings: {
 				groupJoined: groupJoined,
 				eventAttending: eventAttending,
