@@ -44,7 +44,6 @@ function ViewProfile() {
   const [currentEventPage, setcurrentEventPage] = useState(0);
   const [currentJoinedPage, setCurrentJoinedPage] = useState(0);
   const [currentOwnedPage, setCurrentOwnedPage] = useState(0);
-  const [currentCompletedPage, setCompletedPage] = useState(0);
   const [numEvents112, setNumEvents112] = useState(0);
 
   var today = new Date();

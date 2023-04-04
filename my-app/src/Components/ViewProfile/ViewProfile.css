@@ -623,3 +623,8 @@
   font-size: 15px;
   margin-bottom: 10px;
 }
+
+.user-private {
+    font-size: 30px;
+    font-weight: bold;
+}
