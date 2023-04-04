@@ -8,13 +8,14 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import {collection,doc,documentId,getDocs, query, where } from "firebase/firestore";
 
+
 function ViewMemberProfile() {
   // set up attending and owned events
   const { memberId: urlMemberId } = useParams(); // retrieve the EventId from the URL parameter
   const userId = urlMemberId;
-  const [attending, setAttending] = useState(true);
+  const [attending, setAttending] = useState(false);
   const [owned, setOwned] = useState(false);
-  const [attended, setAttended] = useState(false);
+  const [attended, setAttended] = useState(true);
   const [currentEventPage, setcurrentEventPage] = useState(0); 
   const [currentJoinedPage, setCurrentJoinedPage] = useState(0);
   const [currentOwnedPage, setCurrentOwnedPage] = useState(0);
@@ -191,27 +192,44 @@ function ViewMemberProfile() {
   const getSettings = async () => {
     const docRef = query(collection(firestore, "users"), where("userId", "==", userId));
     const docu = await getDocs(docRef);
-    const doc = docu.docs[0].data();
-    setSettingAttending(doc.settings.eventAttending);
-    setSettingAttended(doc.settings.eventAttended);
-    setSettingGroups(doc.settings.groupJoined);
+    docu.forEach((item)=> {
+        var doc = item.data();
+        setSettingAttending(doc.settings.eventAttending);
+        setSettingAttended(doc.settings.eventAttended);
+        if (doc.settings.eventAttending == true) {
+            setSettings(true);   
+        }
+        setSettingGroups(doc.settings.groupJoined);
+    });
   };
+
+  const setSettings = (value) => {
+      if (value == true) {
+        setAttending(true);
+        setAttended(false);
+      }
+  }
+  
   useEffect(() => {
     getProfile();
-    getSettings();
     getGroupsOwned();
     getGroupsJoined();
     getEventsJoined();
     getEventsOwned();
     getNumEvents112();
+    // setAttended(attended);
+    // setAttending(attending);
   }, []);
- 
+  getSettings();
   console.log(eventsOwned112);
   console.log(eventsJoined112);
   console.log(groupsJoined112);
   console.log(groupsOwned112);
   console.log({profile2});
   console.log(userId);
+  console.log(attended);
+  console.log(attending);
+
 
   const ViewEventHandler = (eventId) => {
     console.log(eventId);
