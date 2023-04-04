@@ -217,10 +217,11 @@ function ViewMemberProfile() {
     getEventsJoined();
     getEventsOwned();
     getNumEvents112();
+    getSettings();
     // setAttended(attended);
     // setAttending(attending);
   }, []);
-  getSettings();
+  
   console.log(eventsOwned112);
   console.log(eventsJoined112);
   console.log(groupsJoined112);
