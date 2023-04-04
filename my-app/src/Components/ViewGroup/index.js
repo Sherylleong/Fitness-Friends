@@ -209,7 +209,7 @@ function ViewGroup() {
   var isCreator1;
   if (userId != "") {
     isCreator1 = userId === group.groupOwner;
-  }else {
+  } else {
     isCreator1 = true;
   }
   console.log(isCreator1);
@@ -316,7 +316,7 @@ function ViewGroup() {
                       <div className="left">
                         <div className="eventtitle">{event.eventTitle}</div>
 
-                        <div className="eventdate">Date: {event.eventDate}</div>
+                        <div className="eventdate">Date: {event.date}</div>
 
                         <div className="eventlocation">
                           Location: {event.eventLocation}

@@ -7,7 +7,7 @@ import climbing from "../Resources/climbingimage.png";
 import biking from "../Resources/bikingimage.png";
 import sports from "../Resources/sportsimage.png";
 import others from "../Resources/othersimage.png";
-
+import homepage from "../Resources/Homepage.png";
 import "./Home.css";
 function HomePage() {
   const navigate = useNavigate();
@@ -44,7 +44,7 @@ function HomePage() {
   useEffect(() => {
     const intervalId = setInterval(() => {
       setTextIndex((textIndex + 1) % textOptions.length);
-    }, 3000); // change text every 3 seconds
+    }, 2000); // change text every 3 seconds
 
     return () => {
       clearInterval(intervalId);
@@ -78,10 +78,7 @@ function HomePage() {
           </button>
         </div>
         <div className="home-page-top-right">
-          <img
-            className="home-page-img"
-            src="https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/home-page-image.jpg?alt=media&token=b955c904-02d6-452e-8e47-6f1f0897bb1a"
-          />
+          <img className="home-page-img" src={homepage} />
         </div>
       </div>
       <div className="home-page-bottom">
