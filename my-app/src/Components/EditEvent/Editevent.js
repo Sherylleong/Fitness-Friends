@@ -160,6 +160,9 @@ export default function EditEvent() {
         if (groupSelected != "") {
             eventType = "group";
         }
+        let nameChange=title, descChange=bio;
+		try {nameChange = badFilter.clean(title)} catch(e) {}
+		try {descChange = badFilter.clean(bio)} catch(e) {}
         updateDoc(doc(firestore, 'events',urlEventId), {
             creatorID: userId,
             date: eventDate,
@@ -171,8 +174,8 @@ export default function EditEvent() {
                 lat: selected.position.lat,
                 lng: selected.position.lng
             },
-            eventTitle: badFilter.clean(title),
-            eventDescription: badFilter.clean(bio),
+            eventTitle: nameChange,
+            eventDescription: descChange,
             eventType: eventType,
             groupId: groupSelected,
             eventImage: url

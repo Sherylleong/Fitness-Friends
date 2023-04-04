@@ -170,12 +170,15 @@ export default function EditProfile() {
 	const updateDetails = async() => {
 		const updateQuery = doc(firestore, 'users', documentId);
 		const badFilter = new Filter();
+		let displayNameChange=displayName, bioChange=bio;
+		try {displayNameChange = badFilter.clean(displayName)} catch(e) {}
+		try {bioChange = badFilter.clean(bio)} catch(e) {}
 
-
+		
 		updateDoc(updateQuery, {
-			displayName: badFilter.clean(displayName),
+			displayName: displayNameChange,
 			Location: location,
-			Bio: badFilter.clean(bio),
+			Bio: bioChange,
 			settings: {
 				groupJoined: groupJoined,
 				eventAttending: eventAttending,
@@ -186,6 +189,7 @@ export default function EditProfile() {
 			returnToProfilePage();
 		}).catch((error) => {
 			console.log(error);
+			
 		});;
 	}
 
