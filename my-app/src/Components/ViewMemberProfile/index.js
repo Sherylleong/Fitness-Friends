@@ -14,6 +14,7 @@ function ViewMemberProfile() {
   const userId = urlMemberId;
   const [attending, setAttending] = useState(true);
   const [owned, setOwned] = useState(false);
+  const [attended, setAttended] = useState(false);
   const [currentEventPage, setcurrentEventPage] = useState(0); 
   const [currentJoinedPage, setCurrentJoinedPage] = useState(0);
   const [currentOwnedPage, setCurrentOwnedPage] = useState(0);
@@ -21,10 +22,12 @@ function ViewMemberProfile() {
   const [groupsOwned112, setGroupsOwned112] = useState([]);
   const [eventsJoined112, setEventsJoined112] = useState([]);
   const [eventsOwned112, setEventsOwned112] = useState([]);
+  const [eventsJoinedPast, setEventsJoinedPast] = useState([]);
+  const [eventsOwnedPast, setEventsOwnedPast] = useState([]);
   const [profile2, setProfile2] = useState("");
   const [groupsJoined112, setGroupsJoined112] = useState([]);
-  const [settingAttending, setSettingAttending] = useState(null);
-  const [settingAttened, setSettingAttened] = useState(null);
+  const [settingAttending, setSettingAttending] = useState(true);
+  const [settingAttended, setSettingAttended] = useState(true);
   const [settingGroups, setSettingGroups] = useState(null);
   var today = new Date();
   today.setHours(0,0,0,0);
@@ -32,14 +35,21 @@ function ViewMemberProfile() {
   const attendinghandler = () => {
     setAttending(true);
     setOwned(false);
+    setAttended(false);
     setcurrentEventPage(0);
   };
-
   const ownedhandler = () => {
     setAttending(false);
     setOwned(true);
+    setAttended(false);
     setcurrentEventPage(0);
   };
+  const attendedhandler = () => {
+    setAttending(false);
+    setOwned(false);
+    setAttended(true);
+    setcurrentEventPage(0);
+  }
 
   const navigate = useNavigate();
 
@@ -58,17 +68,21 @@ function ViewMemberProfile() {
 
       const docRef = query(collection(firestore, "group"), where("groupmembers", "array-contains", userId));
       const docu = await getDocs(docRef);
-      const updatedDocs = docu.docs.map(async (doc) => {
-        const updatedGroup = { ...doc.data() };
-        const groupOwner = await getGroupOwnerName(updatedGroup.groupOwner);
-        updatedGroup.groupOwner = groupOwner;
-        if (updatedGroup) {
-          updatedGroup.groupId = doc.id;
-        }
-        return updatedGroup;
+
+      var updatedEvent = [];
+      var completedEvents = [];
+      docu.forEach((doc)=> {
+          var data = Object.assign({}, doc.data() ,{
+              id: doc.id
+          });
+          if(new Date(doc.data().date) < today) {
+              completedEvents = [...completedEvents, data];
+          }else {
+            updatedEvent = [...updatedEvent, data]
+          }
       });
-      const updatedGroups = await Promise.all(updatedDocs);
-      setGroupsJoined112(updatedGroups);
+      setEventsJoinedPast(completedEvents);
+      setEventsJoined112(updatedEvent);
   };
   
   async function getGroupOwnerName(groupOwnerId) {
@@ -82,20 +96,23 @@ function ViewMemberProfile() {
   const getGroupsOwned = async () => {
     const docRef = query(collection(firestore, "group"), where("groupOwner", "==", userId));
     const docu = await getDocs(docRef);
-    const updatedDocs = docu.docs.map(async (doc) => {
-      const updatedGroup = { ...doc.data() };
-      const groupOwner = await getGroupOwnerName(updatedGroup.groupOwner);
-      updatedGroup.groupOwner = groupOwner;
-      // add the doc id into the array as a new field called groupid if updateGroup is not epmty
-      if (updatedGroup) {
-        updatedGroup.groupId = doc.id;
-      }
-      return updatedGroup;
-    });
-    const updatedGroups = await Promise.all(updatedDocs);
-    setGroupsOwned112(updatedGroups);
-
-
+    var updatedEvent = [];
+    var completedEvents = [];
+    docu.forEach((doc)=> {
+        var data = Object.assign({}, doc.data() ,{
+            id: doc.id
+        });
+        console.log(data);
+        if(new Date(doc.data().date) < today) {
+            
+            completedEvents = [...completedEvents, data]
+        }else {
+          updatedEvent = [...updatedEvent, data]
+        }
+    })
+    
+    setEventsOwnedPast(completedEvents);
+    setEventsOwned112(updatedEvent);
   };
 
 
@@ -103,25 +120,21 @@ function ViewMemberProfile() {
 
       const docRef = query(collection(firestore, "events"), where("eventAttendees", "array-contains", userId));
       const docu = await getDocs(docRef);
-    
-      const updatedDocs = docu.docs.map(async (doc) => {
-        const updatedEvent = { ...doc.data() };
-        if (updatedEvent) {
-          updatedEvent.eventId = doc.id;
-        }
-        return updatedEvent;
-      });
-      const updatedEvents = await Promise.all(updatedDocs);
 
       var updatedEvent = [];
-    docu.forEach((doc)=> {
-      var data = Object.assign({}, doc.data() ,{
-          eventId: doc.id
+      var completedEvents = [];
+      docu.forEach((doc)=> {
+          var data = Object.assign({}, doc.data() ,{
+              id: doc.id
+          });
+          if(new Date(doc.data().date) < today) {
+              completedEvents = [...completedEvents, data];
+          }else {
+            updatedEvent = [...updatedEvent, data]
+          }
       });
-      if(new Date(doc.data().date) >= today) {
-        updatedEvent = [...updatedEvent, data]
-      }
-    });
+      setEventsJoinedPast(completedEvents);
+      console.log(completedEvents);
       setEventsJoined112(updatedEvent);
     
   };
@@ -129,25 +142,22 @@ function ViewMemberProfile() {
   const getEventsOwned = async () => {
     const docRef = query(collection(firestore, "events"), where("creatorID", "==", userId));
     const docu = await getDocs(docRef);
-     // add the doc id into the array as a new field called eventId
-    // const updatedDocs = docu.docs.map(async (doc) => {
-    //   const updatedEvent = { ...doc.data() };
-    //   if (updatedEvent) {
-    //     updatedEvent.eventId = doc.id;
-    //   }
-    //   return updatedEvent;
-    // });
-    // const updatedEvents = await Promise.all(updatedDocs);
-
     var updatedEvent = [];
+    var completedEvents = [];
     docu.forEach((doc)=> {
-      var data = Object.assign({}, doc.data() ,{
-          eventId: doc.id
-      });
-      if(new Date(doc.data().date) >= today) {
-        updatedEvent = [...updatedEvent, data]
-      }
-    });
+        var data = Object.assign({}, doc.data() ,{
+            id: doc.id
+        });
+        console.log(data);
+        if(new Date(doc.data().date) < today) {
+            
+            completedEvents = [...completedEvents, data]
+        }else {
+          updatedEvent = [...updatedEvent, data]
+        }
+    })
+    
+    setEventsOwnedPast(completedEvents);
     setEventsOwned112(updatedEvent);
   };
   //get number of events owned and joined
@@ -183,6 +193,7 @@ function ViewMemberProfile() {
     const docu = await getDocs(docRef);
     const doc = docu.docs[0].data();
     setSettingAttending(doc.settings.eventAttending);
+    setSettingAttended(doc.settings.eventAttended);
     setSettingGroups(doc.settings.groupJoined);
   };
   useEffect(() => {
@@ -243,38 +254,131 @@ function ViewMemberProfile() {
                 </div>
               </div>
               <div className="left-bottom112">
-                <div className="events-box112">
-                  <div className="events-selector112">
-                    <div className="events-selector-left112">
-                      <button
-                        className={
+                  <div className="events-box112">
+                {settingAttending || settingAttended ? <>
+                <div className="events-selector112">
+                  {settingAttending ? <>
+                  <div className="events-selector-left112">
+                    <button
+                      className={
                         attending ? "events-selected" : "events-unselected"
                       }
-                        type="submit"
-                        onClick={attendinghandler}
-                      >
-                        Events Attending
-                      </button>
-                    </div>
-                    <div className="events-selector-righ112t">
+                      type="submit"
+                      onClick={attendinghandler}
+                    >
+                      Events Attending
+                    </button>
+                  </div>
+                  <div className="events-selector-righ112t">
+                    <button
+                      className={
+                        owned ? "events-selected" : "events-unselected"
+                      }
+                      type="submit"
+                      onClick={ownedhandler}
+                    >
+                      Events Owned
+                    </button>
+                  </div>
+                  </> : <></>}
+                  {settingAttended ? <>
+                  <div className="events-selector-righ112t">
                       <button
                         className={
-                          owned ? "events-selected" : "events-unselected"
+                          attended ? "events-selected" : "events-unselected"
                         }
                         type="submit"
-                        onClick={ownedhandler}
-                      >
-                        Events Owned
+                        onClick={attendedhandler}>
+                        Events Attended
                       </button>
                     </div>
-                  </div>
-                  {owned && (
-                      <div className="manage-events112">
-                      </div>
-                  )}
-                  <div className="events-list112">
-                    {settingAttending && attending && eventsJoined112.slice(currentEventPage*3,currentEventPage*3+3).map((event) => (
-                      <div className="event112" onClick={() => ViewEventHandler(event.eventId)}>
+                    </>: <></>}
+                </div>
+                <div className="events-list112">
+                  {attending &&
+                    eventsJoined112
+                      .slice(currentEventPage * 3, currentEventPage * 3 + 3)
+                      .map((event) => (
+                        <div
+                          className="event112"
+                          onClick={() => ViewEventHandler(event.id)}
+                        >
+                          <div className="event-left112">
+                            <div className="event-left-left112">
+                              <div className="event-image-container112">
+                                <img
+                                  className="event-image112"
+                                  src={event.eventImage}
+                                ></img>
+                              </div>
+                            </div>
+                            <div className="event-left-right112">
+                              <div className="event-title112">
+                                {event.eventTitle}
+                              </div>
+                              <div className="event-location112">
+                                Location: {event.eventLocation}
+                              </div>
+                              <div className="event-date112">{event.date}</div>
+                            </div>
+                          </div>
+                          <div className="event-right112">
+                            <div className="tags-container112">
+                              <div className="tag112">
+                                {event.eventCategory}
+                              </div>
+                              <div className="tag112">
+                                {event.eventDifficulty}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                  {owned &&
+                    eventsOwned112
+                      .slice(currentEventPage * 3, currentEventPage * 3 + 3)
+                      .map((event) => (
+                        <div className="event112">
+                          <div
+                            className="event-left112"
+                            onClick={() => ViewEventHandler(event.id)}
+                          >
+                            <div className="event-left-left112">
+                              <div className="event-image-container112">
+                                <img
+                                  className="event-image112"
+                                  src={event.eventImage}
+                                ></img>
+                              </div>
+                            </div>
+                            <div className="event-left-right112">
+                              <div className="event-title112">
+                                {event.eventTitle}
+                              </div>
+                              <div className="event-location112">
+                                Location: {event.eventLocation}
+                              </div>
+                              <div className="event-date112">{event.date}</div>
+                            </div>
+                          </div>
+                          <div className="event-right112">
+                            <div
+                              className="tags-container112"
+                              onClick={() => ViewEventHandler(event.id)}
+                            >
+                              <div className="tag112">
+                                {event.eventCategory}
+                              </div>
+                              <div className="tag112">
+                                {event.eventDifficulty}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+
+                      {attended && (eventsJoinedPast.concat(eventsOwnedPast)).slice(currentEventPage*3,currentEventPage*3+3).map((event) => (
+                      <div className="event112" onClick={()=>ViewEventHandler(event.id)}>
                         <div className="event-left112">
                           <div className="event-left-left112">
                             <div className="event-image-container112">
@@ -297,53 +401,23 @@ function ViewMemberProfile() {
                           </div>
                         </div>
                         <div className="event-right112">
-                          <div className="tags-container112" onClick={() => ViewEventHandler(event.eventId)}>
+                          <div className="tags-container112" onClick={() => ViewEventHandler(event.id)}>
                             <div className="tag112">{event.eventCategory}</div>
                             <div className="tag112">{event.eventDifficulty}</div>
                           </div>
                         </div>
                       </div>
                     ))}
-                    {owned && eventsOwned112.slice(currentEventPage*3,currentEventPage*3+3).map((event) => (
-                      <div className="event112" onClick={() => ViewEventHandler(event.eventId)}>
-                      <div className="event-left112">
-                        <div className="event-left-left112">
-                          <div className="event-image-container112">
-                            <img
-                              className="event-image112"
-                              src={event.eventImage}
-                            ></img>
-                          </div>
-                        </div>
-                        <div className="event-left-right112">
-                          <div className="event-title112">
-                            {event.eventTitle}
-                          </div>
-                          <div className="event-location112">
-                            Location: {event.eventLocation}
-                          </div>
-                          <div className="event-date112">
-                            {event.date}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="event-right112">
-                        <div className="tags-container112">
-                          <div className="tag112">{event.eventCategory}</div>
-                          <div className="tag112">{event.eventDifficulty}</div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
                   </div>
                   <div className="event-pagination112">
                   {eventsJoined112.length > 3 ||
-                    eventsOwned112.length > 3 ? (
+                    eventsOwned112.length > 3 ||
+                    (eventsJoinedPast.length+eventsOwnedPast.length) > 3 ? (
                       <ReactPaginate
                         previousLabel={'<'}
                         nextLabel={'>'}
                         breakLabel={'...'}
-                        pageCount={Math.ceil((attending ? eventsJoined112.length : eventsOwned112.length) / 3)}
+                        pageCount={Math.ceil(attended ? (eventsJoinedPast.length+eventsOwnedPast.length) /3: (attending ? eventsJoined112.length : eventsOwned112.length) / 3)}
                         marginPagesDisplayed={2}
                         pageRangeDisplayed={3}
                         onPageChange={(selectedEventPage) => handleEventPageChange(selectedEventPage.selected)}
@@ -352,8 +426,11 @@ function ViewMemberProfile() {
                         forcePage={currentEventPage}
                       />
                     ) : null}
-                  </div>
                 </div>
+                </>:<><div className="user-private">
+                      User has set Event Display to Private
+                  </div></>}
+              </div>
               </div>
             </div>
             <div className="right112">
