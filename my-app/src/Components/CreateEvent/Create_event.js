@@ -131,6 +131,9 @@ export default function CreateEvent() {
 
     const addEvent = (url) => {
         const badFilter = new Filter();
+        let nameChange=title, descChange=bio;
+		try {nameChange = badFilter.clean(title)} catch(e) {}
+		try {descChange = badFilter.clean(bio)} catch(e) {}
         var eventType = "individual";
         if (groupSelected != "") {
             eventType = "group";
@@ -147,8 +150,8 @@ export default function CreateEvent() {
                 lat: selected.position.lat,
                 lng: selected.position.lng
             },
-            eventTitle: badFilter.clean(title),
-            eventDescription: badFilter.clean(bio),
+            eventTitle: nameChange,
+            eventDescription: descChange,
             eventType: eventType,
             groupId: groupSelected,
             eventImage: url

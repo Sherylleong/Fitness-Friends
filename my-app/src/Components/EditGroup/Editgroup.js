@@ -67,9 +67,14 @@ function EditGroup() {
 
   const updateGroup = (url) => {
     const badFilter = new Filter();
+
+    let nameChange=groupname, descChange=groupdesc;
+		try {nameChange = badFilter.clean(groupname)} catch(e) {}
+		try {descChange = badFilter.clean(groupdesc)} catch(e) {}
+
       updateDoc(doc(firestore, "group", urlGroupId), {
-        groupname: badFilter.clean(groupname),
-        groupdesc: badFilter.clean(groupdesc),
+        groupname: nameChange,
+        groupdesc: descChange,
         groupdifficulty: difficulty,
         groupcategory: groupActivity,
         groupImageURL: url
