@@ -64,11 +64,12 @@ h2 {
 
 .account-form input {
   margin: 0.5rem 0;
-  padding: 1rem;
-  border: none;
-  width: 98%;
-  background-color: #e5e5e5e5;
-  border-radius: 5px;
+    padding: 1rem;
+    border: none;
+    width: 98%;
+    background-color: #e5e5e5e5;
+    border-radius: 5px;
+    font-size: 20px;
 }
 
 .account-form input::placeholder {

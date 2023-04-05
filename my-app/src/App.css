@@ -84,7 +84,7 @@ form input[type="text"] {
   width: 98%;
   background-color: #e5e5e5e5;
   border-radius: 5px;
-  font-size: 1.5vh;
+  font-size: 20px;
 }
 
 /* TextArea Styling */
@@ -95,7 +95,7 @@ form textarea {
   width: 98%;
   background-color: #e5e5e5e5;
   border-radius: 5px;
-  font-size: 1.5vh;
+  font-size: 20px;
 }
 
 /* File Upload Button */
