@@ -23,10 +23,8 @@ import { arrayUnion, arrayRemove } from "firebase/firestore";
 import { doc, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
 import { onSnapshot } from "firebase/firestore";
 
+
 function ViewEvent() {
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: "AIzaSyCGCznAwZAFJ8qMQY1ckg6EfDwuczmepWI",
-  });
   const userId = useStoreState("userId");
   const navigate = useNavigate();
   // FirebaseAuth.getInstance().getCurrentUser()
