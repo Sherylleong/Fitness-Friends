@@ -67,23 +67,22 @@ function ViewMemberProfile() {
 
   const getGroupsJoined = async () => {
 
-      const docRef = query(collection(firestore, "group"), where("groupmembers", "array-contains", userId));
-      const docu = await getDocs(docRef);
-
-      var updatedEvent = [];
-      var completedEvents = [];
-      docu.forEach((doc)=> {
-          var data = Object.assign({}, doc.data() ,{
-              id: doc.id
-          });
-          if(new Date(doc.data().date) < today) {
-              completedEvents = [...completedEvents, data];
-          }else {
-            updatedEvent = [...updatedEvent, data]
-          }
-      });
-      setEventsJoinedPast(completedEvents);
-      setEventsJoined112(updatedEvent);
+    const docRef = query(
+      collection(firestore, "group"),
+      where("groupmembers", "array-contains", userId)
+    );
+    const docu = await getDocs(docRef);
+    const updatedDocs = docu.docs.map(async (doc) => {
+      const updatedGroup = { ...doc.data() };
+      const groupOwner = await getGroupOwnerName(updatedGroup.groupOwner);
+      updatedGroup.groupOwner = groupOwner;
+      if (updatedGroup) {
+        updatedGroup.groupId = doc.id;
+      }
+      return updatedGroup;
+    });
+    const updatedGroups = await Promise.all(updatedDocs);
+    setGroupsJoined112(updatedGroups);
   };
   
   async function getGroupOwnerName(groupOwnerId) {
@@ -95,25 +94,23 @@ function ViewMemberProfile() {
   
 
   const getGroupsOwned = async () => {
-    const docRef = query(collection(firestore, "group"), where("groupOwner", "==", userId));
+    const docRef = query(
+      collection(firestore, "group"),
+      where("groupOwner", "==", userId)
+    );
     const docu = await getDocs(docRef);
-    var updatedEvent = [];
-    var completedEvents = [];
-    docu.forEach((doc)=> {
-        var data = Object.assign({}, doc.data() ,{
-            id: doc.id
-        });
-        console.log(data);
-        if(new Date(doc.data().date) < today) {
-            
-            completedEvents = [...completedEvents, data]
-        }else {
-          updatedEvent = [...updatedEvent, data]
-        }
-    })
-    
-    setEventsOwnedPast(completedEvents);
-    setEventsOwned112(updatedEvent);
+    const updatedDocs = docu.docs.map(async (doc) => {
+      const updatedGroup = { ...doc.data() };
+      const groupOwner = await getGroupOwnerName(updatedGroup.groupOwner);
+      updatedGroup.groupOwner = groupOwner;
+      // add the doc id into the array as a new field called groupid if updateGroup is not epmty
+      if (updatedGroup) {
+        updatedGroup.groupId = doc.id;
+      }
+      return updatedGroup;
+    });
+    const updatedGroups = await Promise.all(updatedDocs);
+    setGroupsOwned112(updatedGroups);
   };
 
 
