@@ -50,7 +50,7 @@ export default function GroupFilters({handleFilters, groups}){
                 <input type="checkbox" name="members" value="<=5" onChange={(e) => {handleFilters(e);}}/>
                 {' '}&le;5 members</label>
                 <label>
-                <input type="checkbox" name="members" value="5-10" onChange={(e) => {handleFilters(e);}}/>
+                <input type="checkbox" name="members" value="6-10" onChange={(e) => {handleFilters(e);}}/>
                 {' '}5-10 members</label>
                 <label>
                 <input type="checkbox" name="members" value="11-15" onChange={(e) => {handleFilters(e);}}/>
