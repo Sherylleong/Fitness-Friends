@@ -17,8 +17,7 @@ function EventsMapCard(event, navigate, userId) {
   })
 
   const eventId = event.id;
-  let joined = (event.eventAttendees.includes(userId))
-
+  let joined = (event.eventAttendees.includes(userId) || event.creatorID==userId);
   const handleView = () => {
     navigate("/ViewEvent/" + eventId);
   };

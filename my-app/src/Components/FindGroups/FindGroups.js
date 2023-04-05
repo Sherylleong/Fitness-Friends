@@ -7,14 +7,15 @@ import { getDoc } from "firebase/firestore";
 import { dispatch, useStoreState } from "../../App";
 import { useNavigate } from "react-router-dom";
 
-function GroupsListCard(group, userId,navigate) {
+function GroupsListCard(group, userId,navigate, users) {
   console.log("group:");
   console.log(group.id);
   const groupId = group.id;
 
-
+  let owner = users.filter((user) => {return user.userId == group.groupOwner})[0]
+  console.log(owner)
   const eventId = group.id;
-  let joined = (group.groupmembers.includes(userId))
+  let joined = (group.groupmembers.includes(userId) || group.groupOwner==userId)
   const handleViewGroup = () => {
     navigate("/ViewGroup/" + groupId);
   };
@@ -28,7 +29,7 @@ function GroupsListCard(group, userId,navigate) {
       </div>
       <div className="group-card-desc">
         <h1 className="group-list-name">{group.groupname}</h1>
-        <p className="group-list-date">formed on {group.dateFormed}</p>
+        <p className="group-list-date">Created by {owner.displayName}</p>
         <p className="group-list-location">{group.grouplocation}</p>
         <p className="group-list-attendees">
           {group.groupmembers.length} member(s)
@@ -85,13 +86,13 @@ function GroupsHeader() {
   );
 }
 
-function GroupsListList({ groups, handleFilters, userId,navigate}) {
+function GroupsListList({ groups, handleFilters, userId,navigate, users}) {
   return (
     <div className="groups-list-list">
       <div style={{ position: "relative", left: "-350px" }}>
         <Searchbar handleFilters={handleFilters} searchText="Search group..." />
       </div>
-      {groups.map((group) => GroupsListCard(group,userId,navigate))}
+      {groups.map((group) => GroupsListCard(group,userId,navigate, users))}
     </div>
   );
 }
@@ -101,7 +102,7 @@ export default function FindGroups() {
   const userId = useStoreState("userId");
 
   //const [groups, setgroups] = useState(groupsdb);
-
+  const [users, setUsers] =  useState([]);
   const [groups, setGroups] = useState([]);
   useEffect(() => {
     const fetchGroups = async () => {
@@ -122,6 +123,27 @@ export default function FindGroups() {
         setGroups(fetchedGroups);
       }
     };
+
+    const fetchUsers = async () => {
+      const usersRef = collection(firestore, "users");
+
+      const q = query(usersRef);
+      const querySnapshot = await getDocs(q).catch((error) => {
+        console.log("Error getting documents: ", error);
+      });
+      if (querySnapshot.empty) {
+        console.log("No matching documents.");
+      } else {
+        const fetchedUsers = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        console.log(querySnapshot);
+        setUsers(fetchedUsers);
+      }
+    };
+
+    fetchUsers();
     fetchGroups();
   }, []); // re-fetch the events whenever anything changes
 
@@ -171,9 +193,11 @@ export default function FindGroups() {
       )
         return false;
       let memberCnt;
-      if (group.groupmembers.length < 10) memberCnt = "<10";
-      else if (group.groupmembers.length > 30) memberCnt = ">30";
-      else memberCnt = "10-30";
+      if (group.groupmembers.length <= 5) memberCnt = "<=5";
+      else if (group.groupmembers.length <= 10) memberCnt = "6-10";
+      else if (group.groupmembers.length <= 15) memberCnt = "11-15";
+      else if (group.groupmembers.length <= 20) memberCnt = "16-20";
+      else memberCnt = ">20";
       if (filters.members.length !== 0 && !filters.members.includes(memberCnt))
         return false;
       return (
@@ -189,16 +213,16 @@ export default function FindGroups() {
       {/*col*/}
       <GroupsHeader />
       {/*row*/}
-      <GroupListInfo groups={filteredGroups} handleFilters={handleFilters} userId={userId} navigate={navigate}/>
+      <GroupListInfo groups={filteredGroups} handleFilters={handleFilters} userId={userId} navigate={navigate} users={users}/>
     </div>
   );
 }
 
-function GroupListInfo({ groups, handleFilters, userId,navigate}) {
+function GroupListInfo({ groups, handleFilters, userId,navigate, users}) {
   return (
     <div className="group-list-info">
       <GroupFilters groups={groups} handleFilters={handleFilters} />
-      <GroupsListList groups={groups} handleFilters={handleFilters} userId={userId} navigate={navigate} />
+      <GroupsListList groups={groups} handleFilters={handleFilters} userId={userId} navigate={navigate} users={users} />
     </div>
   );
 }
