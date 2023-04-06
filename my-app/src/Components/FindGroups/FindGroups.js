@@ -29,7 +29,7 @@ function GroupsListCard(group, userId,navigate, users) {
       </div>
       <div className="group-card-desc">
         <h1 className="group-list-name">{group.groupname}</h1>
-        <p className="group-list-date">Created by {owner.displayName}</p>
+        <p className="group-list-date">Created by {owner ? owner.displayName : "John Doe"}</p>
         <p className="group-list-location">{group.grouplocation}</p>
         <p className="group-list-attendees">
           {group.groupmembers.length} member(s)
