@@ -1,14 +1,15 @@
-import { createUserWithEmailAndPassword} from "firebase/auth";
-import { firestore, auth } from "../FirebaseDb/Firebase";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth";
+import { firestore, auth } from "../Components/FirebaseDb/Firebase";
 import { addDoc, collection} from "firebase/firestore";
+import { dispatch } from "../App"
 
 export class UserController {
     constructor(username, password) {
         this.username = username;
         this.password = password;
     }
-    createAcc() {
-        createUserWithEmailAndPassword(auth, this.username, this.password).then((reply) => {
+    async createAcc() {
+        return await createUserWithEmailAndPassword(auth, this.username, this.password).then((reply) => {
             // Display Popup to tell user successful
             alert("Account created successfully");
             const today = new Date();
@@ -28,13 +29,23 @@ export class UserController {
                     eventAttended: true
                 }
             });
+            return "Success";
         }).catch((error) => {
             let code = error.code;
             return code;
         });
     }
 
-    setFalse(state) {
-        state(true);
+    async login() {
+        return await signInWithEmailAndPassword(auth, this.username, this.password).then((reply) => {
+            if (reply.operationType == "signIn") {
+                dispatch({newId: reply.user.uid});
+                return "Success";
+            }
+        }).catch((error) => {
+            return error.code;
+        });
     }
+
+    
 }

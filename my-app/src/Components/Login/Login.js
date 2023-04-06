@@ -11,6 +11,7 @@ import "../Login/Login.css";
 import { sendPasswordResetEmail } from "firebase/auth"
 import { updatePassword } from "firebase/auth"
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { UserController } from "../../Controller/UserController";
 import Filter from 'bad-words';
 
 export default function Login() {
@@ -19,26 +20,24 @@ export default function Login() {
 	const [showMissingUsername, setMissingUsername] = useState(false);
 	const [showMissingPassword, setMissingPassword] = useState(false);
 	const [showIncorrectLogin, setIncorrectLogin] = useState(false);
-	var currUid = "";
 	const navigate = useNavigate();
 
 	const signIn = async(e) => {
 		e.preventDefault(); //Prevent Reload on Form Submit
 		setIncorrectLogin(false);
 		if (verifyLoginData()) {
-			signInWithEmailAndPassword(auth, username, password).then((reply) => {
-				if (reply.operationType == "signIn") {
-					dispatch({newId: reply.user.uid});
-					currUid = reply.user.uid;
-					navigate("/ViewProfile");
+			const uc = new UserController(username, password);
+			uc.login().then(function(code) {
+				switch (code) {
+					case "Success":
+						navigate("/ViewProfile");
+						break;
+					case "auth/wrong-password":
+					case "auth/invalid-email":
+					case "auth/user-not-found":
+						setIncorrectLogin(true);
+						break;
 				}
-			}).catch((error) => {
-				if (error.code == "auth/wrong-password" || error.code == "auth/invalid-email" || error.code == "auth/user-not-found") {
-					setIncorrectLogin(true);
-				}else if (error.code == "auth/user-not-found") {
-					//If needed to seperate
-				}
-				else console.log(error);
 			});
 		}
 	}
@@ -54,12 +53,8 @@ export default function Login() {
 			setMissingPassword(true);
 			return false;
 		}
-
-
 		return true;
 	}
-
-
 
 	return (
 		<div className="account-form">
@@ -76,9 +71,6 @@ export default function Login() {
 					<div style={{display: showMissingPassword ? 'block' : 'none'}} id="missing-password" className="account-form-incorrect">Password field is required.</div>
 					<div style={{display: showIncorrectLogin ? 'block' : 'none'}} id="incorrect-login" className="account-form-incorrect">Incorrect Email or Password.</div>
 					<div className="account-form-options">
-						{/* <label className="checkbox-label">
-							<input type="Checkbox"/> Remember me
-						</label> */}
 						<Link to="/ForgetPassword">Forget password?</Link>
 					</div>
 					<button type="submit">Log In</button>
