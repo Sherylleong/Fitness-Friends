@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { dispatch } from "../../App"
 import { addDoc, collection} from "firebase/firestore";
 import { firestore, auth } from "../FirebaseDb/Firebase";
-import { UserController} from "./UserController";
+
 export default function SignUp() {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
@@ -43,62 +43,59 @@ export default function SignUp() {
 		resetStates();
 		if (password.length >= 8) {
 			if (checkSpecialLetter(password)) {
-				const uc = new UserController(username, password);
-				// var rtnVal = uc.test();
-				uc.setFalse(setMissingUsername);
-				// createUserWithEmailAndPassword(auth, username, password).then((reply) => {
-				// 	// Display Popup to tell user successful
-				// 	alert("Account created successfully");
-				// 	const today = new Date();
-				// 	const formattedDate = today.getDate() + "/" + (today.getMonth() + 1) + "/" + today.getFullYear();
+				createUserWithEmailAndPassword(auth, username, password).then((reply) => {
+					// Display Popup to tell user successful
+					alert("Account created successfully");
+					const today = new Date();
+					const formattedDate = today.getDate() + "/" + (today.getMonth() + 1) + "/" + today.getFullYear();
 
-				// 	var displayName = username.split("@")[0];
-				// 	addDoc(collection(firestore, 'users'), {
-				// 		userId: reply.user.uid,
-				// 		profilePic: "https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/defaultPFP.png?alt=media&token=93a30cef-5994-4701-9fab-9ad9fdec913c",
-				// 		displayName: displayName,
-				// 		JoinedDate: formattedDate,
-				// 		Location: null,
-				// 		Bio: null,
-				// 		settings: {
-				// 			groupJoined: true,
-				// 			eventAttending: true,
-				// 			eventAttended: true
-				// 		}
-				// 	});
-				// 	navigate("/Login"); //Navigate to login to do login demo
-				// }).catch((error) => {
-				// 	let code = error.code;
+					var displayName = username.split("@")[0];
+					addDoc(collection(firestore, 'users'), {
+						userId: reply.user.uid,
+						profilePic: "https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/defaultPFP.png?alt=media&token=93a30cef-5994-4701-9fab-9ad9fdec913c",
+						displayName: displayName,
+						JoinedDate: formattedDate,
+						Location: null,
+						Bio: null,
+						settings: {
+							groupJoined: true,
+							eventAttending: true,
+							eventAttended: true
+						}
+					});
+					navigate("/Login"); //Navigate to login to do login demo
+				}).catch((error) => {
+					let code = error.code;
 
-				// 	switch (code) {
+					switch (code) {
 						
-				// 		case "auth/email-already-in-use":
-				// 			setEmailUsed(true);	
-				// 			break;
-				// 		case "auth/missing-email":
-				// 			setMissingUsername(true)
-				// 			break;
-				// 		case "auth/invalid-email":
-				// 			if (!username) {
-				// 				setMissingUsername(true);
-				// 			}else {
-				// 				setInvalidUsername(true);
-				// 			}
-				// 			break;
-				// 		case "auth/weak-password":
-				// 			setPasswordRequirement(true);
-				// 			break;
-				// 		case "auth/internal-error":
-				// 			if (password == null || password == "") {
-				// 				setMissingPassword(true);
-				// 			}
-				// 			break;
+						case "auth/email-already-in-use":
+							setEmailUsed(true);	
+							break;
+						case "auth/missing-email":
+							setMissingUsername(true)
+							break;
+						case "auth/invalid-email":
+							if (!username) {
+								setMissingUsername(true);
+							}else {
+								setInvalidUsername(true);
+							}
+							break;
+						case "auth/weak-password":
+							setPasswordRequirement(true);
+							break;
+						case "auth/internal-error":
+							if (password == null || password == "") {
+								setMissingPassword(true);
+							}
+							break;
 							
-				// 		default:
-				// 			break;
-				// 	}
-				// });
-				// return;
+						default:
+							break;
+					}
+				});
+				return;
 			}
 		}
 		setPasswordRequirement(true);

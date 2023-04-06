@@ -42,7 +42,8 @@ export default function CreateEvent() {
 
     const [selected, setSelected] = useState({
         name:"",
-        position: {lat:1.3573334951328686,lng:103.80911341579483}
+        position: {lat: 1.348578045634617,
+        lng: 103.6831722481014}
     });
     const [filterValue, setFilterValue] = useState("");
 
@@ -298,11 +299,11 @@ function MapContainer({state, setState, mapData}) {
 
 
 function EventMap({state, setState, mapData}) {
-    const [zoom, setZoom] = useState(12)
+    const [zoom, setZoom] = useState(18)
     const onMarkerClick = (event) => {
         console.log(event);
         setState(event);
-        setZoom(16)
+        setZoom(14)
     }
 
     return (
