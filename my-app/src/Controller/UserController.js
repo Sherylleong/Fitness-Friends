@@ -1,12 +1,8 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth";
-import { firestore, auth } from "../Components/FirebaseDb/Firebase";
-import { collection , doc, getDocs, updateDoc, query, addDoc, where } from "firebase/firestore";
-import { dispatch } from "../App"
+import { firestore,  } from "../Components/FirebaseDb/Firebase";
+import { collection , doc, getDocs, updateDoc, query, where } from "firebase/firestore";
 
 export class UserController {
-    constructor(username, password) {
-        this.username = username;
-        this.password = password;
+    constructor() {
         this.today = new Date();
         this.today.setHours(0,0,0,0);
     }

@@ -1,9 +1,16 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth";
 import { firestore, auth } from "../Components/FirebaseDb/Firebase";
-import { collection , doc, getDocs, updateDoc, query, addDoc, where } from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore";
 import { dispatch } from "../App"
 
 export class AccountController {
+    constructor(username, password) {
+        this.username = username;
+        this.password = password;
+        this.today = new Date();
+        this.today.setHours(0,0,0,0);
+    }
+
     async login() {
         return await signInWithEmailAndPassword(auth, this.username, this.password).then((reply) => {
             if (reply.operationType == "signIn") {
