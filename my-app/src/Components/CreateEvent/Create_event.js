@@ -2,15 +2,10 @@ import { useEffect, useState } from "react";
 import { useStoreState } from "../../App"
 import "../Create.css";
 import Filter from 'bad-words';
-import { firestore, storage } from "../FirebaseDb/Firebase";
-import { collection ,getDocs, query, limit, addDoc, where } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 
-import { GoogleMap, useLoadScript, Marker, MarkerClusterer, MarkerF } from "@react-google-maps/api";
-import { useMemo } from "react";
-import { render } from "@testing-library/react";
+import { GoogleMap, useLoadScript, Marker, MarkerClusterer } from "@react-google-maps/api";
 import { EventController } from "../../Controller/EventController";
 import { ImageController} from "../../Controller/ImageController";
 import { UserController } from "../../Controller/UserController";
@@ -18,7 +13,6 @@ import { UserController } from "../../Controller/UserController";
 export default function CreateEvent() {
     const navigate = useNavigate();
     const userId = useStoreState("userId");
-	const [documentId, setDocumentId] = useState("");
     const ec = new EventController();
 	const [pic, setPic] = useState("https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/defaultPFP.png?alt=media&token=93a30cef-5994-4701-9fab-9ad9fdec913c");
 	const [title, setTitle] = useState("");
@@ -64,7 +58,7 @@ export default function CreateEvent() {
     const [showMissingDesc, setShowMissingDesc] = useState(false);
     const [showMissingLocation, setShowMissingLocation] = useState(false);
     const [showInvalidDateTime, setShowInvalidDateTime] = useState(false);
-  
+    const [userFile, setUserFile] = useState(null);
     
     const getUserGroup = async() => {
         const uc = new UserController();
@@ -92,7 +86,6 @@ export default function CreateEvent() {
         });
     }
 
-    const [userFile, setUserFile] = useState(null);
 	const acceptFile = event => {
 		var fileUploaded = event.target.files[0];
 		setUserFile(fileUploaded);

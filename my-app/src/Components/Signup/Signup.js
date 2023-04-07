@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../Login/Login.css";
 import { Link, useNavigate } from "react-router-dom";
-import { UserController} from "../../Controller/UserController";
+import { AccountController } from "../../Controller/AccountController";
 
 export default function SignUp() {
 	const [username, setUsername] = useState("");
@@ -39,8 +39,8 @@ export default function SignUp() {
 		resetStates();
 		if (password.length >= 8) {
 			if (checkSpecialLetter(password)) {
-				const uc = new UserController(username, password);
-				await uc.createAcc().then(function(code) {
+				const ac = new AccountController(username, password);
+				await ac.createAcc().then(function(code) {
 					switch (code) {
 						case "Success":
 							navigate("/Login");

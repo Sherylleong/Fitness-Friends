@@ -3,7 +3,7 @@ import { useState } from "react";
 import "./Login.css";
 import { Link, useNavigate } from "react-router-dom";
 import "../Login/Login.css";
-import { UserController } from "../../Controller/UserController";
+import { AccountController } from "../../Controller/AccountController";
 
 export default function Login() {
 	const [username, setUsername] = useState("");
@@ -17,8 +17,8 @@ export default function Login() {
 		e.preventDefault(); //Prevent Reload on Form Submit
 		setIncorrectLogin(false);
 		if (verifyLoginData()) {
-			const uc = new UserController(username, password);
-			uc.login().then(function(code) {
+			const ac = new AccountController(username, password);
+			ac.login().then(function(code) {
 				switch (code) {
 					case "Success":
 						navigate("/ViewProfile");

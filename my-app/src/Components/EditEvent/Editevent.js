@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import "../Create.css";
 import { useStoreState } from "../../App"
 import { firestore } from "../FirebaseDb/Firebase";
-import { collection,getDocs, limit } from "firebase/firestore";
+import { collection,getDocs, limit, query} from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import Filter from 'bad-words';
