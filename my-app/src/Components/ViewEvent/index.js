@@ -1,158 +1,45 @@
-import iconpin from "../Resources/location.png";
+
 import calender from "../Resources/calender.png";
 import location from "../Resources/locationfinal.png";
-import attendee from "../Resources/attendees.png";
 import attendee1 from "../Resources/attendee.png";
-import arrow from "../Resources/arrow.png";
 import {
   GoogleMap,
   useLoadScript,
   Marker,
-  MarkerClusterer,
 } from "@react-google-maps/api";
 import { useEffect, useState } from "react";
 import "./ViewEvent.css";
-import { getDoc } from "firebase/firestore";
 import { useParams } from "react-router-dom";
-import { collection, query, where, getDocs } from "firebase/firestore";
-import { firestore } from "../FirebaseDb/Firebase";
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
-import { dispatch, useStoreState } from "../../App";
+import { useStoreState } from "../../App";
 import { useNavigate } from "react-router-dom";
-import { arrayUnion, arrayRemove } from "firebase/firestore";
-import { doc, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
-import { onSnapshot } from "firebase/firestore";
-
+import { EventController } from "../../Controller/EventController";
 
 function ViewEvent() {
   const userId = useStoreState("userId");
   const navigate = useNavigate();
-  // FirebaseAuth.getInstance().getCurrentUser()
-  console.log("userid:");
-  if (!userId) {
-    console.log("no user id");
-  } else {
-    console.log(userId);
-  }
+  const ec = new EventController();
 
-  //geenral getdocbyid function w colllectionname and docid asparameters
-  const getByDocID = async (collectionName, docID) => {
-    const docRef = doc(firestore, collectionName, docID);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      return docSnap.data();
-    } else {
-      console.log("Document does not exist");
-      return null;
-    }
-  };
-
-  //for fetching eventdata using eventid in url
   const { eventId: urlEventId } = useParams(); // retrieve the groupId from the URL parameter
   const [eventId, setEventId] = useState(null); // add a state variable for groupId
   const [event, setEvent] = useState(null); // initialize the group state to null
-  // const [groupEvents, setGroupEvents] = useState([]); //for groupevents
-  console.log(eventId);
+  const [joined, setJoined] = useState(false);
 
-  useEffect(() => {
-    setEventId(urlEventId);
-  }, [urlEventId]);
-
-  console.log(eventId);
-
-  //for image fetching, converting from url to docs/file
-  const [imageUrl, setImageUrl] = useState(null); // initialize the imageUrl state to null
   const [eventOver, setEventOver] = useState(false); //Set true if event date has passed
-  const storage = getStorage();
   var today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  //for data fetching (image and groupdata includigng grpevents)
   useEffect(() => {
-    const fetchEvent = async () => {
-      // const eventDocId = eventId; // use groupId as the document ID to fetch data for
-      // const eventData = await getByDocID("events", eventDocId); // call the getByDocID function to retrieve data for the specified document ID
-      const eventRef = doc(collection(firestore, "events"), eventId);
-
-      if (eventRef) {
-        const unsubscribe = onSnapshot(eventRef, (doc) => {
-          if (new Date(doc.data().date) < today) {
-            setEventOver(true);
-          }
-          setEvent(doc.data());
-        });
-        //for image
-        const imageRef = ref(storage, doc.data().eventImage); // create a reference to the image in Firebase Storage
-        getDownloadURL(imageRef)
-          .then((url) => {
-            setImageUrl(url); // set the imageUrl state to the download URL of the image
-          })
-          .catch((error) => {
-            console.log("Error getting image URL: ", error);
-          });
-      } else {
-        console.log("No matching documents");
-      }
-
-      // if (eventData) {
-      //   console.log(eventData);
-      //   setEvent(eventData); // set the group state to the retrieved data
-      //   //for image
-      //   const imageRef = ref(storage, eventData.eventImage); // create a reference to the image in Firebase Storage
-      //   getDownloadURL(imageRef)
-      //     .then((url) => {
-      //       setImageUrl(url); // set the imageUrl state to the download URL of the image
-      //     })
-      //     .catch((error) => {
-      //       console.log("Error getting image URL: ", error);
-      //     });
-      // } else {
-      //   console.log("No matching documents.");
-      // }
-    };
-
-    fetchEvent();
-  }, [eventId, storage]); // re-fetch the group whenever the groupId changes
-
-  //for joining event
-
-  // console.log("eventAttendee user id=====");
-  // console.log(userId);
-  // console.log(event.eventAttendees.includes(userId));
+    setEventId(urlEventId);
+    ec.getEventDetails(urlEventId, userId ,setEvent, setEventOver, setJoined);
+  }, [urlEventId]);
 
   const joinEvent = async () => {
-    console.log("joining event===");
-    console.log(userId);
-    console.log(eventId);
-
     if (!userId) {
-      //ok this part works
+      //If not logged in, redirect to Login Screen
       navigate("/Login");
       return;
     }
-
-    const eventRef = doc(collection(firestore, "events"), eventId);
-
-    console.log("======++++");
-    //this doesnt like check again if it includes or not, like after doing it once, it doesnt update anymore the includes or not..
-    console.log(userId);
-    console.log(event.eventAttendees.includes(userId));
-    if (event.eventAttendees.includes(userId)) {
-      await updateDoc(eventRef, {
-        eventAttendees: arrayRemove(userId),
-      });
-      console.log("successfully left");
-    } else {
-      await updateDoc(eventRef, {
-        eventAttendees: arrayUnion(userId),
-      });
-      console.log("successfully joined");
-    }
-    // setIsJoined(!isJoined);
-
-    // await updateDoc(groupRef, {
-    //   groupmembers: arrayUnion(userId), // Add the userId to the groupmembers array
-    // });
+    ec.joinEvent(event, setEvent, setJoined, eventId, userId);
   };
 
   if (!event) {
@@ -165,12 +52,7 @@ function ViewEvent() {
   const handleViewCreator = () => {
     navigate("/ViewMemberProfile/" + event.creatorID);
   };
-  console.log("Events");
-  console.log({ event });
-  console.log(eventId);
-  console.log("creator?");
   const isCreator = userId === event.creatorID;
-  console.log(isCreator);
 
   return (
     <>
@@ -186,7 +68,7 @@ function ViewEvent() {
             <div className="joineventbtn">
               {!isCreator && !eventOver && (
                 <button className="joinevent" onClick={joinEvent}>
-                  {event.eventAttendees.includes(userId) ? "Leave " : "Join "}
+                  {joined ? "Leave " : "Join "}
                   Event
                 </button>
               )}

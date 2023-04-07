@@ -14,6 +14,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
+import { UserController } from "../../Controller/UserController";
 
 function ViewProfile() {
   // set up attending and owned events
@@ -21,6 +22,8 @@ function ViewProfile() {
   const [attending, setAttending] = useState(true);
   const [owned, setOwned] = useState(false);
   const [attended, setAttended] = useState(false);
+  const uc = new UserController();
+
   const attendinghandler = () => {
     setAttending(true);
     setOwned(false);
@@ -59,151 +62,31 @@ function ViewProfile() {
   const handleOwnedPageChange = (selectedOwnedPage) => {
     setCurrentOwnedPage(selectedOwnedPage);
   };
+
+  // Variables for display info on Profile
   const [profile2, setProfile2] = useState("");
   const [groupsJoined112, setGroupsJoined112] = useState([]);
-  const getGroupsJoined = async () => {
-    const docRef = query(
-      collection(firestore, "group"),
-      where("groupmembers", "array-contains", userId)
-    );
-    const docu = await getDocs(docRef);
-    const updatedDocs = docu.docs.map(async (doc) => {
-      const updatedGroup = { ...doc.data() };
-      const groupOwner = await getGroupOwnerName(updatedGroup.groupOwner);
-      updatedGroup.groupOwner = groupOwner;
-      if (updatedGroup) {
-        updatedGroup.groupId = doc.id;
-      }
-      return updatedGroup;
-    });
-    const updatedGroups = await Promise.all(updatedDocs);
-    setGroupsJoined112(updatedGroups);
-  };
-
-  async function getGroupOwnerName(groupOwnerId) {
-    const docRef = query(collection(firestore, "users"), where("userId", "==", groupOwnerId));
-    const docu = await getDocs(docRef);
-    const owner = docu.docs[0].data();
-    return owner.displayName;
-  }
-
   const [groupsOwned112, setGroupsOwned112] = useState([]);
-  const getGroupsOwned = async () => {
-    const docRef = query(
-      collection(firestore, "group"),
-      where("groupOwner", "==", userId)
-    );
-    const docu = await getDocs(docRef);
-    const updatedDocs = docu.docs.map(async (doc) => {
-      const updatedGroup = { ...doc.data() };
-      const groupOwner = await getGroupOwnerName(updatedGroup.groupOwner);
-      updatedGroup.groupOwner = groupOwner;
-      // add the doc id into the array as a new field called groupid if updateGroup is not epmty
-      if (updatedGroup) {
-        updatedGroup.groupId = doc.id;
-      }
-      return updatedGroup;
-    });
-    const updatedGroups = await Promise.all(updatedDocs);
-    setGroupsOwned112(updatedGroups);
-  };
-
   const [eventsJoined112, setEventsJoined112] = useState([]);
   const [eventsCompleted112, setEventsCompleted] = useState([]);
-  const getEventsJoined = async () => {
-    // , where("date", ">", "2023-03-31")
-    const docRef = query(collection(firestore, "events"),where("eventAttendees", "array-contains", userId));
-    const docu = await getDocs(docRef);
-
-    var updatedEvent = [];
-    var completedEvents = [];
-    docu.forEach((doc)=> {
-        var data = Object.assign({}, doc.data() ,{
-            id: doc.id
-        });
-        if(new Date(doc.data().date) < today) {
-            completedEvents = [...completedEvents, data];
-        }else {
-          updatedEvent = [...updatedEvent, data]
-        }
-    });
-    setEventsCompleted(completedEvents);
-    console.log(completedEvents);
-    setEventsJoined112(updatedEvent);
-  };
   const [eventsOwned112, setEventsOwned112] = useState([]);
   const [eventsCompleted113, setEventsCompleted2] = useState([]);
-  const getEventsOwned = async () => {
-    const docRef = query(
-      collection(firestore, "events"),
-      where("creatorID", "==", userId)
-    );
-    const docu = await getDocs(docRef);
-     // add the doc id into the array as a new field called eventId
-    // const updatedDocs = docu.docs.map(async (doc) => {
-    //   const updatedEvent = { ...doc.data() };
-    //   if (updatedEvent) {
-    //     updatedEvent.eventId = doc.id;
-    //   }
-    //   return updatedEvent;
-    // });
-    // const updatedEvents = await Promise.all(updatedDocs);
-    var updatedEvent = [];
-    var completedEvents = [];
-    docu.forEach((doc)=> {
-        var data = Object.assign({}, doc.data() ,{
-            id: doc.id
-        });
-        console.log(data);
-        if(new Date(doc.data().date) < today) {
-            
-            completedEvents = [...completedEvents, data]
-        }else {
-          updatedEvent = [...updatedEvent, data]
-        }
-    })
-    
-    setEventsCompleted2(completedEvents);
-    setEventsOwned112(updatedEvent);
-  };
-  //get number of events owned and joined
 
-  const getProfile = async () => {
-    const docRef = query(
-      collection(firestore, "users"),
-      where("userId", "==", userId)
-    );
-    const docu = await getDocs(docRef);
-    docu.forEach((doc) => {
-      setProfile2(doc.data());
-    });
-  };
-
-  const getNumEvents112 = async () => {
-    const docRef = query(
-      collection(firestore, "events"),
-      where("creatorID", "==", userId)
-    );
-    const docu = await getDocs(docRef);
-    const docRef1 = query(
-      collection(firestore, "events"),
-      where("eventAttendees", "array-contains", userId)
-    );
-    const docu1 = await getDocs(docRef1);
-    setNumEvents112(docu.docs.length + docu1.docs.length);
-  };
+  const initProfile = async () => {
+    uc.getProfileDetails(userId, setProfile2);
+    uc.getUserJoinedGroups(userId, setGroupsJoined112);
+    uc.getUserCreatedGroups(userId, setGroupsOwned112);
+    uc.getUserJoinedEvents(userId, setEventsJoined112, setEventsCompleted);
+    uc.getUserCreatedEvents(userId, setEventsOwned112, setEventsCompleted2);
+    uc.getNumEvents(userId,setNumEvents112)
+  }
 
   const navigateEditProfile = () => {
     navigate("/EditProfile");
   };
 
   useEffect(() => {
-    getGroupsOwned();
-    getGroupsJoined();
-    getProfile();
-    getEventsJoined();
-    getEventsOwned();
-    getNumEvents112();
+    initProfile();
   }, []);
 
   const EditEventHandler = (eventId) => {
@@ -463,11 +346,8 @@ function ViewProfile() {
             <div className="right-top112"></div>
             <div className="groupsjoined112">
               <div className="groupsjoinedtext112">Groups Joined</div>
-
               <div className="groupsjoinedlist112">
-                {groupsJoined112
-                  .slice(currentJoinedPage * 2, currentJoinedPage * 2 + 2)
-                  .map((group) => (
+                {(groupsJoined112).slice(currentJoinedPage * 2, currentJoinedPage * 2 + 2).map((group) => (
                     <div
                       className="group-box112"
                       onClick={() => ViewGroupHandler(group.groupId)}
