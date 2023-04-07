@@ -9,6 +9,23 @@ export class GroupController {
         });
     }
 
+    async updateGroup(groupId, input) {
+        return await updateDoc(doc(firestore, "group", groupId), input).then(()=> {
+            return true
+        });
+    }
+
+    async getGroup(groupId, setPic, setGroupname, setGroupdesc, setDifficulty, setActivity) {
+        const docRef = doc(firestore, "group", groupId);
+        const docu = await getDoc(docRef);
+        var d = docu.data();
+        setPic(d.groupImageURL);
+        setGroupname(d.groupname);
+        setGroupdesc(d.groupdesc);
+        setDifficulty(d.groupdifficulty);
+        setActivity(d.groupcategory);
+    }
+
     async getGroupDetails(groupId, userId, setGroup, setGroupEvents, setJoined) {
         const groupRef = doc(collection(firestore, "group"), groupId);
         const groupDoc = await getDoc(groupRef);

@@ -10,6 +10,9 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import "../Create.css"
 import { v4 as uuidv4 } from "uuid";
 import Filter from 'bad-words';
+import { ImageController } from "../../Controller/ImageController";
+import { GroupController } from "../../Controller/GroupController";
+
 function EditGroup() {
   const [groupname, setGroupname] = useState("");
   const [groupdesc, setGroupdesc] = useState("");
@@ -18,8 +21,6 @@ function EditGroup() {
   const [pic, setPic] = useState("https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/defaultPFP.png?alt=media&token=93a30cef-5994-4701-9fab-9ad9fdec913c");
 
   const navigate = useNavigate();
-  const storage = getStorage();
-  const groupId = uuidv4();
 
   const difficultyChoices = ["Beginner", "Intermediate", "Advanced"]
   const activityChoices = ["Walking", "Jogging", "Running", "Climbing","Biking","Sports","Others"]
@@ -27,23 +28,12 @@ function EditGroup() {
   const [showMissingName, setShowMissingName] = useState(false);
   const [showMissingDesc, setShowMissingDesc] = useState(false);
 
+  const gc = new GroupController();
 
   const { groupId: urlGroupId } = useParams();
 
-  const getEventDetails = async () => {
-        console.log(urlGroupId);
-      const docRef = doc(firestore, "group", urlGroupId);
-      try {
-          const docu = await getDoc(docRef);
-          var d = docu.data();
-          setPic(d.groupImageURL);
-          setGroupname(d.groupname);
-          setGroupdesc(d.groupdesc);
-          setDifficulty(d.groupdifficulty);
-          setActivity(d.groupcategory);
-      } catch(error) {
-          console.log(error)
-      }
+  const getGroupDetails = async () => {
+    gc.getGroup(urlGroupId, setPic, setGroupname, setGroupdesc, setDifficulty, setActivity)
   }
 
   const [userFile, setUserFile] = useState(null);
@@ -53,33 +43,29 @@ function EditGroup() {
 		setPic(URL.createObjectURL(fileUploaded));
 	};
 
-	const uploadImage = async() => {
+  const updateGroup = async () => {
+    var url
     if (userFile != null) {
-      const imageRef = ref(storage, groupId+"-grouppic");
-      await uploadBytes(imageRef, userFile);
-        getDownloadURL(imageRef).then((url)=> {     
-            updateGroup(url);
-        });
+        const ic = new ImageController();
+        url = await ic.uploadFile(userFile, urlGroupId, "group");
     }else {
-        updateGroup(pic);
+        url = pic;
     }
-  }
-
-  const updateGroup = (url) => {
+    console.log(url);
     const badFilter = new Filter();
 
     let nameChange=groupname, descChange=groupdesc;
 		try {nameChange = badFilter.clean(groupname)} catch(e) {}
 		try {descChange = badFilter.clean(groupdesc)} catch(e) {}
 
-      updateDoc(doc(firestore, "group", urlGroupId), {
-        groupname: nameChange,
-        groupdesc: descChange,
-        groupdifficulty: difficulty,
-        groupcategory: groupActivity,
-        groupImageURL: url
-      });
-      navigate("/ViewProfile");
+    await gc.updateGroup(urlGroupId, {
+      groupname: nameChange,
+      groupdesc: descChange,
+      groupdifficulty: difficulty,
+      groupcategory: groupActivity,
+      groupImageURL: url
+    });
+    navigate("/ViewProfile");
   }
 
   function validateGroupForm() {
@@ -93,7 +79,7 @@ function EditGroup() {
     if (!groupdesc) {
         setShowMissingDesc(true);  
         incorrect = true;}
-    if (!incorrect) {uploadImage(); alert("Group successfully edited!")}
+    if (!incorrect) {updateGroup(); alert("Group successfully edited!")}
 
   }
 
@@ -103,7 +89,7 @@ function EditGroup() {
 	}
 
     useEffect(() => {
-        getEventDetails();
+       getGroupDetails();
     }, []);
 
   return (

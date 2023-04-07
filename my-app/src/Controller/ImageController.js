@@ -7,7 +7,7 @@ export class ImageController {
         const imageRef = ref(storage, id+"-" + naming + "pic");
         await uploadBytes(imageRef, file);
         
-        getDownloadURL(imageRef).then((url)=> {
+        await getDownloadURL(imageRef).then((url)=> {
             rtnVal = url;
         });
         return rtnVal;

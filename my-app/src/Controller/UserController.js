@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth";
 import { firestore, auth } from "../Components/FirebaseDb/Firebase";
-import { addDoc, collection, query, where, getDocs} from "firebase/firestore";
+import { collection , doc, getDocs, updateDoc, query, addDoc, where } from "firebase/firestore";
 import { dispatch } from "../App"
 
 export class UserController {
@@ -38,6 +38,29 @@ export class UserController {
         });
     }
 
+    async getProfile(userId, setDocumentId, setProfilePic, setBio, setDisplayName,setLocation,setGroupJoined,setEventAttending,setEventAttended) {
+        const docRef = query(collection(firestore, "users"), where("userId", "==", userId));
+		const docu = await getDocs(docRef);
+		docu.forEach((doc) => {
+			setDocumentId(doc.id);
+			var userData = doc.data();
+			setProfilePic(userData.profilePic);
+			setBio(userData.Bio);
+			setDisplayName(userData.displayName);
+			setLocation(userData.Location);
+			var settings = userData.settings;
+			setGroupJoined(settings.groupJoined == true);
+			setEventAttending(settings.eventAttending == true);
+			setEventAttended(settings.eventAttended == true);
+		});
+    }
+
+    async updateProfile(userId, input) {
+        return await updateDoc(doc(firestore, 'users', userId), input).then(()=> {
+            return true;
+        });
+    }
+
     async login() {
         return await signInWithEmailAndPassword(auth, this.username, this.password).then((reply) => {
             if (reply.operationType == "signIn") {
@@ -50,17 +73,17 @@ export class UserController {
     }
 
     // Returns list of group names that user has created
-    async getGroupsOwned(userId) {
+    async getGroupsOwned(userId, setGroups) {
         const docRef = query(collection(firestore, "group"), where("groupOwner", "==", userId));
         const docu = await getDocs(docRef);
-        var fetchGroup = [];
+        var fetchGroup = [{id: "", name:"None"}];
         docu.forEach((doc)=> {
             fetchGroup = [...fetchGroup, {
                 id: doc.id,
                 name: doc.data().groupname
             }]
         })
-        return fetchGroup;
+        setGroups(fetchGroup);
     }
 
     async getProfileDetails(userId, setState) {

@@ -67,8 +67,7 @@ export default function CreateEvent() {
     
     const getUserGroup = async() => {
         const uc = new UserController();
-        var fetchGroup = await uc.getGroups(userId);
-        setGroupList([...groupList, ...fetchGroup]);
+        uc.getGroupsOwned(userId, setGroupList);
     }
 
     const getMarkerLoc = async () => {
@@ -89,7 +88,7 @@ export default function CreateEvent() {
         return arr.filter(({name}) => {
             const location = name.toLowerCase();
                 return location.includes(searchParams.toLowerCase());
-              })
+        });
     }
 
     const [userFile, setUserFile] = useState(null);

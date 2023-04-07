@@ -9,20 +9,18 @@ import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import Filter from 'bad-words';
 import { GoogleMap, useLoadScript, Marker, MarkerClusterer, MarkerF } from "@react-google-maps/api";
+import { EventController } from "../../Controller/EventController";
+import { UserController } from "../../Controller/UserController";
+import { ImageController } from "../../Controller/ImageController";
 
 export default function EditEvent() {
     const userId = useStoreState("userId");
-
-	const [documentId, setDocumentId] = useState("");
-
 	const [pic, setPic] = useState("");
 	const [title, setTitle] = useState("");
     var today = new Date()
 
     var month = (today.getMonth()+1) < 10 ? "0" + (today.getMonth()+1) : (today.getMonth()+1)
-    var hour = today.getHours() < 10 ? "0" + today.getHours()  : today.getHours()
     var day = today.getDate() < 10 ? "0" + (today.getDate()) : (today.getDate())
-    var minutes = today.getMinutes() < 10 ? "0" + today.getMinutes()  : today.getMinutes()
     var min = (today.getFullYear() + "-" + month + "-" + day);
 
     const [eventDate, setEventDate] = useState(min);
@@ -58,50 +56,16 @@ export default function EditEvent() {
     const { eventId: urlEventId } = useParams();
     const [showInvalidDateTime, setShowInvalidDateTime] = useState(false);
 
+    const ec = new EventController();
+    const uc= new UserController();
     const getEventDetails = async () => {
-        const docRef = doc(firestore, "events", urlEventId);
-        try {
-            const docu = await getDoc(docRef);
-            var d = docu.data();
-            setPic(d.eventImage);
-            setTitle(d.eventTitle);
-            setEventDate(d.date);
-            setEventTime(d.time);
-            setBio(d.eventDescription);
-            setDifficulty(d.eventDifficulty);
-            setActivity(d.eventCategory);
-            setSelected({
-                name: d.eventLocation,
-                position: d.eventPosition
-            });
-            const getGroupDocId = query(collection(firestore, "group"), where("groupId","==", d.groupId));
-            try {
-                const groupDocId = await getDocs(getGroupDocId);
-                groupDocId.forEach((doc) => {
-                    setGroupSelected(doc.id);
-                });
-            }catch(error) {
-                console.log(error)
-            }
-        } catch(error) {
-            console.log(error)
-        }
+        ec.getEvent(urlEventId, setPic, setTitle, setEventDate, setEventTime, setBio, 
+            setDifficulty, setActivity, setSelected, setGroupSelected);
     }
 
     const getUserGroup = async() => {
-        const docRef = query(collection(firestore, "group"), where("groupOwner", "==", userId));
-        const docu = await getDocs(docRef);
-        var fetchGroup = [];
-        docu.forEach((doc)=> {
-            fetchGroup = [...fetchGroup, {
-                // id: doc.data().groupId,
-                id: doc.id,
-                name: doc.data().groupname
-            }]
-        })
-        setGroupList([...groupList, ...fetchGroup]);
+        uc.getGroupsOwned(userId, setGroupList);
     }
-
 
     const getMarkerLoc = async () => {
         const docRef = query(collection(firestore, "locations"), limit(15));
@@ -141,29 +105,19 @@ export default function EditEvent() {
 		setPic(URL.createObjectURL(fileUploaded));
 	};
 
-	const uploadFile = async() => {
-        if(userFile != null)  {
-            const imageRef = ref(storage, urlEventId+"-eventpic");
-            await uploadBytes(imageRef, userFile);
-
-            getDownloadURL(imageRef).then((url)=> {
-                updateEvent(url);
-            });
+    const updateEvent = async () => {
+        var url
+        if (userFile != null) {
+            const ic = new ImageController();
+            url = await ic.uploadFile(userFile, eventId, "event");
         }else {
-            updateEvent(pic);
+            url = pic;
         }
-    }
-
-    const updateEvent = (url) => {
         const badFilter = new Filter();
-        var eventType = "individual";
-        if (groupSelected != "") {
-            eventType = "group";
-        }
         let nameChange=title, descChange=bio;
 		try {nameChange = badFilter.clean(title)} catch(e) {}
 		try {descChange = badFilter.clean(bio)} catch(e) {}
-        updateDoc(doc(firestore, 'events',urlEventId), {
+        await ec.updateEvent(urlEventId, {
             creatorID: userId,
             date: eventDate,
             time: eventTime,
@@ -176,12 +130,9 @@ export default function EditEvent() {
             },
             eventTitle: nameChange,
             eventDescription: descChange,
-            eventType: eventType,
-            groupId: groupSelected,
             eventImage: url
-        }).then(navigate("/ViewProfile"))
-
- 
+        });
+        navigate("/ViewProfile");
     }
 
     const removeImage = () => {
@@ -219,7 +170,7 @@ export default function EditEvent() {
             setShowInvalidDateTime(true);
             incorrect=true;
         }
-        if (!incorrect) {uploadFile(); alert("Event successfully edited!")}
+        if (!incorrect) {updateEvent(); alert("Event successfully edited!")}
     }
 
 
