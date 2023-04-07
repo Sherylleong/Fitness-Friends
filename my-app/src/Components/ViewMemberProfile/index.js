@@ -7,6 +7,7 @@ import { async } from "@firebase/util";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import {collection,doc,documentId,getDocs, query, where } from "firebase/firestore";
+import { UserController } from "../../Controller/UserController";
 
 
 function ViewMemberProfile() {
@@ -27,11 +28,10 @@ function ViewMemberProfile() {
   const [eventsOwnedPast, setEventsOwnedPast] = useState([]);
   const [profile2, setProfile2] = useState("");
   const [groupsJoined112, setGroupsJoined112] = useState([]);
-  const [settingAttending, setSettingAttending] = useState(true);
-  const [settingAttended, setSettingAttended] = useState(true);
-  const [settingGroups, setSettingGroups] = useState(null);
-  var today = new Date();
-  today.setHours(0,0,0,0);
+  const [settingAttending, setSettingAttending] = useState(false);
+  const [settingAttended, setSettingAttended] = useState(false);
+  const [settingGroups, setSettingGroups] = useState(false);
+  const uc = new UserController();
   
   const attendinghandler = () => {
     setAttending(true);
@@ -65,169 +65,23 @@ function ViewMemberProfile() {
     setCurrentOwnedPage(selectedOwnedPage);
   };
 
-  const getGroupsJoined = async () => {
-
-    const docRef = query(
-      collection(firestore, "group"),
-      where("groupmembers", "array-contains", userId)
-    );
-    const docu = await getDocs(docRef);
-    const updatedDocs = docu.docs.map(async (doc) => {
-      const updatedGroup = { ...doc.data() };
-      const groupOwner = await getGroupOwnerName(updatedGroup.groupOwner);
-      updatedGroup.groupOwner = groupOwner;
-      if (updatedGroup) {
-        updatedGroup.groupId = doc.id;
-      }
-      return updatedGroup;
-    });
-    const updatedGroups = await Promise.all(updatedDocs);
-    setGroupsJoined112(updatedGroups);
-  };
-  
-  async function getGroupOwnerName(groupOwnerId) {
-    const docRef = query(collection(firestore, "users"), where("userId", "==", groupOwnerId));
-    const docu = await getDocs(docRef);
-    const owner = docu.docs[0].data();
-    return owner.displayName;
-  }
-  
-
-  const getGroupsOwned = async () => {
-    const docRef = query(
-      collection(firestore, "group"),
-      where("groupOwner", "==", userId)
-    );
-    const docu = await getDocs(docRef);
-    const updatedDocs = docu.docs.map(async (doc) => {
-      const updatedGroup = { ...doc.data() };
-      const groupOwner = await getGroupOwnerName(updatedGroup.groupOwner);
-      updatedGroup.groupOwner = groupOwner;
-      // add the doc id into the array as a new field called groupid if updateGroup is not epmty
-      if (updatedGroup) {
-        updatedGroup.groupId = doc.id;
-      }
-      return updatedGroup;
-    });
-    const updatedGroups = await Promise.all(updatedDocs);
-    setGroupsOwned112(updatedGroups);
-  };
-
-
-  const getEventsJoined = async () => {
-
-      const docRef = query(collection(firestore, "events"), where("eventAttendees", "array-contains", userId));
-      const docu = await getDocs(docRef);
-
-      var updatedEvent = [];
-      var completedEvents = [];
-      docu.forEach((doc)=> {
-          var data = Object.assign({}, doc.data() ,{
-              id: doc.id
-          });
-          if(new Date(doc.data().date) < today) {
-              completedEvents = [...completedEvents, data];
-          }else {
-            updatedEvent = [...updatedEvent, data]
-          }
-      });
-      setEventsJoinedPast(completedEvents);
-      console.log(completedEvents);
-      setEventsJoined112(updatedEvent);
-    
-  };
-
-  const getEventsOwned = async () => {
-    const docRef = query(collection(firestore, "events"), where("creatorID", "==", userId));
-    const docu = await getDocs(docRef);
-    var updatedEvent = [];
-    var completedEvents = [];
-    docu.forEach((doc)=> {
-        var data = Object.assign({}, doc.data() ,{
-            id: doc.id
-        });
-        console.log(data);
-        if(new Date(doc.data().date) < today) {
-            
-            completedEvents = [...completedEvents, data]
-        }else {
-          updatedEvent = [...updatedEvent, data]
-        }
-    })
-    
-    setEventsOwnedPast(completedEvents);
-    setEventsOwned112(updatedEvent);
-  };
-  //get number of events owned and joined
-
-
-  const getProfile = async () => {
-    const docRef = query(collection(firestore, "users"), where("userId", "==", userId));
-    const docu = await getDocs(docRef);
-    docu.forEach((doc) => {
-      setProfile2(doc.data());
-    });
-  };
-  
-  const getNumEvents112 = async () => {
-    const docRef2 = query(collection(firestore, "users"), where("userId", "==", userId));
-    const docu2 = await getDocs(docRef2);
-    const doc2 = docu2.docs[0].data();
-    if (doc2.settings.eventAttended == true) {
-      const docRef = query(collection(firestore, "events"), where("creatorID", "==", userId));
-      const docu = await getDocs(docRef);
-      const docRef1 = query(collection(firestore, "events"), where("eventAttendees", "array-contains", userId));
-      const docu1 = await getDocs(docRef1);
-      setNumEvents112(docu.docs.length + docu1.docs.length);
-    }
-  };
-
   const handleViewMemberReturn = () => {
     navigate(-1);
   };
   
-  const getSettings = async () => {
-    const docRef = query(collection(firestore, "users"), where("userId", "==", userId));
-    const docu = await getDocs(docRef);
-    docu.forEach((item)=> {
-        var doc = item.data();
-        setSettingAttending(doc.settings.eventAttending);
-        setSettingAttended(doc.settings.eventAttended);
-        if (doc.settings.eventAttending == true) {
-            setSettings(true);   
-        }
-        setSettingGroups(doc.settings.groupJoined);
-    });
-  };
 
-  const setSettings = (value) => {
-      if (value == true) {
-        setAttending(true);
-        setAttended(false);
-      }
+  const initProfile =  async () => {
+    uc.viewProfileDetails(userId, setProfile2, setSettingAttending, setSettingAttended, setSettingGroups, setAttending, setAttended);
+    uc.getUserJoinedGroups(userId, setGroupsJoined112);
+    uc.getUserCreatedGroups(userId, setGroupsOwned112);
+    uc.getUserJoinedEvents(userId, setEventsJoined112, setEventsJoinedPast);
+    uc.getUserCreatedEvents(userId, setEventsOwned112, setEventsOwnedPast);
+    uc.getNumEvents(userId,setNumEvents112);
   }
-  
-  useEffect(() => {
-    getProfile();
-    getGroupsOwned();
-    getGroupsJoined();
-    getEventsJoined();
-    getEventsOwned();
-    getNumEvents112();
-    getSettings();
-    // setAttended(attended);
-    // setAttending(attending);
-  }, []);
-  
-  console.log(eventsOwned112);
-  console.log(eventsJoined112);
-  console.log(groupsJoined112);
-  console.log(groupsOwned112);
-  console.log({profile2});
-  console.log(userId);
-  console.log(attended);
-  console.log(attending);
 
+  useEffect(() => {
+    initProfile();
+  }, []);
 
   const ViewEventHandler = (eventId) => {
     console.log(eventId);
@@ -235,7 +89,6 @@ function ViewMemberProfile() {
   };
 
   const ViewGroupHandler = (groupId) => {
-    // console.log(groupId);
     navigate(`/ViewGroup/` + groupId);
   };
 

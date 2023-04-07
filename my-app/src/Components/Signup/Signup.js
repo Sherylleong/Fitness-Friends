@@ -1,10 +1,7 @@
 import React, { useState } from "react";
-import { createUserWithEmailAndPassword} from "firebase/auth"
 import "../Login/Login.css";
 import { Link, useNavigate } from "react-router-dom";
-import { dispatch } from "../../App"
-import { addDoc, collection} from "firebase/firestore";
-import { firestore, auth } from "../FirebaseDb/Firebase";
+import { UserController} from "../../Controller/UserController";
 
 export default function SignUp() {
 	const [username, setUsername] = useState("");
@@ -14,8 +11,8 @@ export default function SignUp() {
 	const [showMissingPassword, setMissingPassword] = useState(false);
 	const [showPasswordRequirement, setPasswordRequirement] = useState(false);
 	const [showEmailUsed, setEmailUsed] = useState(false);
-
 	const navigate = useNavigate();
+
 
 	const resetStates = () => {
 		setMissingUsername(false);
@@ -30,47 +27,27 @@ export default function SignUp() {
 		var split = input.split("");
 		var rtn = false;
 		split.forEach((char) => {
-			console.log(char);
-			console.log(specialChars.includes(char));
 			if (specialChars.includes(char)) {
 				rtn = true;
 			}
 		});
 		return rtn;
 	}
-	const createAcc = (e) => {
+	
+	const createAcc = async (e) => {
 		e.preventDefault(); //Prevent Reload on Form Submit
 		resetStates();
 		if (password.length >= 8) {
 			if (checkSpecialLetter(password)) {
-				createUserWithEmailAndPassword(auth, username, password).then((reply) => {
-					// Display Popup to tell user successful
-					alert("Account created successfully");
-					const today = new Date();
-					const formattedDate = today.getDate() + "/" + (today.getMonth() + 1) + "/" + today.getFullYear();
-
-					var displayName = username.split("@")[0];
-					addDoc(collection(firestore, 'users'), {
-						userId: reply.user.uid,
-						profilePic: "https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/defaultPFP.png?alt=media&token=93a30cef-5994-4701-9fab-9ad9fdec913c",
-						displayName: displayName,
-						JoinedDate: formattedDate,
-						Location: null,
-						Bio: null,
-						settings: {
-							groupJoined: true,
-							eventAttending: true,
-							eventAttended: true
-						}
-					});
-					navigate("/Login"); //Navigate to login to do login demo
-				}).catch((error) => {
-					let code = error.code;
-
+				const uc = new UserController(username, password);
+				await uc.createAcc().then(function(code) {
 					switch (code) {
-						
+						case "Success":
+							navigate("/Login");
+							break;
 						case "auth/email-already-in-use":
 							setEmailUsed(true);	
+							console.log("hhi");
 							break;
 						case "auth/missing-email":
 							setMissingUsername(true)
@@ -90,17 +67,17 @@ export default function SignUp() {
 								setMissingPassword(true);
 							}
 							break;
-							
 						default:
 							break;
 					}
 				});
-				return;
+				return
 			}
 		}
 		setPasswordRequirement(true);
 		return;
 	}
+
 	return (
 		<div className="account-form">
 			<div className="account-form-container">

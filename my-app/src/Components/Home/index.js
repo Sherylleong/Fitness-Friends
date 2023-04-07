@@ -1,10 +1,9 @@
-import { useState, useReducer, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import running from "../Resources/runningimage.png";
 import jogging from "../Resources/joggingimage.png";
 import walking from "../Resources/walkingimage.png";
 import climbing from "../Resources/climbingimage.png";
-import biking from "../Resources/bikingimage.png";
 import sports from "../Resources/sportsimage.png";
 import others from "../Resources/othersimage.png";
 import homepage from "../Resources/Homepage.png";

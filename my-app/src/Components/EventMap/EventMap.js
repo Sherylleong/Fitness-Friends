@@ -1,10 +1,4 @@
-import { Component, useMemo, useState } from "react";
-import {
-  GoogleMap,
-  useLoadScript,
-  Marker,
-  MarkerClusterer,
-} from "@react-google-maps/api";
+import {GoogleMap,useLoadScript,Marker} from "@react-google-maps/api";
 import "./event-map-styles.css";
 
 export default function MapContainer({events, setFilters}) {

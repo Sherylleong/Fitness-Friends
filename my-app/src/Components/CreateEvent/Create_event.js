@@ -11,12 +11,15 @@ import { v4 as uuidv4 } from "uuid";
 import { GoogleMap, useLoadScript, Marker, MarkerClusterer, MarkerF } from "@react-google-maps/api";
 import { useMemo } from "react";
 import { render } from "@testing-library/react";
+import { EventController } from "../../Controller/EventController";
+import { ImageController} from "../../Controller/ImageController";
+import { UserController } from "../../Controller/UserController";
 
 export default function CreateEvent() {
     const navigate = useNavigate();
     const userId = useStoreState("userId");
 	const [documentId, setDocumentId] = useState("");
-
+    const ec = new EventController();
 	const [pic, setPic] = useState("https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/defaultPFP.png?alt=media&token=93a30cef-5994-4701-9fab-9ad9fdec913c");
 	const [title, setTitle] = useState("");
 
@@ -64,33 +67,15 @@ export default function CreateEvent() {
   
     
     const getUserGroup = async() => {
-        const docRef = query(collection(firestore, "group"), where("groupOwner", "==", userId));
-        const docu = await getDocs(docRef);
-        var fetchGroup = [];
-        docu.forEach((doc)=> {
-            fetchGroup = [...fetchGroup, {
-                id: doc.id,
-                name: doc.data().groupname
-            }]
-        })
-        setGroupList([...groupList, ...fetchGroup]);
+        const uc = new UserController();
+        uc.getGroupsOwned(userId, setGroupList);
     }
 
     const getMarkerLoc = async () => {
-        const docRef = query(collection(firestore, "locations"));
-		const docu = await getDocs(docRef);
-        var mapArr = [];
-		docu.forEach((doc) => {
-            mapArr.push({
-                name: doc.data().name,
-                position: {
-                    lat: doc.data().x,
-                    lng: doc.data().y
-                }
-            });
-		});
-        setMapData(mapArr);
-        setFilterMapData(mapArr);
+        var mapData = await ec.getParkLocations();
+        console.log(mapData);
+        setMapData(mapData);
+        setFilterMapData(mapData);
     }
 
     const changeFilter = (e) => {
@@ -104,7 +89,7 @@ export default function CreateEvent() {
         return arr.filter(({name}) => {
             const location = name.toLowerCase();
                 return location.includes(searchParams.toLowerCase());
-              })
+        });
     }
 
     const [userFile, setUserFile] = useState(null);
@@ -114,22 +99,14 @@ export default function CreateEvent() {
 		setPic(URL.createObjectURL(fileUploaded));
 	};
 
-	const uploadFile = async() => {
+	const createEvent = async() => {
+        var url
         if (userFile != null) {
-            const imageRef = ref(storage, eventId+"-eventpic");
-            await uploadBytes(imageRef, userFile);
-
-            getDownloadURL(imageRef).then((url)=> {
-                addEvent(url);
-            });
+            const ic = new ImageController();
+            url = await ic.uploadFile(userFile, eventId, "event");
         }else {
-            addEvent(pic);
+            url = pic;
         }
-
-
-    }
-
-    const addEvent = (url) => {
         const badFilter = new Filter();
         let nameChange=title, descChange=bio;
 		try {nameChange = badFilter.clean(title)} catch(e) {}
@@ -138,7 +115,7 @@ export default function CreateEvent() {
         if (groupSelected != "") {
             eventType = "group";
         }
-        addDoc(collection(firestore, 'events'), {
+        await ec.createEvent({
             creatorID: userId,
             date: eventDate,
             time: eventTime,
@@ -155,7 +132,8 @@ export default function CreateEvent() {
             eventType: eventType,
             groupId: groupSelected,
             eventImage: url
-        }).then((docRef)=>{navigate("/ViewProfile")})
+        });
+        navigate("/ViewProfile");
     }
 
     const removeImage = () => {
@@ -193,7 +171,7 @@ export default function CreateEvent() {
             setShowInvalidDateTime(true);
             incorrect=true;
         }
-        if (!incorrect) {uploadFile(); alert("Event successfully created!")}
+        if (!incorrect) {createEvent(); alert("Event successfully created!")}
     }
 
 
@@ -272,7 +250,7 @@ export default function CreateEvent() {
                         <div className="map-contain">
                             <MapContainer state={selected} setState={setSelected} mapData={mapData}/>
                             <div className="search-location">
-                                <input className="create-searchbar" type="text" value={filterValue} placeholder="Search Location..." onChange={(e)=>changeFilter(e)}></input>
+                                <input className="create-searchbar" type="text" value={filterValue} placeholder="Search Location..."  onChange={(e)=>changeFilter(e)}></input>
                                 <div className="location-list">
                                     {filterMapData.map(data=> <div className="location-item" onClick={()=>setSelected(data)}>{data.name}</div>)}
                                 </div>

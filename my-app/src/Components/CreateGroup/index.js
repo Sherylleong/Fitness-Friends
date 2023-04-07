@@ -1,15 +1,12 @@
-import { useState, useRef, createContext, useContext } from "react";
-import { auth } from "../FirebaseDb/Firebase";
-import { dispatch, useStoreState } from "../../App";
-import { Link, redirect, useNavigate } from "react-router-dom";
-import { firestore } from "../FirebaseDb/Firebase";
-import { addDoc } from "firebase/firestore";
-import { collection } from "firebase/firestore";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-// import "./CreateGroup.css";
+import { useState } from "react";
+import { useStoreState } from "../../App";
+import { useNavigate } from "react-router-dom";
+import { getStorage } from "firebase/storage";
 import "../Create.css"
 import { v4 as uuidv4 } from "uuid";
 import Filter from 'bad-words';
+import { GroupController } from "../../Controller/GroupController";
+import { ImageController } from "../../Controller/ImageController";
 
 function CreateGroup() {
   const userId = useStoreState("userId");
@@ -25,6 +22,7 @@ function CreateGroup() {
   const navigate = useNavigate();
   const storage = getStorage();
   const groupId = uuidv4();
+  const gc = new GroupController();
 
   const difficultyChoices = ["Beginner", "Intermediate", "Advanced"]
   const activityChoices = ["Walking", "Jogging", "Running", "Climbing","Biking","Sports","Others"]
@@ -36,24 +34,19 @@ function CreateGroup() {
 		setPic(URL.createObjectURL(fileUploaded));
 	};
 
-	const uploadImage = async() => {
+  const createGroup = async (url) => {
+    var url
     if (userFile != null) {
-      const imageRef = ref(storage, groupId+"-grouppic");
-      await uploadBytes(imageRef, userFile);
-        getDownloadURL(imageRef).then((url)=> {     
-            createGroup(url);
-        });
+        const ic = new ImageController();
+        url = await ic.uploadFile(userFile, groupId, "group");
     }else {
-        createGroup(pic);
+        url = pic;
     }
-  }
-
-  const createGroup = (url) => {
     const badFilter = new Filter();
     let nameChange=groupname, descChange=groupdesc;
 		try {nameChange = badFilter.clean(groupname)} catch(e) {}
 		try {descChange = badFilter.clean(groupdesc)} catch(e) {}
-      addDoc(collection(firestore, "group"), {
+    await gc.createGroup({
         groupOwner: userId,
         groupname: nameChange,
         groupdesc: descChange,
@@ -78,7 +71,7 @@ function CreateGroup() {
       if (!groupdesc) {
           setShowMissingDesc(true);  
           incorrect = true;}
-      if (!incorrect) {uploadImage(); alert("Group successfully created!")}
+      if (!incorrect) {createGroup(); alert("Group successfully created!")}
 
     }
 

@@ -2,11 +2,9 @@ import { useState, useReducer, useEffect } from "react";
 import MapContainer from "../EventMap/EventMap.js";
 import EventFilters from "../Filters/EventFilters.js";
 import "./find-events-map-styles.css";
-import { firestore } from "../FirebaseDb/Firebase";
-import { doc, collection, query, where, getDocs } from "firebase/firestore";
-import { getDoc } from "firebase/firestore";
-import { dispatch, useStoreState } from "../../App";
+import { useStoreState } from "../../App";
 import { useNavigate, useLocation } from "react-router-dom";
+import { EventController } from "../../Controller/EventController.js";
 
 function EventsMapCard(event, navigate, userId) {
   const longEnUSFormatter = new Intl.DateTimeFormat('en-US', {
@@ -178,75 +176,16 @@ export default function FindEventsMap() {
   const location = useLocation();
   const [events, setEvents] = useState([]);
   const [groups, setGroups] = useState([]); // user's joined groups
-  const [groupsOwned, setGroupsOwned]= useState([]);
   const userId = useStoreState("userId");
   var today = new Date()
-
+  const ec = new EventController();
 
 
 
   useEffect(() => {
-    const fetchEvents = async () => {
-      const eventsRef = collection(firestore, "events");
-
-      const q = query(eventsRef);
-      const querySnapshot = await getDocs(q).catch((error) => {
-        console.log("Error getting documents: ", error);
-      });
-      if (querySnapshot.empty) {
-        console.log("No matching documents.");
-      } else {
-        const fetchedEvents = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setEvents(fetchedEvents);
-      }
-    };
-    let temp = [];
-
-    
-    const getGroupsOwned = async () => {
-      const docRef = query(
-        collection(firestore, "group"),
-        where("groupOwner", "==", userId)
-      );
-      const docu = await getDocs(docRef);
-      const updatedDocs = docu.docs.map(async (doc) => {
-        return { id: doc.id, groupname: doc.data()["groupname"] };
-      });
-      const fetchedGroups = await Promise.all(updatedDocs); // jank, has to be an easier way :(
-      let updatedGroups = {};
-      fetchedGroups.forEach((group) => {
-        updatedGroups[group.id] = group.groupname;
-      });
-      temp = updatedGroups;
-    };
-
-    const getGroupsJoined = async () => {
-      const docRef = query(
-        collection(firestore, "group"),
-        where("groupmembers", "array-contains", userId)
-      );
-      const docu = await getDocs(docRef);
-      const updatedDocs = docu.docs.map(async (doc) => {
-        return { id: doc.id, groupname: doc.data()["groupname"] };
-      });
-      const fetchedGroups = await Promise.all(updatedDocs); // jank, has to be an easier way :(
-      let updatedGroups = {};
-      fetchedGroups.forEach((group) => {
-        updatedGroups[group.id] = group.groupname;
-      });
-
-      setGroups({...temp, ...updatedGroups});
-    };
-
-
-          fetchEvents();
-          getGroupsOwned();
-          getGroupsJoined();
-
-      }, []); // re-fetch the events whenever anything changes
+    ec.getAllEvents(setEvents);
+    ec.getUserGroups(userId, setGroups);
+  }, []); // re-fetch the events whenever anything changes
 
     //const [events, setEvents] = useState(eventsdb);
     const [eventsView, setEventsView] = useState("mapview");
@@ -350,7 +289,7 @@ export default function FindEventsMap() {
             <EventMapHeader eventsView={eventsView} setEventsView={setEventsView} />{/*row*/}
             {eventsView==="mapview" ?
             (<EventMapInfo navigate={navigate} groups={groups} filters={filters} setFilters={setFilters} handleFilters={handleFilters} events={filteredEvents} eventsView={eventsView} setEventsView={setEventsView} userId={userId} />)
-        : (<EventListInfo navigate={navigate} groups={groups} filters={filters} handleFilters={handleFilters} events={filteredEvents} eventsView={eventsView} setEventsView={setEventsView} userId={userId} />)}
+        : (<EventListInfo navigate={navigate} groups={groups} filters={filters} handleFilters={handleFilters} events={filteredEvents} userId={userId} />)}
         </div>
 
     )
@@ -366,7 +305,7 @@ function EventMapInfo({groups, navigate, filters, setFilters, handleFilters, eve
   );
 }
 
-function EventListInfo({groups, navigate, filters, handleFilters, events, eventsView, setEventsView,userId}){
+function EventListInfo({groups, navigate, filters, handleFilters, events,userId}){
     return (
         <div className="event-list-info">
         <EventFilters groups={groups} filters={filters} handleFilters={handleFilters}/>

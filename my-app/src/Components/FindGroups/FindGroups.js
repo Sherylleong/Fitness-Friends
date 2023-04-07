@@ -1,21 +1,17 @@
+import "./find-groups-styles.css";
 import { useState, useReducer, useEffect } from "react";
 import GroupFilters from "../Filters/GroupFilters.js";
-import "./find-groups-styles.css";
-import { firestore } from "../FirebaseDb/Firebase";
-import { doc, collection, query, where, getDocs } from "firebase/firestore";
-import { getDoc } from "firebase/firestore";
-import { dispatch, useStoreState } from "../../App";
+import { useStoreState } from "../../App";
 import { useNavigate } from "react-router-dom";
+import { GroupController } from "../../Controller/GroupController.js";
 
 function GroupsListCard(group, userId,navigate, users) {
   console.log("group:");
   console.log(group.id);
   const groupId = group.id;
 
-  let owner = users.filter((user) => {return user.userId == group.groupOwner})[0]
-  console.log(owner)
-  const eventId = group.id;
-  let joined = (group.groupmembers.includes(userId) || group.groupOwner==userId)
+  let owner = users.filter((user) => {return user.userId == group.groupOwner})[0];
+  let joined = (group.groupmembers.includes(userId) || group.groupOwner==userId);
   const handleViewGroup = () => {
     navigate("/ViewGroup/" + groupId);
   };
@@ -104,47 +100,11 @@ export default function FindGroups() {
   //const [groups, setgroups] = useState(groupsdb);
   const [users, setUsers] =  useState([]);
   const [groups, setGroups] = useState([]);
+  const gc = new GroupController();
+  
   useEffect(() => {
-    const fetchGroups = async () => {
-      const groupsRef = collection(firestore, "group");
-
-      const q = query(groupsRef);
-      const querySnapshot = await getDocs(q).catch((error) => {
-        console.log("Error getting documents: ", error);
-      });
-      if (querySnapshot.empty) {
-        console.log("No matching documents.");
-      } else {
-        const fetchedGroups = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        console.log(querySnapshot);
-        setGroups(fetchedGroups);
-      }
-    };
-
-    const fetchUsers = async () => {
-      const usersRef = collection(firestore, "users");
-
-      const q = query(usersRef);
-      const querySnapshot = await getDocs(q).catch((error) => {
-        console.log("Error getting documents: ", error);
-      });
-      if (querySnapshot.empty) {
-        console.log("No matching documents.");
-      } else {
-        const fetchedUsers = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        console.log(querySnapshot);
-        setUsers(fetchedUsers);
-      }
-    };
-
-    fetchUsers();
-    fetchGroups();
+    gc.getAllGroups(setGroups);  
+    gc.getAllUsers(setUsers);
   }, []); // re-fetch the events whenever anything changes
 
   const [filters, setFilters] = useReducer(

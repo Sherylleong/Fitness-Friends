@@ -1,12 +1,12 @@
 import "./EditProfile.css";
 import { useState, useEffect } from "react";
 import { useStoreState } from "../../App"
-import { firestore, storage, auth } from "../FirebaseDb/Firebase";
-import {collection,doc, updateDoc ,getDocs, query, where } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { auth } from "../FirebaseDb/Firebase";
 import { updatePassword } from "firebase/auth"
 import { useNavigate } from "react-router-dom";
 import Filter from 'bad-words';
+import { UserController } from "../../Controller/UserController";
+import { ImageController } from "../../Controller/ImageController";
 
 
 export default function EditProfile() {
@@ -15,7 +15,6 @@ export default function EditProfile() {
 
 	const [profilePic, setProfilePic] = useState("");
 	const [displayName, setDisplayName] = useState("");
-	const [noName, setNoName] = useState(false);
 	const [location, setLocation] = useState("");
 	const [bio, setBio] = useState("");
 	const [groupJoined, setGroupJoined] = useState(false);
@@ -27,21 +26,10 @@ export default function EditProfile() {
 	const [showPasswordLengthError, setPasswordLengthError] = useState(false);
 	const [showNameError, setShowNameError] = useState(false);
 	const navigate = useNavigate();
+	const uc = new UserController();
 
-	/*
-	for (i=0; i <= 24;i++) {
-    	arr.push(document.querySelector("#mw-content-text > div.mw-parser-output > table:nth-child(24) > tbody").childNodes[24+i].childNodes[1].childNodes[0].text);
-	}
-	*/
 	// Taken from wikipedia
 	const sgTowns =['','Ang Mo Kio', 'Bedok', 'Bishan', 'Bukit Batok', 'Bukit Merah', 'Bukit Panjang', 'Choa Chu Kang', 'Clementi', 'Geylang', 'Hougang', 'Jurong East', 'Jurong West', 'Kallang', 'Pasir Ris', 'Punggol', 'Queenstown', 'Sembawang', 'Sengkang', 'Serangoon', 'Tampines', 'Tengah', 'Toa Payoh', 'Woodlands', 'Yishun'];
-	const townOptions = () => {
-		const options = sgTowns.map((town, index)=><option value={town}>{town}</option>)
-
-		// return <select>{options}</select>
-		return <h1>hi</h1>
-	}
-
 
 	function flipValue(id) {
 		switch(id) {
@@ -61,24 +49,7 @@ export default function EditProfile() {
 
 	
 	const getProfile = async () => {
-		const docRef = query(collection(firestore, "users"), where("userId", "==", userId));
-		const docu = await getDocs(docRef);
-		docu.forEach((doc) => {
-			setDocumentId(doc.id);
-			var userData = doc.data();
-			setProfilePic(userData.profilePic);
-			setBio(userData.Bio);
-			setDisplayName(userData.displayName);
-			setLocation(userData.Location);
-			var settings = userData.settings;
-			setGroupJoined(settings.groupJoined == true);
-			setEventAttending(settings.eventAttending == true);
-			setEventAttended(settings.eventAttended == true);
-		});
-
-		if (displayName == null || displayName == "") {
-			setNoName(true);
-		}
+		uc.getProfile(userId, setDocumentId, setProfilePic, setBio, setDisplayName,setLocation,setGroupJoined,setEventAttending, setEventAttended);
 	};
 
 	const saveProfile = () => {
@@ -92,7 +63,7 @@ export default function EditProfile() {
 			else {
 				setShowNameError(false);
 				alert("Profile details changed!")
-				uploadFile();
+				updateDetails();
 			}
 			
 		}
@@ -120,7 +91,7 @@ export default function EditProfile() {
 				if (checkSpecialLetter(newPassword)) {
 			updatePassword(auth.currentUser, newPassword).then(()=> {
 				alert("Password update Success");
-				uploadFile();
+				updateDetails();
 			}).catch((error) => {
 				console.log(error);
 			});
@@ -135,47 +106,27 @@ export default function EditProfile() {
 		}
 	}
 
-	const [testFile, setTest] = useState(null);
+	const [userFile, setUserFile] = useState(null);
 	const acceptFile = event => {
 		var fileUploaded = event.target.files[0];
-		setTest(fileUploaded);
+		setUserFile(fileUploaded);
 		setProfilePic(URL.createObjectURL(fileUploaded));
-		// uploadFile(fileUploaded);
 	};
 
-
-
-	const uploadFile = async() => {
-		if (testFile != null) { 
-			var imageUrl = profilePic;
-			if (testFile != true) {
-			const imageRef = ref(storage, userId+"-profilepic");
-			await uploadBytes(imageRef, testFile);
-
-			const imageURL = await getDownloadURL(imageRef);
-			setProfilePic(imageURL);
-				imageUrl = imageURL;
-			}
-			const updateQuery = doc(firestore, 'users', documentId);
-			updateDoc(updateQuery, {
-				profilePic: imageUrl
-			}).then(() => {
-				updateDetails();
-			});
-		}else {
-			updateDetails();
-		}
-	}
-
 	const updateDetails = async() => {
-		const updateQuery = doc(firestore, 'users', documentId);
+		var url
+        if (userFile != null) {
+            const ic = new ImageController();
+            url = await ic.uploadFile(userFile, documentId, "profile");
+        }else {
+            url = profilePic;
+        }
 		const badFilter = new Filter();
 		let displayNameChange=displayName, bioChange=bio;
 		try {displayNameChange = badFilter.clean(displayName)} catch(e) {}
 		try {bioChange = badFilter.clean(bio)} catch(e) {}
 
-		
-		updateDoc(updateQuery, {
+		await uc.updateProfile(documentId, {
 			displayName: displayNameChange,
 			Location: location,
 			Bio: bioChange,
@@ -183,23 +134,15 @@ export default function EditProfile() {
 				groupJoined: groupJoined,
 				eventAttending: eventAttending,
 				eventAttended: eventAttended
-			}
-		}).then(()=> {
-			console.log("Update Success");
-			returnToProfilePage();
-		}).catch((error) => {
-			console.log(error);
-			
-		});;
+			},
+			profilePic: url 
+		});
+		returnToProfilePage();
 	}
 
 	const removeImage = () => {
-		setTest(true);
+		setUserFile(true);
 		setProfilePic("https://firebasestorage.googleapis.com/v0/b/sc2006-fitnessfriends-66854.appspot.com/o/defaultPFP.png?alt=media&token=93a30cef-5994-4701-9fab-9ad9fdec913c");
-		// const updateQuery = doc(firestore, 'users', documentId);
-		// updateDoc(updateQuery, {
-		// 	profilePic: profilePic
-		// });
 	}
 
 	const returnToProfilePage = () => {
