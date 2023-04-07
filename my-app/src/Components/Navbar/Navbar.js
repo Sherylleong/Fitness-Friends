@@ -1,6 +1,5 @@
 import "./nav-styles.css";
-import { Link, RouterProvider, redirect, useNavigate } from 'react-router-dom'
-import { useContext } from "react";
+import { Link } from 'react-router-dom'
 import { dispatch, useStoreState} from "../../App"
 
 

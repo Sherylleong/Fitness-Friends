@@ -1,7 +1,6 @@
 import { collection , doc, getDoc, getDocs, updateDoc, query, addDoc, where } from "firebase/firestore";
 import { arrayUnion, arrayRemove } from "firebase/firestore";
 import { firestore } from "../Components/FirebaseDb/Firebase";
-import EventFilters from "../Components/Filters/EventFilters";
 
 export class EventController {
     constructor() {

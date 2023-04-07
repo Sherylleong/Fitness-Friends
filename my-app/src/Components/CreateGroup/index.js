@@ -1,11 +1,7 @@
-import { useState, useRef, createContext, useContext } from "react";
-import { auth } from "../FirebaseDb/Firebase";
-import { dispatch, useStoreState } from "../../App";
-import { Link, redirect, useNavigate } from "react-router-dom";
-import { firestore } from "../FirebaseDb/Firebase";
-import { addDoc } from "firebase/firestore";
-import { collection } from "firebase/firestore";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { useState } from "react";
+import { useStoreState } from "../../App";
+import { useNavigate } from "react-router-dom";
+import { getStorage } from "firebase/storage";
 import "../Create.css"
 import { v4 as uuidv4 } from "uuid";
 import Filter from 'bad-words';

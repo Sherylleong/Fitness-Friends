@@ -1,19 +1,8 @@
 import { useState, useEffect } from "react";
 import "./ViewProfile.css";
 import ReactPaginate from "react-paginate";
-import { dispatch, useStoreState } from "../../App";
-import { firestore } from "../FirebaseDb/Firebase";
-import "firebase/firestore";
-import { async } from "@firebase/util";
+import { useStoreState } from "../../App";
 import { useNavigate } from "react-router-dom";
-import {
-  collection,
-  doc,
-  documentId,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
 import { UserController } from "../../Controller/UserController";
 
 function ViewProfile() {

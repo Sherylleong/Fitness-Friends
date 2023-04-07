@@ -1,10 +1,6 @@
 import React, { useState } from "react";
-import { createUserWithEmailAndPassword} from "firebase/auth"
 import "../Login/Login.css";
 import { Link, useNavigate } from "react-router-dom";
-import { dispatch } from "../../App"
-import { addDoc, collection} from "firebase/firestore";
-import { firestore, auth } from "../FirebaseDb/Firebase";
 import { UserController} from "../../Controller/UserController";
 
 export default function SignUp() {

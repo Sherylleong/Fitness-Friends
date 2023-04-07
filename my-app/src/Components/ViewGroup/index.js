@@ -1,21 +1,11 @@
-import iconpin from "../Resources/location.png";
 import aboutgroup from "../Resources/aboutgroup.png";
 import attendee1 from "../Resources/attendee.png";
-import arrow from "../Resources/arrow.png";
 import { useEffect, useState } from "react";
 import "./ViewGroup.css";
 import ReactPaginate from "react-paginate";
 import { useParams } from "react-router-dom";
-import { collection, query, where, getDocs } from "firebase/firestore";
-import { firestore } from "../FirebaseDb/Firebase";
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
-import { doc, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
-import { getDoc } from "firebase/firestore";
-import { dispatch, useStoreState } from "../../App";
+import { useStoreState } from "../../App";
 import { useNavigate } from "react-router-dom";
-import { arrayUnion, arrayRemove } from "firebase/firestore";
-import calender from "../Resources/calender.png";
-import { onSnapshot } from "firebase/firestore";
 import { GroupController } from "../../Controller/GroupController";
 
 function ViewGroup() {

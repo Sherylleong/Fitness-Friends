@@ -2,13 +2,12 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "../Create.css";
 import { useStoreState } from "../../App"
-import { firestore, storage } from "../FirebaseDb/Firebase";
-import { collection,doc, updateDoc ,getDocs, getDoc, query, limit, addDoc, where } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { firestore } from "../FirebaseDb/Firebase";
+import { collection,getDocs, limit } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import Filter from 'bad-words';
-import { GoogleMap, useLoadScript, Marker, MarkerClusterer, MarkerF } from "@react-google-maps/api";
+import { GoogleMap, useLoadScript, Marker, MarkerClusterer } from "@react-google-maps/api";
 import { EventController } from "../../Controller/EventController";
 import { UserController } from "../../Controller/UserController";
 import { ImageController } from "../../Controller/ImageController";

@@ -1,4 +1,3 @@
-
 import calender from "../Resources/calender.png";
 import location from "../Resources/locationfinal.png";
 import attendee1 from "../Resources/attendee.png";
