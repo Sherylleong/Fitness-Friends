@@ -6,8 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { GroupController } from "../../Controller/GroupController.js";
 
 function GroupsListCard(group, userId,navigate, users) {
-  console.log("group:");
-  console.log(group.id);
   const groupId = group.id;
 
   let owner = users.filter((user) => {return user.userId == group.groupOwner})[0];

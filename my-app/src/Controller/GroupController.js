@@ -40,10 +40,9 @@ export class GroupController {
         const eventsRef = query(collection(firestore, "events"), where("groupId", "==", groupId));
         const eventDoc = await getDocs(eventsRef);
         var eventList = [];
-        eventDoc.forEach((event) => {
+        await eventDoc.forEach((event) => {
             var newGroup = event.data();
-            newGroup.id = event.data().id;
-
+            newGroup.id = event.id;
             eventList = [...eventList, newGroup];
         });
         setGroupEvents(eventList);
@@ -92,7 +91,6 @@ export class GroupController {
         const usersRef = query(collection(firestore, "users"));
         const userDocs = await getDocs(usersRef);
         var fetchedUsers = [];
-        console.log(userDocs)
         userDocs.forEach((user) => {
             var data = user.data();
             data.id = user.id;
