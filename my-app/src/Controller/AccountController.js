@@ -7,8 +7,6 @@ export class AccountController {
     constructor(username, password) {
         this.username = username;
         this.password = password;
-        this.today = new Date();
-        this.today.setHours(0,0,0,0);
     }
 
     async login() {

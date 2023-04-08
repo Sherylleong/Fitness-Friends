@@ -12,7 +12,6 @@ import { ImageController } from "../../Controller/ImageController";
 export default function EditProfile() {
 	const userId = useStoreState("userId");
 	const [documentId, setDocumentId] = useState("");
-
 	const [profilePic, setProfilePic] = useState("");
 	const [displayName, setDisplayName] = useState("");
 	const [location, setLocation] = useState("");
