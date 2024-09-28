@@ -27,10 +27,10 @@ jobs:
           REACT_APP_FIREBASE_APIKEY: ${{ secrets.REACT_APP_FIREBASE_APIKEY }}
           REACT_APP_GMAP_APIKEY: ${{ secrets.REACT_APP_GMAP_APIKEY }}
         run: npm run build
-        working-directory: my-app/build
+        working-directory: my-app
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: my-app//build
+          publish_dir: my-app/build
