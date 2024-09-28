@@ -157,7 +157,7 @@ function ViewEvent() {
 
 function MapContainer({ event }) {
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: "AIzaSyCGCznAwZAFJ8qMQY1ckg6EfDwuczmepWI",
+    googleMapsApiKey: process.env.REACT_APP_GMAP_APIKEY,
   });
   if (!isLoaded) return <div>..Loading</div>;
   return <Map event={event} />;

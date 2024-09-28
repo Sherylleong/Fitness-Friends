@@ -8,6 +8,7 @@ import sports from "../Resources/sportsimage.png";
 import others from "../Resources/othersimage.png";
 import homepage from "../Resources/Homepage.png";
 import "./Home.css";
+
 function HomePage() {
   const navigate = useNavigate();
   const [textIndex, setTextIndex] = useState(0);
@@ -62,7 +63,7 @@ function HomePage() {
               style={{
                 backgroundImage: "linear-gradient(45deg, #ee6b6e, #77c9d4)",
                 backgroundClip: "text",
-                color: "white",
+                color: "#fc3d03",
               }}
             >
               {textOptions[textIndex]}
