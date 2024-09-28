@@ -1,24 +1,24 @@
 {
   "files": {
-    "main.css": "/static/css/main.ffd350e6.css",
-    "main.js": "/static/js/main.eb95d1f9.js",
-    "static/js/787.28cb0dcd.chunk.js": "/static/js/787.28cb0dcd.chunk.js",
-    "static/media/Homepage.png": "/static/media/Homepage.27f8374a6e0ca79208ac.png",
-    "static/media/account-form-background.png": "/static/media/account-form-background.758c12e26bb03461fb23.png",
-    "static/media/background.jpg": "/static/media/background.3557e24d3ac9c735121f.jpg",
-    "static/media/sportsimage.png": "/static/media/sportsimage.ec440dfa6571193a532b.png",
-    "static/media/site-icon.png": "/static/media/site-icon.24805f635e1a338dce90.png",
-    "static/media/othersimage.png": "/static/media/othersimage.c8eef2af26163213bffa.png",
-    "static/media/locationfinal.png": "/static/media/locationfinal.4b24287cb33401ab0dfb.png",
-    "static/media/attendee.png": "/static/media/attendee.33e7df0963941edbeb70.png",
-    "static/media/logo.svg": "/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
-    "index.html": "/index.html",
-    "main.ffd350e6.css.map": "/static/css/main.ffd350e6.css.map",
-    "main.eb95d1f9.js.map": "/static/js/main.eb95d1f9.js.map",
-    "787.28cb0dcd.chunk.js.map": "/static/js/787.28cb0dcd.chunk.js.map"
+    "main.css": "/Fitness-Friends/static/css/main.c4ed91a0.css",
+    "main.js": "/Fitness-Friends/static/js/main.e7454e39.js",
+    "static/js/787.28cb0dcd.chunk.js": "/Fitness-Friends/static/js/787.28cb0dcd.chunk.js",
+    "static/media/Homepage.png": "/Fitness-Friends/static/media/Homepage.27f8374a6e0ca79208ac.png",
+    "static/media/account-form-background.png": "/Fitness-Friends/static/media/account-form-background.758c12e26bb03461fb23.png",
+    "static/media/background.jpg": "/Fitness-Friends/static/media/background.3557e24d3ac9c735121f.jpg",
+    "static/media/sportsimage.png": "/Fitness-Friends/static/media/sportsimage.ec440dfa6571193a532b.png",
+    "static/media/site-icon.png": "/Fitness-Friends/static/media/site-icon.24805f635e1a338dce90.png",
+    "static/media/othersimage.png": "/Fitness-Friends/static/media/othersimage.c8eef2af26163213bffa.png",
+    "static/media/locationfinal.png": "/Fitness-Friends/static/media/locationfinal.4b24287cb33401ab0dfb.png",
+    "static/media/attendee.png": "/Fitness-Friends/static/media/attendee.33e7df0963941edbeb70.png",
+    "static/media/logo.svg": "/Fitness-Friends/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "/Fitness-Friends/index.html",
+    "main.c4ed91a0.css.map": "/Fitness-Friends/static/css/main.c4ed91a0.css.map",
+    "main.e7454e39.js.map": "/Fitness-Friends/static/js/main.e7454e39.js.map",
+    "787.28cb0dcd.chunk.js.map": "/Fitness-Friends/static/js/787.28cb0dcd.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ffd350e6.css",
-    "static/js/main.eb95d1f9.js"
+    "static/css/main.c4ed91a0.css",
+    "static/js/main.e7454e39.js"
   ]
 }
