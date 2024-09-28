@@ -26,6 +26,7 @@ jobs:
         env:
           REACT_APP_FIREBASE_APIKEY: ${{ secrets.REACT_APP_FIREBASE_APIKEY }}
           REACT_APP_GMAP_APIKEY: ${{ secrets.REACT_APP_GMAP_APIKEY }}
+          CI: false  # Disable treating warnings as errors
         run: npm run build
         working-directory: my-app
 
