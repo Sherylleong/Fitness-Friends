@@ -12,18 +12,26 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
+        
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'  # Use a version compatible with your app
+        
       - name: Install dependencies
         run: npm install
+        working-directory: my-app
 
       - name: Build
         env:
           REACT_APP_FIREBASE_APIKEY: ${{ secrets.REACT_APP_FIREBASE_APIKEY }}
           REACT_APP_GMAP_APIKEY: ${{ secrets.REACT_APP_GMAP_APIKEY }}
+          CI: false  # Disable treating warnings as errors
         run: npm run build
+        working-directory: my-app
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
+          publish_dir: my-app/build
