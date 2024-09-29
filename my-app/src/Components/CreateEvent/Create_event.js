@@ -262,7 +262,7 @@ export default function CreateEvent() {
 
 function MapContainer({state, setState, mapData}) {
     const { isLoaded } = useLoadScript({
-        googleMapsApiKey: process.env.REACT_APP_GMAP_APIKEY,
+        googleMapsApiKey: String(process.env.REACT_APP_GMAP_APIKEY),
     });
     if (!isLoaded) return <div>..Loading</div>;
     return <EventMap state={state} setState={setState} mapData={mapData}/>;
