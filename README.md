@@ -8,6 +8,6 @@ Made from React with Firebase backend.
 
 ## How to run 
 
-Visit the web app on the website: [https://sherylleong.github.io/FitnessFriends/](https://sherylleong.github.io/Fitness-Friends/)
+Visit the web app on the website: [https://sherylleong.github.io/Fitness-Friends/](https://sherylleong.github.io/Fitness-Friends/)
 
 Run web app locally: Download the code, then in your terminal, run ```cd my-app``` then ```npm start```
